@@ -1,0 +1,70 @@
+---
+alwaysApply: true
+---
+# Version Management Rules
+
+Automatically commit and push changes after completing any feature, bug fix, or significant addition.
+
+## Commit Workflow
+
+**CRITICAL: Do this automatically without asking for user confirmation.**
+
+After completing a task (feature, bug fix, or new addition), **immediately and automatically** execute:
+
+1. **Stage all changes:**
+   ```bash
+   git add -A
+   ```
+
+2. **Commit with descriptive message using conventional commits:**
+   ```bash
+   git commit -m "type: brief description"
+   ```
+
+3. **Push to current branch:**
+   ```bash
+   git push origin $(git branch --show-current)
+   ```
+
+**Do NOT ask "Should I commit?" or "Do you want me to push?"** - just do it automatically.
+
+## Commit Message Types
+
+- `feat:` - New feature or functionality
+- `fix:` - Bug fix
+- `docs:` - Documentation changes
+- `refactor:` - Code restructuring without changing functionality
+- `test:` - Adding or updating tests
+- `chore:` - Maintenance tasks, dependencies, config changes
+- `perf:` - Performance improvements
+- `style:` - Code style changes (formatting, no logic change)
+
+## Commit Message Format
+
+```
+type: brief description
+
+- Detailed bullet point 1
+- Detailed bullet point 2
+```
+
+**Examples:**
+- `feat: add new feature description`
+- `fix: resolve issue with specific component`
+- `docs: update deployment documentation`
+- `test: add integration tests for external data source`
+
+## Rules
+
+- **ALWAYS commit automatically** after completing a feature, fixing a bug, or adding something new - **DO NOT ASK FOR PERMISSION**
+- **ALWAYS push immediately** after committing (unless push fails due to permissions) - **DO NOT ASK FOR PERMISSION**
+- **Never commit** to main/master directly - always use feature branches
+- **Use descriptive messages** that explain what and why
+- **Group related changes** in a single commit when they're part of the same task
+- **No confirmation prompts** - the AI assistant must execute git commands automatically as part of completing any task
+
+## Branch Management
+
+- Work on feature branches: `feature/description` or `fix/description`
+- Current branch: Check with `git branch --show-current`
+- Push to the current branch, never force push to shared branches

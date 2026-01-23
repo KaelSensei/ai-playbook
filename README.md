@@ -68,6 +68,24 @@ Breaking changes are documented.
 
 ---
 
+## Resources
+
+### Official Documentation
+
+- **[Cursor Commands Documentation](https://cursor.com/fr/docs/context/commands)** - Official Cursor documentation on creating and using custom commands
+  - Learn how commands work
+  - Understand command structure and syntax
+  - See examples of effective commands
+
+### Community Examples
+
+- **[cursor-commands Repository](https://github.com/hamzafer/cursor-commands/tree/main/.cursor/commands)** - Community-maintained collection of Cursor command examples
+  - Real-world command implementations
+  - Additional command patterns and workflows
+  - Inspiration for creating your own commands
+
+---
+
 ## License
 
 Internal / private by default.  

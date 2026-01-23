@@ -1,0 +1,92 @@
+---
+alwaysApply: true
+---
+# Technical Stack Rules
+
+These rules guide the AI assistant when generating or modifying code. Projects using this playbook should define their specific technical stack constraints.
+
+## Language & Code Style
+
+- Use modern language features and best practices for the project's chosen language(s)
+- Follow consistent formatting and style patterns across all files
+- Keep logic simple and explicit; avoid magic abstractions
+- **Type safety**: When the language supports it (TypeScript, Python type hints, Go, Rust, etc.), use strong typing and avoid type-unsafe patterns
+- **Code style**: Follow project-specific style guides (PEP 8 for Python, Go fmt, Rust clippy, ESLint for JS/TS, etc.)
+
+## Platform & Framework
+
+Projects should define their target platform(s) and framework(s). Common considerations:
+
+- **Web**: React, Vue, Angular, vanilla JS/TS, etc.
+- **Mobile**: React Native, Flutter, native iOS/Android, etc.
+- **Desktop**: Electron, native desktop apps, etc.
+- **Backend**: Node.js, Python, Go, etc.
+
+AI assistants should:
+- Respect platform-specific constraints and patterns
+- Use platform-appropriate APIs and libraries
+- Follow platform-specific best practices and conventions
+
+## Build & Development Tools
+
+Projects should define their build system and development tooling:
+
+- **Build tools**: Language/framework-specific (Webpack/Vite for JS, Cargo for Rust, Gradle/Maven for Java, Make/CMake for C/C++, etc.)
+- **Package managers**: Language-specific (npm/yarn/pnpm for JS, pip/poetry for Python, cargo for Rust, go mod for Go, etc.)
+- **Linting/Formatting**: Language-specific (ESLint/Prettier for JS/TS, Black/flake8 for Python, rustfmt/clippy for Rust, gofmt for Go, etc.)
+- **Testing**: Language-specific (Jest/Vitest for JS, pytest for Python, cargo test for Rust, go test for Go, etc.)
+
+AI assistants should:
+- Use project-defined build commands
+- Respect existing build configurations
+- Follow project-specific development workflows
+
+## Data & Persistence
+
+Projects should define their data storage approach:
+
+- **Databases**: SQLite, PostgreSQL, MongoDB, etc.
+- **File storage**: Local filesystem, cloud storage, etc.
+- **Caching**: In-memory, Redis, local cache, etc.
+
+When working with databases:
+- SQLite or other databases should be the **single source of truth** when appropriate
+- Prefer simple schemas with explicit indexes for queries that affect performance
+- Always add indexes when search speed matters
+- Avoid heavy ORMs; keep queries clear and localized
+- Avoid complex ORM abstractions unless necessary
+
+For file storage:
+- Download once, cache locally when appropriate
+- Never depend on remote URLs at runtime when offline behavior is expected
+- Store files locally and reuse when possible
+
+## External Data Sources
+
+When projects consume external data (APIs, scraping, etc.):
+
+- Treat all external data as **unreliable**; normalize and validate before use
+- Keep external data access code isolated and documented
+- Handle common failure cases (missing fields, layout changes, HTTP errors) gracefully
+- Respect rate limits and API constraints
+- Implement proper error handling and retry logic
+
+## Quality Standards
+
+- Provide clear doc comments for public functions and important utility helpers
+- Prefer small, testable units for complex logic
+- Add or update tests when changing behavior that touches:
+  - External data access
+  - Database queries
+  - Critical business logic
+  - Security-sensitive code
+
+## Project-Specific Constraints
+
+AI assistants must:
+- Respect project-defined technical constraints
+- Not suggest alternatives that violate project architecture
+- Follow project-specific patterns and conventions
+- Ask for clarification when constraints are unclear
+
+These rules ensure code generation respects the project's technical stack and constraints.

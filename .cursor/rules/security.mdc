@@ -1,0 +1,92 @@
+---
+alwaysApply: true
+---
+# Security Rules for AI Assistants
+
+AI assistants must treat **security and user privacy as first‑class requirements** in all projects, regardless of project scope or type.
+
+Before any branch is considered ready for merge, the following rules **must be enforced**.
+
+## General Security Principles
+
+- Never introduce hidden logic, obfuscated code, or unnecessary indirection.
+- Avoid dynamic code execution (`eval`, `Function`, dynamic imports, unsafe reflection).
+- Avoid uncontrolled access to the filesystem or device APIs.
+- Prefer explicit, readable, auditable logic over clever or compact code.
+- Assume all dependencies may be compromised unless verified.
+
+
+## Language-Specific Security Considerations
+
+Security concerns vary by language and ecosystem. Apply these principles based on the project's language:
+
+### Dynamic Code Execution
+- **JavaScript/TypeScript**: Avoid `eval()`, `Function()`, dynamic `import()` based on user input
+- **Python**: Avoid `eval()`, `exec()`, `compile()` with user input; use `ast.literal_eval()` when needed
+- **Ruby**: Avoid `eval()`, `instance_eval()`, `class_eval()` with user input
+- **PHP**: Avoid `eval()`, `create_function()` with user input
+- **General**: Never execute code from user input or untrusted sources
+
+### Dependency Management
+- **JavaScript/TypeScript (npm/yarn/pnpm)**: No post-install scripts unless strictly required; audit dependencies regularly
+- **Python (pip/poetry)**: Avoid `setup.py` with arbitrary code execution; use `pyproject.toml` when possible
+- **Ruby (bundler)**: Audit gems for known vulnerabilities
+- **Go (go mod)**: Verify module checksums; use `go.sum` for integrity
+- **Rust (cargo)**: Review `build.rs` scripts; audit dependencies
+- **General**: Keep dependencies minimal and well-known; prefer built-ins and lightweight libraries
+
+### Type Safety & Input Validation
+- **TypeScript**: Use strict types; avoid `any` types that bypass type checking
+- **Python**: Use type hints; validate input with libraries like `pydantic` or `marshmallow`
+- **Go**: Leverage strong typing; validate all external input
+- **Rust**: Use the type system; validate input at boundaries
+- **General**: Always validate and sanitize user input and external data
+
+### Common Vulnerabilities by Language
+- **JavaScript/TypeScript**: Prototype pollution, XSS, unsafe object merging, prototype chain manipulation
+- **Python**: Code injection, pickle deserialization, path traversal, SQL injection
+- **Go**: Panic handling, nil pointer dereferences, race conditions
+- **Rust**: Unsafe code blocks, memory safety violations
+- **General**: SQL injection, command injection, path traversal, XXE (XML), deserialization attacks
+
+### Network & External Calls
+- No new network calls to unknown or undocumented endpoints
+- Respect project-defined allowed domains and external services
+- Only use approved external APIs and services as defined by the project
+- Implement proper authentication and authorization for API calls
+- Use secure communication protocols (HTTPS, TLS) by default
+
+### Package & Build Security
+- Avoid post-install/build scripts that execute arbitrary code
+- Review package manifests for suspicious scripts or dependencies
+- Use package lock files (package-lock.json, Pipfile.lock, Cargo.lock, etc.) for reproducible builds
+- Do not introduce any background tracking, analytics, or hidden telemetry
+
+## Local Data & Offline Behavior
+
+- Local data storage (database, file system, etc.) should be treated as the **single source of truth** when appropriate; never leak or sync data to unauthorized remote backends.
+- Local file caching should:
+  - Store only application‑needed assets.
+  - Avoid writing arbitrary user-provided paths.
+  - Clean up safely when needed (no recursive deletes outside the application's sandbox).
+- External data sources (scraping, APIs, etc.) must treat remote content as **untrusted input**:
+  - Validate and sanitize all external data before use.
+  - Handle missing/changed fields defensively (no crashes on bad data).
+  - Implement proper error handling for network failures and malformed responses.
+
+## Merge Safety Rules
+
+- Never approve or suggest merging code that has not passed security review.
+- Never auto-merge changes involving execution, permissions, or external calls.
+- If a potential vulnerability or suspicious pattern is detected, highlight it explicitly and explain the risk.
+
+## AI Assistant Behavior
+
+- Always reason explicitly about security when modifying code.
+- Prefer defensive coding patterns.
+- When in doubt, **pause and ask** instead of guessing.
+- Security > convenience > performance.
+- Respect project-specific security constraints and requirements.
+
+These rules exist to prevent backdoors, malware, supply-chain attacks, privacy leaks, and critical vulnerabilities.
+They must be applied automatically and consistently.
