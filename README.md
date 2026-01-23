@@ -43,10 +43,50 @@ Each project can pin a specific version of the playbook and upgrade intentionall
 
 ---
 
+## Installation
+
+### Quick Install (Recommended)
+
+```bash
+# Install in your project (creates symlinks)
+npx ai-playbook-cli@latest install
+
+# Or copy files directly
+npx ai-playbook-cli@latest install --type copy
+```
+
+**Next Steps:**
+1. Verify installation: `npx ai-playbook-cli@latest status`
+2. Open your project in Cursor
+3. Start using commands like `/start`, `/feature`, `/fix`
+4. See [INSTALLATION.md](INSTALLATION.md) for detailed setup and troubleshooting
+
+### Manual Installation
+
+You can also install manually:
+
+1. **As Git Submodule:**
+   ```bash
+   git submodule add https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook
+   mkdir -p .cursor
+   ln -s ../.ai-playbook/.cursor/rules .cursor/rules
+   ln -s ../.ai-playbook/.cursor/commands .cursor/commands
+   ln -s ../.ai-playbook/.cursor/docs .cursor/docs
+   ```
+
+2. **Direct Copy:**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook
+   cp -r .ai-playbook/.cursor .cursor
+   ```
+
+For detailed installation, deployment, and development instructions, see [INSTALLATION.md](INSTALLATION.md).
+
 ## Typical Usage
 
+- Installed via **CLI tool** (recommended)
 - Added as a **git submodule** in projects
-- Linked to `.cursor/rules/`
+- Linked to `.cursor/rules/` and `.cursor/commands/`
 - Read automatically by AI assistants
 - Updated independently of application code
 
@@ -68,6 +108,25 @@ Breaking changes are documented.
 
 ---
 
+## CLI Commands
+
+The AI Playbook includes a CLI tool for easy installation and management:
+
+```bash
+# Install in current project
+npx ai-playbook-cli@latest install
+
+# Check installation status
+npx ai-playbook-cli@latest status
+
+# Update playbook
+npx ai-playbook-cli@latest update
+```
+
+See [cli/README.md](cli/README.md) for full CLI documentation.
+
+For installation, deployment, and next steps, see [INSTALLATION.md](INSTALLATION.md).
+
 ## Resources
 
 ### Official Documentation
@@ -83,6 +142,10 @@ Breaking changes are documented.
   - Real-world command implementations
   - Additional command patterns and workflows
   - Inspiration for creating your own commands
+
+- **[AIBlueprint](https://github.com/Melvynx/aiblueprint)** - Similar CLI tool for Claude Code configurations
+  - Inspiration for CLI structure
+  - Example of npx-based installation
 
 ---
 

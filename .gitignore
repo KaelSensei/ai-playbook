@@ -41,3 +41,8 @@ coverage/
 
 # Cursor MCP config (contains sensitive tokens - NEVER COMMIT!)
 .cursor/mcp.json
+
+# CLI
+cli/node_modules
+cli/dist
+cli/*.log

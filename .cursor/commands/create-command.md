@@ -182,3 +182,10 @@ For more information on creating Cursor commands:
 
 - **[Official Cursor Commands Documentation](https://cursor.com/fr/docs/context/commands)** - Learn about command structure, syntax, and best practices
 - **[cursor-commands Repository](https://github.com/hamzafer/cursor-commands/tree/main/.cursor/commands)** - Browse community examples and command patterns
+- **[AIBlueprint](https://github.com/Melvynx/aiblueprint)** - Similar CLI tool for Claude Code configurations
+  - Melvynx created a similar playbook system for Claude Code
+  - Includes 16 pre-configured workflow automation commands
+  - Great inspiration for command structure and patterns
+  - Example of npx-based CLI installation
+
+
