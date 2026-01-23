@@ -219,7 +219,7 @@ Use `/merge-branch-into-main [branch-name]` to:
 - Follow git best practices for merging
 
 **Examples:**
-- `/merge-branch-into-main feature/add-deck-export` - Merge specific branch
+- `/merge-branch-into-main feature/add-export` - Merge specific branch
 - `/merge-branch-into-main` - Merge current branch into main
 
 ---

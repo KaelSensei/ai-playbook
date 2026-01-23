@@ -57,8 +57,8 @@ When `/cleanup-repo` is invoked, immediately execute the following steps to anal
 ## Step 3: Identify Files to Organize
 
 1. **Documentation files** (typically in root, should be organized):
-   - `ANDROID_CONFIG.md`, `ANDROID_SETUP.md` → `docs/android/` or `.cursor/docs/android/`
-   - `INSTALL_INSTRUCTIONS.md`, `RUN_ON_ANDROID.md` → `docs/installation/` or `.cursor/docs/installation/`
+   - `CONFIG.md`, `SETUP.md` → `docs/setup/` or `.cursor/docs/setup/`
+   - `INSTALL_INSTRUCTIONS.md`, `SETUP.md` → `docs/installation/` or `.cursor/docs/installation/`
    - `PLAY_STORE_DEPLOYMENT.md` → `docs/deployment/` or `.cursor/docs/deployment/`
    - `TESTING.md`, `TROUBLESHOOTING.md`, `DEBUG.md` → `docs/development/` or `.cursor/docs/development/`
    - `SCRAPING_ISSUES.md` → `docs/troubleshooting/` or `.cursor/docs/troubleshooting/`
@@ -67,7 +67,7 @@ When `/cleanup-repo` is invoked, immediately execute the following steps to anal
 
 2. **Script files** (should be in `scripts/`):
    - `*.ps1` files → `scripts/` or `scripts/setup/`
-   - `setup-android.js` → `scripts/setup/`
+   - `setup.js` → `scripts/setup/`
    - Other utility scripts → `scripts/` or `scripts/utils/`
 
 3. **Test data and misc files**:
@@ -97,7 +97,7 @@ When `/cleanup-repo` is invoked, immediately execute the following steps to anal
 1. **Create target directory structure** (if needed):
    ```
    docs/                    # Root-level docs (or .cursor/docs/)
-   ├── android/
+   ├── setup/
    ├── installation/
    ├── deployment/
    ├── development/
@@ -154,7 +154,7 @@ Before moving any files:
 
 1. **Create target directories** (if they don't exist):
    ```bash
-   mkdir -p docs/android docs/installation docs/deployment docs/development docs/troubleshooting docs/architecture
+   mkdir -p docs/setup docs/installation docs/deployment docs/development docs/troubleshooting docs/architecture
    mkdir -p scripts/setup scripts/utils
    mkdir -p test-data
    ```
@@ -163,8 +163,8 @@ Before moving any files:
    - Move files to appropriate `docs/` subdirectories
    - Use `git mv` to preserve history:
      ```bash
-     git mv ANDROID_CONFIG.md docs/android/
-     git mv ANDROID_SETUP.md docs/android/
+     git mv CONFIG.md docs/setup/
+     git mv SETUP.md docs/setup/
      git mv INSTALL_INSTRUCTIONS.md docs/installation/
      # etc.
      ```
@@ -172,7 +172,7 @@ Before moving any files:
 3. **Move script files**:
    ```bash
    git mv *.ps1 scripts/setup/
-   git mv setup-android.js scripts/setup/
+   git mv setup.js scripts/setup/
    ```
 
 4. **Organize test data**:
@@ -328,7 +328,7 @@ When cleaning up the repo, ensure:
 ### Documentation Organization
 ```
 Root (scattered) → Organized
-├── ANDROID_CONFIG.md → docs/android/ANDROID_CONFIG.md
+├── CONFIG.md → docs/setup/CONFIG.md
 ├── INSTALL_INSTRUCTIONS.md → docs/installation/INSTALL_INSTRUCTIONS.md
 ├── PLAY_STORE_DEPLOYMENT.md → docs/deployment/PLAY_STORE_DEPLOYMENT.md
 └── TESTING.md → docs/development/TESTING.md
@@ -337,9 +337,9 @@ Root (scattered) → Organized
 ### Script Organization
 ```
 Root (scattered) → Organized
-├── setup-android.ps1 → scripts/setup/setup-android.ps1
+├── setup.ps1 → scripts/setup/setup.ps1
 ├── fix-navigation.ps1 → scripts/utils/fix-navigation.ps1
-└── setup-android.js → scripts/setup/setup-android.js
+└── setup.js → scripts/setup/setup.js
 ```
 
 ### Test Data Organization
@@ -393,9 +393,9 @@ ProjectRoot/
 ```
 ProjectRoot/
 ├── docs/
-│   ├── android/
-│   │   ├── ANDROID_CONFIG.md
-│   │   └── ANDROID_SETUP.md
+│   ├── setup/
+│   │   ├── CONFIG.md
+│   │   └── SETUP.md
 │   ├── installation/
 │   │   └── INSTALL_INSTRUCTIONS.md
 │   ├── deployment/
@@ -405,7 +405,7 @@ ProjectRoot/
 │       └── TROUBLESHOOTING.md
 ├── scripts/
 │   └── setup/
-│       ├── setup-android.ps1
+│       ├── setup.ps1
 │       └── fix-navigation.ps1
 ├── test-data/
 │   └── *.json (from misc/)

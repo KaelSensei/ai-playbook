@@ -110,11 +110,11 @@ After branch creation:
 Use these patterns:
 
 - **Features**: `feature/<description>`
-  - Examples: `feature/search-reset-button`, `feature/stats-card-images`
+  - Examples: `feature/search-reset-button`, `feature/stats-dashboard`
 - **Fixes**: `fix/<description>`
   - Examples: `fix/image-loading-error`, `fix/database-migration`
 - **Refactors**: `refactor/<description>`
-  - Examples: `refactor/extract-card-utils`, `refactor/cleanup-db-queries`
+  - Examples: `refactor/extract-utils`, `refactor/cleanup-db-queries`
 - **Documentation**: `docs/<description>`
   - Examples: `docs/update-readme`, `docs/add-architecture-docs`
 
@@ -146,8 +146,8 @@ Use `/feature-branch` (no name) to:
 ## Examples
 
 ```bash
-/feature-branch feature/add-deck-export
-# Creates: feature/add-deck-export branch
+/feature-branch feature/add-export
+# Creates: feature/add-export branch
 
 /feature-branch fix/search-performance
 # Creates: fix/search-performance branch

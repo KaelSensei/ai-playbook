@@ -19,7 +19,7 @@ When `/clean-code [target]` is invoked, immediately execute the following steps 
 4. Identify the current Git branch and assume it is a **refactor branch**, not `main`
 5. Determine the cleanup scope:
    - If no target specified: analyze entire codebase for cleanup opportunities
-   - If target specified: focus on specific files/directories (e.g., `src/screens/DeckDetailScreen.tsx`, `src/db/`)
+   - If target specified: focus on specific files/directories (e.g., `src/screens/UserProfileScreen.tsx`, `src/db/`)
 
 ---
 
@@ -186,7 +186,7 @@ Use `/clean-code [target]` to:
 
 **Examples:**
 - `/clean-code` - Clean entire codebase
-- `/clean-code src/screens/DeckDetailScreen.tsx` - Clean specific file
+- `/clean-code src/screens/UserProfileScreen.tsx` - Clean specific file
 - `/clean-code src/db/` - Clean specific directory
 - `/clean-code src/screens/` - Clean all screen components
 

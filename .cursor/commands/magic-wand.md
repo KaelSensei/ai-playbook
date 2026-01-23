@@ -59,10 +59,10 @@ When `/magic-wand [issue description]` is invoked, immediately execute the follo
    - Use semantic search to find all code related to the issue
    - Search for similar patterns or related functionality
    - Check for changes in dependencies or configuration files
-   - Look for changes in Android config, network config, database schema, etc.
+   - Look for changes in configuration files, network config, database schema, etc.
 
 3. **Review related files** (not just the reported file):
-   - Check configuration files (AndroidManifest.xml, network_security_config.xml, build.gradle)
+   - Check configuration files (project-specific config files, build configuration, etc.)
    - Check related screens/components
    - Check database schema and migrations
    - Check navigation setup
@@ -96,7 +96,7 @@ When `/magic-wand [issue description]` is invoked, immediately execute the follo
    - Verify timing and sequencing
 
 3. **Check for common root causes**:
-   - **Configuration issues**: Android config, network security, build settings
+   - **Configuration issues**: Project config, network security, build settings
    - **State management**: Stale state, missing updates, incorrect dependencies
    - **Timing issues**: Race conditions, async operations not awaited
    - **Navigation issues**: Screen not remounting, params not updating
@@ -125,12 +125,12 @@ When `/magic-wand [issue description]` is invoked, immediately execute the follo
    - What external factors (network, permissions, etc.) could be involved?
 
 3. **Look for the "real" problem**:
-   - Example: Issue in `DeckDetailScreen.tsx` might be caused by:
+   - Example: Issue in `UserProfileScreen.tsx` might be caused by:
      - Network security config blocking Metro connection
      - Navigation not remounting screen
      - Database transaction timing
      - State management in parent component
-     - Configuration in AndroidManifest.xml
+     - Configuration in project-specific config files
    - Don't just fix the symptom - fix the root cause
 
 4. **Document your reasoning**:
@@ -266,7 +266,7 @@ Use `/magic-wand [issue description]` when:
 - Configuration or system-wide issues are suspected
 
 **Examples:**
-- `/magic-wand deck detail screen not refreshing after reload` - Deep analysis of refresh issue
+- `/magic-wand user profile screen not refreshing after reload` - Deep analysis of refresh issue
 - `/magic-wand images not loading` - Comprehensive investigation of image loading
 - `/magic-wand app crashes on startup` - System-wide analysis
 
@@ -291,7 +291,7 @@ When using magic-wand, ensure you:
 
 - [ ] Reviewed recent git history (20-50 commits)
 - [ ] Searched entire codebase for related code
-- [ ] Checked configuration files (Android, network, build)
+- [ ] Checked configuration files (project config, network, build)
 - [ ] Reviewed related screens/components
 - [ ] Traced execution flow end-to-end
 - [ ] Identified root cause (not just symptom)
@@ -306,10 +306,10 @@ When using magic-wand, ensure you:
 ## Common Root Causes to Check
 
 1. **Configuration Issues**:
-   - `AndroidManifest.xml` - Permissions, network config
-   - `network_security_config.xml` - Security settings
-   - `build.gradle` - Build configuration
-   - `package.json` - Dependencies
+   - Project-specific config files - Permissions, network config
+   - Security configuration files - Security settings
+   - Build configuration files - Build settings
+   - `package.json` / dependency files - Dependencies
 
 2. **State Management**:
    - Missing dependencies in hooks
@@ -357,14 +357,14 @@ All magic-wand fixes must respect:
 
 ---
 
-## Example: The Deck Refresh Issue
+## Example: The Data Refresh Issue
 
-**Problem**: Deck detail screen not refreshing after reload (20+ iterations)
+**Problem**: Detail screen not refreshing after reload (20+ iterations)
 
 **Magic Wand Analysis**:
 1. Reviewed git history - found network security config changes
 2. Searched codebase - found Metro connection issues
-3. Checked Android config - found `network_security_config.xml` blocking localhost
+3. Checked project config - found network security configuration blocking localhost
 4. **Root Cause**: Network security config blocking Metro bundler connection, not the refresh logic
 5. **Fix**: Updated `network_security_config.xml` to allow localhost cleartext traffic
 6. **Why previous fixes didn't work**: We were fixing the symptom (refresh logic) not the root cause (Metro connection)

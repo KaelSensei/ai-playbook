@@ -160,6 +160,8 @@ program
       console.log(chalk.gray('   - Cursor rules (.cursor/rules/)'));
       console.log(chalk.gray('   - Cursor commands (.cursor/commands/)'));
       console.log(chalk.gray('   - Documentation structure (.cursor/docs/)\n'));
+      console.log(chalk.cyan('   Optional: Add .cursor/mcp.json for MCP server configuration'));
+      console.log(chalk.gray('   (mcp.json is in .gitignore - contains sensitive tokens)\n'));
       console.log(chalk.yellow('   Note: Make sure to commit .cursor/ to your repository\n'));
 
     } catch (error: any) {
@@ -232,6 +234,15 @@ program
       if (rulesStats.isSymbolicLink()) {
         const target = await fs.readlink(rulesDir);
         console.log(chalk.gray(`   Rules link: ${target}\n`));
+      }
+
+      // Check for mcp.json
+      const mcpJson = path.join(cursorDir, 'mcp.json');
+      const mcpExists = await fs.pathExists(mcpJson);
+      if (mcpExists) {
+        console.log(chalk.green('   MCP config: Found (project-specific)\n'));
+      } else {
+        console.log(chalk.gray('   MCP config: Not found (optional - add .cursor/mcp.json for MCP servers)\n'));
       }
     } else {
       console.log(chalk.yellow('⚠️  Partially installed\n'));

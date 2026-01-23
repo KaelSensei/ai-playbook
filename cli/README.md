@@ -47,6 +47,21 @@ npx ai-playbook-cli@latest status
 npx ai-playbook-cli@latest update
 ```
 
+## Project-Specific Configuration
+
+After installation, you can add project-specific MCP (Model Context Protocol) server configurations:
+
+```bash
+# Create .cursor/mcp.json for your MCP servers
+touch .cursor/mcp.json
+```
+
+**Important:**
+- `mcp.json` is automatically excluded from installation (contains sensitive tokens)
+- Already in `.gitignore` - will never be committed
+- Each developer can have their own `mcp.json` with personal tokens
+- See `.cursor/mcp.json.example` in the playbook for a template
+
 ## Installation Types
 
 ### Symlink (Default)

@@ -26,7 +26,7 @@ When `/brainstorm [topic]` is invoked, immediately execute the following steps t
 ## Step 2: Understand the Brainstorming Topic
 
 1. **Parse the topic** provided after `/brainstorm`:
-   - If topic provided: Focus brainstorming on that area (e.g., "search", "deck management", "offline features")
+   - If topic provided: Focus brainstorming on that area (e.g., "search", "user management", "offline features")
    - If no topic: Conduct general brainstorming for the entire app
 
 2. **Analyze current app state**:
@@ -217,7 +217,7 @@ Use `/brainstorm [topic]` to:
 **Examples:**
 - `/brainstorm` - General brainstorming for entire app
 - `/brainstorm search` - Focus on search functionality improvements
-- `/brainstorm deck management` - Brainstorm deck-related features
+- `/brainstorm user management` - Brainstorm user-related features
 - `/brainstorm offline features` - Focus on offline capabilities
 
 ---
@@ -273,8 +273,8 @@ All brainstormed features must respect:
 ### Ideas Generated:
 
 1. **Advanced Search Filters** (Priority: High)
-   - Filter by card type, mana cost, color
-   - Filter by deck, board type
+   - Filter by category, status, type
+   - Filter by collection, group type
    - Value: 4/5, Effort: 2/5, Score: 2.0
 
 2. **Search History** (Priority: Medium)
@@ -289,7 +289,7 @@ All brainstormed features must respect:
 ### Top Priority: Search History (Score: 3.0)
 - Quick win, high user value
 - Implementation: Add database table for search history (if applicable)
-- Files: CardSearchScreen.tsx, db/repositories.ts
+- Files: SearchScreen.tsx, db/repositories.ts
 ```
 
 ---

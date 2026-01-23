@@ -18,7 +18,7 @@ These rules guide the AI assistant when generating or modifying code. Projects u
 Projects should define their target platform(s) and framework(s). Common considerations:
 
 - **Web**: React, Vue, Angular, vanilla JS/TS, etc.
-- **Mobile**: React Native, Flutter, native iOS/Android, etc.
+- **Mobile**: React Native, Flutter, native mobile platforms, etc.
 - **Desktop**: Electron, native desktop apps, etc.
 - **Backend**: Node.js, Python, Go, etc.
 
@@ -31,7 +31,7 @@ AI assistants should:
 
 Projects should define their build system and development tooling:
 
-- **Build tools**: Language/framework-specific (Webpack/Vite for JS, Cargo for Rust, Gradle/Maven for Java, Make/CMake for C/C++, etc.)
+- **Build tools**: Language/framework-specific (Webpack/Vite for JS, Cargo for Rust, Maven for Java, Make/CMake for C/C++, etc.)
 - **Package managers**: Language-specific (npm/yarn/pnpm for JS, pip/poetry for Python, cargo for Rust, go mod for Go, etc.)
 - **Linting/Formatting**: Language-specific (ESLint/Prettier for JS/TS, Black/flake8 for Python, rustfmt/clippy for Rust, gofmt for Go, etc.)
 - **Testing**: Language-specific (Jest/Vitest for JS, pytest for Python, cargo test for Rust, go test for Go, etc.)

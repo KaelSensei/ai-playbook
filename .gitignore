@@ -8,24 +8,7 @@ yarn-error.log*
 *.log
 *.tmp
 
-# Android
-android/.gradle
-android/app/build
-android/build
-android/local.properties
-android/GeneratedPluginRegistrant.java
-android/.idea
-android/*.iml
-*.apk
-*.aar
-*.jks
-
-# Release signing (DO NOT COMMIT!)
-android/keystore.properties
-android/app/*.keystore
-!android/app/debug.keystore
-
-# React Native
+# Build artifacts
 .idea/
 .vscode/
 *.swp
@@ -41,6 +24,8 @@ coverage/
 
 # Cursor MCP config (contains sensitive tokens - NEVER COMMIT!)
 .cursor/mcp.json
+# Example template is safe to commit
+!.cursor/mcp.json.example
 
 # CLI
 cli/node_modules

@@ -173,11 +173,11 @@ The command enforces these naming patterns:
 ### Required Prefixes
 
 - **Features**: `feature/<description>`
-  - Examples: `feature/add-deck-export`, `feature/stats-card-images`
+  - Examples: `feature/add-export`, `feature/stats-dashboard`
 - **Fixes**: `fix/<description>`
   - Examples: `fix/image-loading-error`, `fix/database-migration`
 - **Refactors**: `refactor/<description>`
-  - Examples: `refactor/extract-card-utils`, `refactor/cleanup-db-queries`
+  - Examples: `refactor/extract-utils`, `refactor/cleanup-db-queries`
 - **Documentation**: `docs/<description>`
   - Examples: `docs/update-readme`, `docs/add-architecture-docs`
 
@@ -188,7 +188,7 @@ The command enforces these naming patterns:
 - Be **descriptive** but concise
 - Avoid special characters
 - Examples:
-  - ✅ Good: `feature/add-deck-export`, `fix/search-performance`
+  - ✅ Good: `feature/add-export`, `fix/search-performance`
   - ❌ Bad: `Feature_AddExport`, `new branch`, `fix/bug#123`
 
 ### Auto-Normalization
@@ -225,11 +225,11 @@ Use `/create-branch` to:
 ```
 User: /create-branch
 AI: What would you like to name the new branch?
-User: add deck export
+User: add export feature
 AI: What type of branch is this? (feature/fix/refactor/docs)
 User: feature
-AI: Creating branch: feature/add-deck-export
-✓ Created and switched to branch: feature/add-deck-export
+AI: Creating branch: feature/add-export
+✓ Created and switched to branch: feature/add-export
 ✓ Branch pushed to remote with upstream tracking
 ```
 
