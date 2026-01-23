@@ -1,14 +1,17 @@
 # AI Playbook
 
-This repository contains a **shared AI playbook** used across multiple projects to standardize how AI assistants (Cursor, Claude, etc.) contribute to codebases.
+This repository contains a **shared AI playbook** used across multiple projects to standardize how
+AI assistants (Cursor, Claude, etc.) contribute to codebases.
 
 It defines:
+
 - Reusable **Cursor rules (`.mdc`)**
 - Structured **AI commands** (`/start`, `/feature`, `/fix`, `/refactor`, etc.)
 - **Security-first policies** (MCP validation, backdoor prevention, supply-chain awareness)
 - **Version and branch discipline** for AI-generated commits
 
 The goal is to ensure AI-assisted development is:
+
 - **Consistent** across projects
 - **Safe** by default
 - **Auditable** and reviewable
@@ -19,11 +22,13 @@ The goal is to ensure AI-assisted development is:
 ## Why This Exists
 
 Copy-pasting AI rules between projects does not scale and leads to:
+
 - Silent behavior drift
 - Inconsistent security guarantees
 - Uncontrolled AI changes
 
-This repository acts as a **single source of truth** for AI behavior and is meant to be included in projects via **Git submodules or symlinks**.
+This repository acts as a **single source of truth** for AI behavior and is meant to be included in
+projects via **Git submodules or symlinks**.
 
 Each project can pin a specific version of the playbook and upgrade intentionally.
 
@@ -32,11 +37,13 @@ Each project can pin a specific version of the playbook and upgrade intentionall
 ## What This Repo Is (and Is Not)
 
 **This repo is:**
+
 - A reusable AI behavior baseline
 - Tool-agnostic (Cursor, Claude, future agents)
 - Security-focused and production-oriented
 
 **This repo is NOT:**
+
 - Project-specific documentation
 - Application code
 - A framework or SDK
@@ -61,6 +68,7 @@ ln -s ../.ai-playbook/.cursor/docs .cursor/docs
 ```
 
 **Benefits:**
+
 - ✅ Update rules in one place, pull into all projects
 - ✅ Version-control AI behavior (huge win!)
 - ✅ Pin specific versions per project
@@ -68,6 +76,7 @@ ln -s ../.ai-playbook/.cursor/docs .cursor/docs
 - ✅ This is what serious infra teams do
 
 **Updating:**
+
 ```bash
 git submodule update --remote .ai-playbook
 ```
@@ -85,6 +94,7 @@ npx ai-playbook-cli@latest install --type copy
 ```
 
 **Next Steps:**
+
 1. Verify installation: `npx ai-playbook-cli@latest status`
 2. Open your project in Cursor
 3. Start using commands like `/start`, `/feature`, `/fix`
@@ -99,7 +109,8 @@ git clone https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook
 cp -r .ai-playbook/.cursor .cursor
 ```
 
-For detailed installation, deployment, and development instructions, see [INSTALLATION.md](INSTALLATION.md).
+For detailed installation, deployment, and development instructions, see
+[INSTALLATION.md](INSTALLATION.md).
 
 ## Typical Usage
 
@@ -110,7 +121,8 @@ For detailed installation, deployment, and development instructions, see [INSTAL
 
 ### Project-Specific Configuration
 
-You can add project-specific MCP (Model Context Protocol) server configurations in `.cursor/mcp.json`:
+You can add project-specific MCP (Model Context Protocol) server configurations in
+`.cursor/mcp.json`:
 
 - **Already in `.gitignore`** - contains sensitive tokens, never committed
 - Each developer can have their own `mcp.json` with personal tokens
@@ -129,10 +141,44 @@ See [INSTALLATION.md](INSTALLATION.md) for details.
 
 ---
 
+## Development
+
+This repository uses ESLint and Prettier for code quality and formatting.
+
+### Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Format all files
+npm run format
+
+# Check formatting
+npm run format:check
+
+# Lint TypeScript code (CLI)
+npm run lint
+
+# Run all checks
+npm run check
+```
+
+### Code Quality
+
+- **ESLint**: TypeScript/JavaScript linting for the CLI tool
+- **Prettier**: Code formatting for all files (Markdown, JSON, TypeScript, etc.)
+- **Pre-commit hooks**: Automatically runs linting and formatting checks before each commit
+  - Uses [Husky](https://typicode.github.io/husky/) for Git hooks
+  - Uses [lint-staged](https://github.com/lint-staged/lint-staged) to check only staged files
+  - Automatically fixes formatting issues when possible
+
+---
+
 ## Versioning
 
-Changes to AI behavior are versioned and must be consciously pulled into projects.
-Breaking changes are documented.
+Changes to AI behavior are versioned and must be consciously pulled into projects. Breaking changes
+are documented.
 
 ---
 
@@ -159,19 +205,22 @@ For installation, deployment, and next steps, see [INSTALLATION.md](INSTALLATION
 
 ### Official Documentation
 
-- **[Cursor Commands Documentation](https://cursor.com/fr/docs/context/commands)** - Official Cursor documentation on creating and using custom commands
+- **[Cursor Commands Documentation](https://cursor.com/fr/docs/context/commands)** - Official Cursor
+  documentation on creating and using custom commands
   - Learn how commands work
   - Understand command structure and syntax
   - See examples of effective commands
 
 ### Community Examples
 
-- **[cursor-commands Repository](https://github.com/hamzafer/cursor-commands/tree/main/.cursor/commands)** - Community-maintained collection of Cursor command examples
+- **[cursor-commands Repository](https://github.com/hamzafer/cursor-commands/tree/main/.cursor/commands)** -
+  Community-maintained collection of Cursor command examples
   - Real-world command implementations
   - Additional command patterns and workflows
   - Inspiration for creating your own commands
 
-- **[AIBlueprint](https://github.com/Melvynx/aiblueprint)** - Similar CLI tool for Claude Code configurations
+- **[AIBlueprint](https://github.com/Melvynx/aiblueprint)** - Similar CLI tool for Claude Code
+  configurations
   - Inspiration for CLI structure
   - Example of npx-based installation
 
@@ -181,6 +230,7 @@ For installation, deployment, and next steps, see [INSTALLATION.md](INSTALLATION
 
 This project is free to use and reuse for any purpose, including commercial use.  
 You are free to:
+
 - Use this playbook in your projects (commercial or non-commercial)
 - Modify and adapt it to your needs
 - Share it with others
