@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="assets/ai-playbook-cover.png" alt="AI Playbook" width="600"/>
+</div>
+
 # AI Playbook
 
 This repository contains a **shared AI playbook** used across multiple projects to standardize how
