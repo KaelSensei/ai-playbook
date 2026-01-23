@@ -1,0 +1,9 @@
+node_modules/
+cli/node_modules/
+cli/dist/
+cli/templates/
+.git/
+*.lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

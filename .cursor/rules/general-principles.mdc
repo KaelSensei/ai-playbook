@@ -1,0 +1,99 @@
+---
+alwaysApply: true
+---
+# General Principles and Project Philosophy
+
+These rules define the core philosophy and mental model for AI-assisted development. Projects using this playbook should adapt these principles to their specific context.
+
+## Project Philosophy
+
+- Prefer **simple solutions over clever ones**
+- Avoid over-engineering
+- If something can be done locally, **do it locally** (when appropriate)
+- Always consider **offline-first** behavior when applicable
+- Projects should be **useful**, **maintainable**, and **easy to understand**
+- Keep it simple. Keep it working. 😄
+
+## Mental Model
+
+AI assistants should assume:
+
+- **Project-specific constraints** - Understand and respect the project's technical constraints
+- **Data sources** - Be aware of where data comes from and how it's structured
+- **Local-first when possible** - Prefer local storage and processing when appropriate
+- **Read-only external sources** - When scraping or consuming external data, respect read-only constraints
+
+Projects should prioritize:
+
+- **Maintainability** - Code should be readable and understandable
+- **Performance** - Prioritize speed and efficiency where it matters
+- **Simplicity** - Functional solutions > complex abstractions
+
+If a suggestion violates project principles → don't do it.
+
+## Tech Stack Constraints
+
+Projects should define their own tech stack constraints. Common considerations:
+
+- **Platform**: Define target platforms (web, mobile, desktop, etc.)
+- **Language**: Preferred languages and versions
+- **Data storage**: Database, file system, or other persistence mechanisms
+- **External dependencies**: What external services or APIs are allowed
+- **Build tools**: Preferred build systems and tooling
+
+AI assistants must respect project-specific tech stack constraints and should not suggest alternatives that violate them.
+
+## Data Rules
+
+Projects should define their own data rules:
+
+- Data formats and structures
+- Validation requirements
+- External data source constraints
+- Synchronization policies (if any)
+
+## Database Rules (When Applicable)
+
+If the project uses a database:
+
+- Define the database as the single source of truth (when appropriate)
+- Prefer simple schemas
+- Always add indexes when search speed matters
+- Avoid complex ORM abstractions unless necessary
+
+## UI Rules (When Applicable)
+
+If the project has a user interface:
+
+- Prioritize usability and clarity
+- Avoid unnecessary animations or complexity
+- Prioritize speed and readability
+- Functional screens > beautiful screens
+
+## Coding Style
+
+- Prefer readable code over short code
+- Explicit > implicit
+- Avoid magic abstractions
+- Comment only when useful
+
+## When AI Assists
+
+When asked for help, AI assistants should:
+
+- Act as an **expert in the project's domain**
+- Be confident with project-specific patterns and constraints
+- Give **step-by-step answers**
+- Explain **why** when choices exist
+- Default to the **simplest working solution**
+- Assume the user wants something that works now, not perfect later
+
+## What AI Should NOT Do
+
+- Do not introduce services or dependencies that violate project constraints
+- Do not add features that conflict with project architecture
+- Do not suggest solutions that require infrastructure not available to the project
+- Do not optimize prematurely
+- Do not add external dependencies without justification
+
+These principles ensure projects stay true to their intended architecture and constraints.
