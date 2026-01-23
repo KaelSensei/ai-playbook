@@ -45,7 +45,36 @@ Each project can pin a specific version of the playbook and upgrade intentionall
 
 ## Installation
 
-### Quick Install (Recommended)
+### Option 1: Git Submodule (Recommended for Teams)
+
+**Best for teams, long-term projects, and version-controlled AI behavior.**
+
+```bash
+# Add as Git submodule
+git submodule add https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook
+
+# Create symlinks
+mkdir -p .cursor
+ln -s ../.ai-playbook/.cursor/rules .cursor/rules
+ln -s ../.ai-playbook/.cursor/commands .cursor/commands
+ln -s ../.ai-playbook/.cursor/docs .cursor/docs
+```
+
+**Benefits:**
+- ✅ Update rules in one place, pull into all projects
+- ✅ Version-control AI behavior (huge win!)
+- ✅ Pin specific versions per project
+- ✅ No npm/node dependencies
+- ✅ This is what serious infra teams do
+
+**Updating:**
+```bash
+git submodule update --remote .ai-playbook
+```
+
+### Option 2: CLI Tool (Quick Setup)
+
+**Best for quick setup and individual developers.**
 
 ```bash
 # Install in your project (creates symlinks)
@@ -61,34 +90,33 @@ npx ai-playbook-cli@latest install --type copy
 3. Start using commands like `/start`, `/feature`, `/fix`
 4. See [INSTALLATION.md](INSTALLATION.md) for detailed setup and troubleshooting
 
-### Manual Installation
+### Option 3: Manual Copy
 
-You can also install manually:
+For one-off installations without Git submodules:
 
-1. **As Git Submodule:**
-   ```bash
-   git submodule add https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook
-   mkdir -p .cursor
-   ln -s ../.ai-playbook/.cursor/rules .cursor/rules
-   ln -s ../.ai-playbook/.cursor/commands .cursor/commands
-   ln -s ../.ai-playbook/.cursor/docs .cursor/docs
-   ```
-
-2. **Direct Copy:**
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook
-   cp -r .ai-playbook/.cursor .cursor
-   ```
+```bash
+git clone https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook
+cp -r .ai-playbook/.cursor .cursor
+```
 
 For detailed installation, deployment, and development instructions, see [INSTALLATION.md](INSTALLATION.md).
 
 ## Typical Usage
 
-- Installed via **CLI tool** (recommended)
-- Added as a **git submodule** in projects
+- Installed via **CLI tool** or **Git submodule**
 - Linked to `.cursor/rules/` and `.cursor/commands/`
 - Read automatically by AI assistants
 - Updated independently of application code
+
+### Project-Specific Configuration
+
+You can add project-specific MCP (Model Context Protocol) server configurations in `.cursor/mcp.json`:
+
+- **Already in `.gitignore`** - contains sensitive tokens, never committed
+- Each developer can have their own `mcp.json` with personal tokens
+- The CLI automatically excludes `mcp.json` when installing
+
+See [INSTALLATION.md](INSTALLATION.md) for details.
 
 ---
 
@@ -151,5 +179,11 @@ For installation, deployment, and next steps, see [INSTALLATION.md](INSTALLATION
 
 ## License
 
-Internal / private by default.  
-Adapt as needed.
+This project is free to use and reuse for any purpose, including commercial use.  
+You are free to:
+- Use this playbook in your projects (commercial or non-commercial)
+- Modify and adapt it to your needs
+- Share it with others
+- Include it in proprietary software
+
+No attribution required, though it's appreciated.
