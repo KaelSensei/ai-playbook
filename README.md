@@ -230,6 +230,14 @@ For installation, deployment, and next steps, see [INSTALLATION.md](INSTALLATION
 
 ---
 
+## Annex – Commands
+
+For a consolidated overview of all available Cursor commands in this playbook, see:
+
+- [COMMANDS.md](COMMANDS.md) – summary table of every `/command` and its purpose
+
+---
+
 ## License
 
 This project is free to use and reuse for any purpose, including commercial use.  
