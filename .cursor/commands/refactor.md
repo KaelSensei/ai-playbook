@@ -87,7 +87,7 @@ Before making changes:
 
 Before committing, **automatically** update (as per `documentation.mdc` rule):
 
-1. **Project progress documentation**: 
+1. **Project progress documentation**:
    - Note the refactor if it changes functionality description
    - Update "Last updated" timestamp
 2. **CHANGELOG.md** (create if missing):
@@ -107,10 +107,10 @@ git commit -m "refactor: <clear description of structural improvement>"
 git push origin $(git branch --show-current)
 ```
 
-Never push directly to main or master
-Always push to the current refactor branch
+Never push directly to main or master Always push to the current refactor branch
 
 Cursor Behavior Rules
+
 - Refactor ≠ rewrite
 - Never “improve” logic
 - Never sneak in fixes or features
@@ -120,6 +120,7 @@ Cursor Behavior Rules
 ## Usage
 
 Use `/refactor <description>` to:
+
 - Improve readability
 - Clean up structure
 - Reduce duplication

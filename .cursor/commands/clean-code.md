@@ -1,6 +1,7 @@
 # Clean Code Command – Code Cleanup and Technical Debt Removal
 
-When `/clean-code [target]` is invoked, immediately execute the following steps to remove redundant code, unused variables, dead code, debug statements, and other technical debt.
+When `/clean-code [target]` is invoked, immediately execute the following steps to remove redundant
+code, unused variables, dead code, debug statements, and other technical debt.
 
 ---
 
@@ -19,7 +20,8 @@ When `/clean-code [target]` is invoked, immediately execute the following steps 
 4. Identify the current Git branch and assume it is a **refactor branch**, not `main`
 5. Determine the cleanup scope:
    - If no target specified: analyze entire codebase for cleanup opportunities
-   - If target specified: focus on specific files/directories (e.g., `src/screens/UserProfileScreen.tsx`, `src/db/`)
+   - If target specified: focus on specific files/directories (e.g.,
+     `src/screens/UserProfileScreen.tsx`, `src/db/`)
 
 ---
 
@@ -32,10 +34,12 @@ When `/clean-code [target]` is invoked, immediately execute the following steps 
    - **Dead code** - Remove code paths that are unreachable
    - **Duplicate code** - Identify and consolidate duplicate logic
    - **Redundant code** - Remove code that does the same thing multiple times
-   - **Debug statements** - Remove `console.log`, `console.debug`, `console.warn` (unless intentional)
+   - **Debug statements** - Remove `console.log`, `console.debug`, `console.warn` (unless
+     intentional)
    - **Commented-out code** - Remove old commented code blocks
    - **Unused functions** - Remove functions that are never called
-   - **Unnecessary dependencies** - Remove dependencies from hooks/useMemo that don't affect the result
+   - **Unnecessary dependencies** - Remove dependencies from hooks/useMemo that don't affect the
+     result
    - **Overly complex logic** - Simplify unnecessarily complex expressions
 3. **Do NOT remove**:
    - Code that appears unused but is actually used (e.g., via dynamic imports, reflection)
@@ -138,6 +142,7 @@ Before removing any code:
 ## Step 7: Update Documentation (If Required)
 
 If the cleanup affects:
+
 - Public APIs: Update relevant documentation
 - Architecture: Update architecture docs if structure changed
 - Patterns: Update pattern documentation if new patterns were introduced
@@ -147,6 +152,7 @@ If the cleanup affects:
 ## Step 8: Commit & Push (Required)
 
 After cleanup is complete:
+
 ```bash
 git add .
 git commit -m "refactor: clean up code in [target]
@@ -178,6 +184,7 @@ git push origin $(git branch --show-current)
 ## Usage
 
 Use `/clean-code [target]` to:
+
 - Remove unused imports, variables, and dead code
 - Clean up debug statements and commented code
 - Remove duplicate/redundant code patterns
@@ -185,6 +192,7 @@ Use `/clean-code [target]` to:
 - Reduce technical debt
 
 **Examples:**
+
 - `/clean-code` - Clean entire codebase
 - `/clean-code src/screens/UserProfileScreen.tsx` - Clean specific file
 - `/clean-code src/db/` - Clean specific directory
@@ -216,6 +224,7 @@ When cleaning code, check for:
 ## Integration with Project Rules
 
 All cleanup must respect:
+
 - `.cursor/rules/security.mdc` - Don't remove security-related code
 - `.cursor/rules/technical-stack.mdc` - Maintain technical stack patterns
 - `.cursor/rules/documentation.mdc` - Update docs if APIs change

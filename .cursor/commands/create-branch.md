@@ -1,6 +1,7 @@
 # Create Branch Command – Interactive Branch Creation
 
-When `/create-branch` is invoked, immediately execute the following steps to interactively create a new feature branch with proper naming conventions.
+When `/create-branch` is invoked, immediately execute the following steps to interactively create a
+new feature branch with proper naming conventions.
 
 ---
 
@@ -14,18 +15,21 @@ When `/create-branch` is invoked, immediately execute the following steps to int
    - `version-management.mdc` - Git commit/push workflow
    - `general-principles.mdc` - Project philosophy
 3. Check current git status and branch
-4. Read project progress documentation (e.g., `PROGRESS.md`, `CHANGELOG.md`) to understand current project state
+4. Read project progress documentation (e.g., `PROGRESS.md`, `CHANGELOG.md`) to understand current
+   project state
 
 ---
 
 ## Step 2: Check Current State
 
 1. **Check current branch**:
+
    ```bash
    git branch --show-current
    ```
 
 2. **Check for uncommitted changes**:
+
    ```bash
    git status
    ```
@@ -82,11 +86,13 @@ When `/create-branch` is invoked, immediately execute the following steps to int
 ## Step 5: Check Branch Doesn't Exist
 
 1. **Check if branch already exists locally**:
+
    ```bash
    git branch --list <normalized-name>
    ```
 
 2. **Check if branch exists remotely**:
+
    ```bash
    git branch -r --list origin/<normalized-name>
    ```
@@ -103,11 +109,13 @@ When `/create-branch` is invoked, immediately execute the following steps to int
 ## Step 6: Ensure Base Branch is Up to Date
 
 1. **Switch to main/master**:
+
    ```bash
    git checkout main  # or master
    ```
 
 2. **Pull latest changes**:
+
    ```bash
    git pull origin main  # or master
    ```
@@ -121,14 +129,17 @@ When `/create-branch` is invoked, immediately execute the following steps to int
 ## Step 7: Create and Switch to New Branch
 
 1. **Create new branch**:
+
    ```bash
    git checkout -b <normalized-name>
    ```
 
 2. **Verify branch creation**:
+
    ```bash
    git branch --show-current
    ```
+
    - Should show the new branch name
 
 3. **Display confirmation**:
@@ -139,6 +150,7 @@ When `/create-branch` is invoked, immediately execute the following steps to int
 ## Step 8: Push Branch to Remote (Set Upstream)
 
 1. **Push branch to remote**:
+
    ```bash
    git push -u origin <normalized-name>
    ```
@@ -155,6 +167,7 @@ When `/create-branch` is invoked, immediately execute the following steps to int
 ## Step 9: Ready for Development
 
 1. **Confirm branch is active**:
+
    ```bash
    git branch --show-current
    ```
@@ -194,6 +207,7 @@ The command enforces these naming patterns:
 ### Auto-Normalization
 
 The command automatically:
+
 - Converts to lowercase
 - Replaces spaces/underscores with hyphens
 - Adds prefix if missing (after asking user)
@@ -217,11 +231,13 @@ The command automatically:
 ## Usage
 
 Use `/create-branch` to:
+
 - Interactively create a new feature/fix/refactor branch
 - Ensure proper naming conventions are followed
 - Set up branch with remote tracking automatically
 
 **Example Flow:**
+
 ```
 User: /create-branch
 AI: What would you like to name the new branch?
@@ -238,6 +254,7 @@ AI: Creating branch: feature/add-export
 ## Integration with Other Commands
 
 After creating a branch with `/create-branch`:
+
 - Use `/feature <description>` to implement new functionality
 - Use `/fix <description>` to fix issues
 - Use `/refactor <description>` to improve code structure
@@ -262,6 +279,7 @@ Always provide clear error messages and suggested resolutions.
 ## Integration with Project Rules
 
 All branch creation must respect:
+
 - `.cursor/rules/version-management.mdc` - Git workflow and branch management
 - `.cursor/rules/general-principles.mdc` - Project philosophy (simple, offline-first)
 - `.cursor/rules/documentation.mdc` - Documentation update requirements (if applicable)

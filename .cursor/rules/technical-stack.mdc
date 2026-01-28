@@ -1,17 +1,21 @@
 ---
 alwaysApply: true
 ---
+
 # Technical Stack Rules
 
-These rules guide the AI assistant when generating or modifying code. Projects using this playbook should define their specific technical stack constraints.
+These rules guide the AI assistant when generating or modifying code. Projects using this playbook
+should define their specific technical stack constraints.
 
 ## Language & Code Style
 
 - Use modern language features and best practices for the project's chosen language(s)
 - Follow consistent formatting and style patterns across all files
 - Keep logic simple and explicit; avoid magic abstractions
-- **Type safety**: When the language supports it (TypeScript, Python type hints, Go, Rust, etc.), use strong typing and avoid type-unsafe patterns
-- **Code style**: Follow project-specific style guides (PEP 8 for Python, Go fmt, Rust clippy, ESLint for JS/TS, etc.)
+- **Type safety**: When the language supports it (TypeScript, Python type hints, Go, Rust, etc.),
+  use strong typing and avoid type-unsafe patterns
+- **Code style**: Follow project-specific style guides (PEP 8 for Python, Go fmt, Rust clippy,
+  ESLint for JS/TS, etc.)
 
 ## Platform & Framework
 
@@ -23,6 +27,7 @@ Projects should define their target platform(s) and framework(s). Common conside
 - **Backend**: Node.js, Python, Go, etc.
 
 AI assistants should:
+
 - Respect platform-specific constraints and patterns
 - Use platform-appropriate APIs and libraries
 - Follow platform-specific best practices and conventions
@@ -31,12 +36,17 @@ AI assistants should:
 
 Projects should define their build system and development tooling:
 
-- **Build tools**: Language/framework-specific (Webpack/Vite for JS, Cargo for Rust, Maven for Java, Make/CMake for C/C++, etc.)
-- **Package managers**: Language-specific (npm/yarn/pnpm for JS, pip/poetry for Python, cargo for Rust, go mod for Go, etc.)
-- **Linting/Formatting**: Language-specific (ESLint/Prettier for JS/TS, Black/flake8 for Python, rustfmt/clippy for Rust, gofmt for Go, etc.)
-- **Testing**: Language-specific (Jest/Vitest for JS, pytest for Python, cargo test for Rust, go test for Go, etc.)
+- **Build tools**: Language/framework-specific (Webpack/Vite for JS, Cargo for Rust, Maven for Java,
+  Make/CMake for C/C++, etc.)
+- **Package managers**: Language-specific (npm/yarn/pnpm for JS, pip/poetry for Python, cargo for
+  Rust, go mod for Go, etc.)
+- **Linting/Formatting**: Language-specific (ESLint/Prettier for JS/TS, Black/flake8 for Python,
+  rustfmt/clippy for Rust, gofmt for Go, etc.)
+- **Testing**: Language-specific (Jest/Vitest for JS, pytest for Python, cargo test for Rust, go
+  test for Go, etc.)
 
 AI assistants should:
+
 - Use project-defined build commands
 - Respect existing build configurations
 - Follow project-specific development workflows
@@ -50,6 +60,7 @@ Projects should define their data storage approach:
 - **Caching**: In-memory, Redis, local cache, etc.
 
 When working with databases:
+
 - SQLite or other databases should be the **single source of truth** when appropriate
 - Prefer simple schemas with explicit indexes for queries that affect performance
 - Always add indexes when search speed matters
@@ -57,6 +68,7 @@ When working with databases:
 - Avoid complex ORM abstractions unless necessary
 
 For file storage:
+
 - Download once, cache locally when appropriate
 - Never depend on remote URLs at runtime when offline behavior is expected
 - Store files locally and reuse when possible
@@ -84,6 +96,7 @@ When projects consume external data (APIs, scraping, etc.):
 ## Project-Specific Constraints
 
 AI assistants must:
+
 - Respect project-defined technical constraints
 - Not suggest alternatives that violate project architecture
 - Follow project-specific patterns and conventions

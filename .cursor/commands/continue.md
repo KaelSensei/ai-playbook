@@ -1,6 +1,7 @@
 # Continue Command - Resume Project Work
 
-When `/continue` is invoked, resume work on **this project** by reloading progress and picking the next pending task.
+When `/continue` is invoked, resume work on **this project** by reloading progress and picking the
+next pending task.
 
 ## Step 1: Project Context
 

@@ -1,6 +1,7 @@
 # Beautify Command – UI Enhancement Workflow
 
-When `/beautify <component or page description>` is invoked, immediately execute the following steps.
+When `/beautify <component or page description>` is invoked, immediately execute the following
+steps.
 
 ---
 
@@ -51,26 +52,31 @@ Before writing any code:
 Apply improvements following these priorities:
 
 ### 4.1 Layout & Spacing
+
 - Improve visual hierarchy with consistent spacing
 - Ensure proper alignment and grid structure
 - Add appropriate white space for breathing room
 
 ### 4.2 Typography
+
 - Enhance readability with proper font sizing
 - Improve text hierarchy (headings, body, captions)
 - Ensure sufficient contrast ratios (WCAG AA minimum)
 
 ### 4.3 Colors & Visual Appeal
+
 - Apply or refine color scheme consistently
 - Add subtle gradients or shadows where appropriate
 - Ensure sufficient color contrast for accessibility
 
 ### 4.4 Interactive Elements
+
 - Add smooth transitions and hover states
 - Enhance button and input styling
 - Improve focus states for keyboard navigation
 
 ### 4.5 Responsiveness
+
 - Ensure mobile-first responsive design
 - Test breakpoints and adaptive layouts
 - Optimize for touch targets on mobile (min 44x44px)
@@ -120,6 +126,7 @@ Apply improvements following these priorities:
 ## Step 8: Commit & Push (Required)
 
 After enhancements are complete:
+
 ```bash
 git add .
 git commit -m "style: beautify <component/page name> - <brief description of changes>"
@@ -146,6 +153,7 @@ git push
 ## Usage
 
 Use `/beautify <component or page description>` to:
+
 - Enhance visual appeal of a component or page
 - Improve spacing, typography, and color usage
 - Add modern UI patterns (gradients, shadows, animations)

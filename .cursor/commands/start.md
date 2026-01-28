@@ -36,7 +36,8 @@ Without asking for confirmation:
    - Overall goal: **Project purpose and key constraints**
    - Current milestone and any relevant constraints
 2. List all documents that were loaded
-3. Choose the **next concrete task** based on the docs (feature, bugfix, refactor, or deployment work)
+3. Choose the **next concrete task** based on the docs (feature, bugfix, refactor, or deployment
+   work)
 4. Immediately start implementing that task, following:
    - The tech‑stack rules (project-specific technical constraints)
    - The security rules (no unsafe network behavior, no dynamic code)
@@ -45,6 +46,7 @@ Without asking for confirmation:
 ## Usage
 
 Type `/start` when opening a project in a new session. The AI will:
+
 1. Load the project docs and rules
 2. Understand what's done and what's next
 3. Pick the next task

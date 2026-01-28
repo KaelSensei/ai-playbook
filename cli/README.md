@@ -57,6 +57,7 @@ touch .cursor/mcp.json
 ```
 
 **Important:**
+
 - `mcp.json` is automatically excluded from installation (contains sensitive tokens)
 - Already in `.gitignore` - will never be committed
 - Each developer can have their own `mcp.json` with personal tokens
@@ -69,11 +70,13 @@ touch .cursor/mcp.json
 Creates symbolic links from your project's `.cursor/` directory to the playbook files. This allows you to update the playbook in one place and have changes reflected in all projects.
 
 **Pros:**
+
 - Easy updates across all projects
 - No duplication
 - Always uses latest version
 
 **Cons:**
+
 - Requires playbook repository to be accessible
 - Symlinks may not work on all systems
 
@@ -82,11 +85,13 @@ Creates symbolic links from your project's `.cursor/` directory to the playbook 
 Copies all playbook files directly into your project's `.cursor/` directory.
 
 **Pros:**
+
 - Works everywhere
 - Project is self-contained
 - No external dependencies
 
 **Cons:**
+
 - Updates require re-running install
 - Files are duplicated
 
@@ -95,11 +100,13 @@ Copies all playbook files directly into your project's `.cursor/` directory.
 Uses Git submodules to link the playbook repository.
 
 **Pros:**
+
 - Version controlled
 - Can pin specific versions
 - Standard Git workflow
 
 **Cons:**
+
 - Requires Git submodule knowledge
 - More setup steps
 

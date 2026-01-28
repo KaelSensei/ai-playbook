@@ -1,22 +1,27 @@
 ---
 alwaysApply: true
 ---
+
 # Version Management Rules
 
-Automatically commit and push changes after completing any feature, bug fix, or significant addition.
+Automatically commit and push changes after completing any feature, bug fix, or significant
+addition.
 
 ## Commit Workflow
 
 **CRITICAL: Do this automatically without asking for user confirmation.**
 
-After completing a task (feature, bug fix, or new addition), **immediately and automatically** execute:
+After completing a task (feature, bug fix, or new addition), **immediately and automatically**
+execute:
 
 1. **Stage all changes:**
+
    ```bash
    git add -A
    ```
 
 2. **Commit with descriptive message using conventional commits:**
+
    ```bash
    git commit -m "type: brief description"
    ```
@@ -49,6 +54,7 @@ type: brief description
 ```
 
 **Examples:**
+
 - `feat: add new feature description`
 - `fix: resolve issue with specific component`
 - `docs: update deployment documentation`
@@ -56,12 +62,15 @@ type: brief description
 
 ## Rules
 
-- **ALWAYS commit automatically** after completing a feature, fixing a bug, or adding something new - **DO NOT ASK FOR PERMISSION**
-- **ALWAYS push immediately** after committing (unless push fails due to permissions) - **DO NOT ASK FOR PERMISSION**
+- **ALWAYS commit automatically** after completing a feature, fixing a bug, or adding something
+  new - **DO NOT ASK FOR PERMISSION**
+- **ALWAYS push immediately** after committing (unless push fails due to permissions) - **DO NOT ASK
+  FOR PERMISSION**
 - **Never commit** to main/master directly - always use feature branches
 - **Use descriptive messages** that explain what and why
 - **Group related changes** in a single commit when they're part of the same task
-- **No confirmation prompts** - the AI assistant must execute git commands automatically as part of completing any task
+- **No confirmation prompts** - the AI assistant must execute git commands automatically as part of
+  completing any task
 
 ## Branch Management
 

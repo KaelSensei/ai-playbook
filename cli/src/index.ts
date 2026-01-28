@@ -15,15 +15,15 @@ async function getPlaybookRoot(): Promise<string | null> {
   // Files are at: node_modules/ai-playbook-cli/templates/.cursor
   const cliRoot = path.resolve(__dirname, '..');
   const playbookCursor1 = path.join(cliRoot, 'templates', '.cursor');
-  
+
   // Try 2: Parent of CLI (when in repo: cli/dist -> cli -> repo root)
   const repoRoot = path.resolve(__dirname, '../../..');
   const playbookCursor2 = path.join(repoRoot, '.cursor');
-  
+
   // Try 3: Current working directory (when run from repo root)
   const cwdRoot = process.cwd();
   const playbookCursor3 = path.join(cwdRoot, '.cursor');
-  
+
   // Check which location has the .cursor directory
   if (await fs.pathExists(playbookCursor1)) {
     return path.join(cliRoot, 'templates');
@@ -31,19 +31,16 @@ async function getPlaybookRoot(): Promise<string | null> {
   if (await fs.pathExists(playbookCursor2)) {
     return repoRoot;
   }
-  if (await fs.pathExists(playbookCursor3) && cwdRoot.includes('ai-playbook')) {
+  if ((await fs.pathExists(playbookCursor3)) && cwdRoot.includes('ai-playbook')) {
     return cwdRoot;
   }
-  
+
   return null;
 }
 
 const program = new Command();
 
-program
-  .name('ai-playbook')
-  .description('Install AI Playbook in your project')
-  .version('1.0.0');
+program.name('ai-playbook').description('Install AI Playbook in your project').version('1.0.0');
 
 program
   .command('install')
@@ -54,7 +51,7 @@ program
     const cwd = process.cwd();
     const cursorDir = path.join(cwd, '.cursor');
     const playbookRoot = await getPlaybookRoot();
-    
+
     if (!playbookRoot) {
       console.log(chalk.red('❌ Error: Could not find AI Playbook files'));
       console.log(chalk.yellow('\n   Make sure the CLI package was built correctly.'));
@@ -66,13 +63,13 @@ program
       console.log(chalk.gray('   npm run dev install\n'));
       process.exit(1);
     }
-    
+
     const playbookCursorDir = path.join(playbookRoot, '.cursor');
 
     console.log(chalk.blue('🚀 AI Playbook Installer\n'));
 
     // Check if .cursor already exists
-    if (await fs.pathExists(cursorDir) && !options.force) {
+    if ((await fs.pathExists(cursorDir)) && !options.force) {
       console.log(chalk.yellow(`⚠️  .cursor directory already exists at ${cursorDir}`));
       console.log(chalk.yellow('   Use --force to overwrite or install manually\n'));
       process.exit(1);
@@ -80,7 +77,9 @@ program
 
     // Verify playbook .cursor directory exists
     if (!(await fs.pathExists(playbookCursorDir))) {
-      console.log(chalk.red(`❌ Error: AI Playbook .cursor directory not found at ${playbookCursorDir}`));
+      console.log(
+        chalk.red(`❌ Error: AI Playbook .cursor directory not found at ${playbookCursorDir}`)
+      );
       console.log(chalk.red('   Make sure you are running from the ai-playbook repository\n'));
       process.exit(1);
     }
@@ -132,7 +131,6 @@ program
         console.log(chalk.gray(`   ${rulesDir} -> ${playbookRulesDir}`));
         console.log(chalk.gray(`   ${commandsDir} -> ${playbookCommandsDir}`));
         console.log(chalk.gray(`   ${docsDir} -> ${playbookDocsDir}\n`));
-
       } else if (options.type === 'copy') {
         // Copy files
         await fs.copy(playbookCursorDir, cursorDir, {
@@ -140,15 +138,18 @@ program
           filter: (src) => {
             // Don't copy mcp.json if it exists (contains sensitive data)
             return !src.endsWith('mcp.json');
-          }
+          },
         });
 
         console.log(chalk.green('✅ Copied AI Playbook files to .cursor directory\n'));
-
       } else if (options.type === 'submodule') {
         console.log(chalk.yellow('📦 Submodule installation:\n'));
         console.log(chalk.cyan('   Run these commands in your project:\n'));
-        console.log(chalk.gray('   git submodule add https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook'));
+        console.log(
+          chalk.gray(
+            '   git submodule add https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook'
+          )
+        );
         console.log(chalk.gray('   ln -s .ai-playbook/.cursor/rules .cursor/rules'));
         console.log(chalk.gray('   ln -s .ai-playbook/.cursor/commands .cursor/commands'));
         console.log(chalk.gray('   ln -s .ai-playbook/.cursor/docs .cursor/docs\n'));
@@ -163,7 +164,6 @@ program
       console.log(chalk.cyan('   Optional: Add .cursor/mcp.json for MCP server configuration'));
       console.log(chalk.gray('   (mcp.json is in .gitignore - contains sensitive tokens)\n'));
       console.log(chalk.yellow('   Note: Make sure to commit .cursor/ to your repository\n'));
-
     } catch (error: any) {
       console.log(chalk.red(`❌ Error: ${error.message}\n`));
       process.exit(1);
@@ -180,7 +180,9 @@ program
     console.log(chalk.blue('🔄 AI Playbook Updater\n'));
 
     if (!(await fs.pathExists(cursorDir))) {
-      console.log(chalk.yellow('⚠️  .cursor directory not found. Run "ai-playbook install" first.\n'));
+      console.log(
+        chalk.yellow('⚠️  .cursor directory not found. Run "ai-playbook install" first.\n')
+      );
       process.exit(1);
     }
 
@@ -190,7 +192,9 @@ program
 
     if (stats?.isSymbolicLink()) {
       console.log(chalk.cyan('📦 Symlink installation detected\n'));
-      console.log(chalk.yellow('   To update, pull the latest changes from the playbook repository:\n'));
+      console.log(
+        chalk.yellow('   To update, pull the latest changes from the playbook repository:\n')
+      );
       console.log(chalk.gray('   cd .ai-playbook'));
       console.log(chalk.gray('   git pull origin main\n'));
     } else {
@@ -242,7 +246,9 @@ program
       if (mcpExists) {
         console.log(chalk.green('   MCP config: Found (project-specific)\n'));
       } else {
-        console.log(chalk.gray('   MCP config: Not found (optional - add .cursor/mcp.json for MCP servers)\n'));
+        console.log(
+          chalk.gray('   MCP config: Not found (optional - add .cursor/mcp.json for MCP servers)\n')
+        );
       }
     } else {
       console.log(chalk.yellow('⚠️  Partially installed\n'));
