@@ -1,9 +1,11 @@
 ---
 alwaysApply: true
 ---
+
 # General Principles and Project Philosophy
 
-These rules define the core philosophy and mental model for AI-assisted development. Projects using this playbook should adapt these principles to their specific context.
+These rules define the core philosophy and mental model for AI-assisted development. Projects using
+this playbook should adapt these principles to their specific context.
 
 ## Project Philosophy
 
@@ -21,7 +23,8 @@ AI assistants should assume:
 - **Project-specific constraints** - Understand and respect the project's technical constraints
 - **Data sources** - Be aware of where data comes from and how it's structured
 - **Local-first when possible** - Prefer local storage and processing when appropriate
-- **Read-only external sources** - When scraping or consuming external data, respect read-only constraints
+- **Read-only external sources** - When scraping or consuming external data, respect read-only
+  constraints
 
 Projects should prioritize:
 
@@ -41,7 +44,8 @@ Projects should define their own tech stack constraints. Common considerations:
 - **External dependencies**: What external services or APIs are allowed
 - **Build tools**: Preferred build systems and tooling
 
-AI assistants must respect project-specific tech stack constraints and should not suggest alternatives that violate them.
+AI assistants must respect project-specific tech stack constraints and should not suggest
+alternatives that violate them.
 
 ## Data Rules
 

@@ -1,17 +1,20 @@
 ---
 alwaysApply: true
 ---
+
 # Documentation Maintenance Rules
 
 **CRITICAL: Update documentation automatically after every code change.**
 
-After completing any feature, bug fix, refactor, or significant change, **immediately and automatically** update the relevant documentation files.
+After completing any feature, bug fix, refactor, or significant change, **immediately and
+automatically** update the relevant documentation files.
 
 ## Required Documentation Updates
 
 ### 1. Project Progress Documentation (If Present)
 
-After **any** create/change/update/delete operation, update project progress documentation (e.g., `PROGRESS.md`, `CHANGELOG.md`, or similar):
+After **any** create/change/update/delete operation, update project progress documentation (e.g.,
+`PROGRESS.md`, `CHANGELOG.md`, or similar):
 
 - **For new features**: Add to the completed features section with `[x]` checkbox
 - **For bug fixes**: Note the fix in the relevant section
@@ -19,12 +22,14 @@ After **any** create/change/update/delete operation, update project progress doc
 - **Update "Last updated"** timestamp if the file includes one
 
 **Examples:**
+
 - `[x] **Feature Name**: Brief description of what was added`
 - `[x] **Bug Fix**: Description of the issue that was resolved`
 
 ### 2. Architecture Documentation
 
 If you modify:
+
 - **Database schema** → Update architecture documentation (schema section)
 - **External data sources** → Update architecture doc (data import section)
 - **Data flow** → Update architecture doc (data flow section)
@@ -33,12 +38,14 @@ If you modify:
 ### 3. Development Plan Documentation
 
 If the project maintains a step-by-step development plan:
+
 - Mark completed steps as done
 - Update any notes or implementation details
 
 ### 4. README.md
 
 Update `README.md` if:
+
 - New features change how the application works
 - Build/install instructions change
 - New dependencies are added
@@ -47,6 +54,7 @@ Update `README.md` if:
 ### 5. Deployment Documentation
 
 If deployment documentation exists (e.g., `DEPLOYMENT.md`, `RELEASE.md`):
+
 - Update when build process changes
 - Update when signing/configuration changes
 - Update when new deployment steps are needed
@@ -79,12 +87,14 @@ If deployment documentation exists (e.g., `DEPLOYMENT.md`, `RELEASE.md`):
 ## Examples
 
 **Good documentation update:**
+
 ```markdown
 - [x] **Feature Name**: Clear description of what was added and why
 - [x] **Bug Fix**: Description of the issue that was resolved
 ```
 
 **Bad documentation update:**
+
 ```markdown
 - [x] Updated feature
 ```

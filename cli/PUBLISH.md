@@ -11,15 +11,18 @@
 1. **Update version** in `cli/package.json`
 
 2. **Build the package:**
+
    ```bash
    cd cli
    npm run build
    ```
+
    This will:
    - Copy `.cursor` files to `templates/.cursor`
    - Compile TypeScript to `dist/`
 
 3. **Test locally:**
+
    ```bash
    npm pack
    # This creates ai-playbook-cli-1.0.0.tgz
@@ -28,6 +31,7 @@
    ```
 
 4. **Publish to npm:**
+
    ```bash
    npm publish
    ```

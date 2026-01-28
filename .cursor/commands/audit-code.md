@@ -1,6 +1,7 @@
 # Audit Code Command – Code Quality and Security Analysis
 
-When `/audit-code [target]` is invoked, immediately execute the following steps to analyze code quality, security, and adherence to project standards.
+When `/audit-code [target]` is invoked, immediately execute the following steps to analyze code
+quality, security, and adherence to project standards.
 
 ---
 
@@ -181,6 +182,7 @@ When `/audit-code [target]` is invoked, immediately execute the following steps 
 ## Step 9: Optional - Auto-Fix Safe Issues
 
 If explicitly requested and issues are safe to auto-fix:
+
 1. Fix low-priority style issues (formatting, unused imports)
 2. Fix simple code quality issues (dead code, obvious bugs)
 3. **Never auto-fix**:
@@ -194,6 +196,7 @@ If explicitly requested and issues are safe to auto-fix:
 ## Step 10: Commit & Push (If Changes Made)
 
 If any auto-fixes were applied:
+
 ```bash
 git add .
 git commit -m "fix: apply code audit fixes"
@@ -220,6 +223,7 @@ git push origin $(git branch --show-current)
 ## Usage
 
 Use `/audit-code [target]` to:
+
 - Analyze code quality and security
 - Identify bugs and vulnerabilities
 - Check adherence to project standards
@@ -227,6 +231,7 @@ Use `/audit-code [target]` to:
 - Audit specific files or directories
 
 **Examples:**
+
 - `/audit-code` - Audit entire codebase
 - `/audit-code src/screens/` - Audit only screen components
 - `/audit-code src/db/` - Audit database layer
@@ -239,6 +244,7 @@ Use `/audit-code [target]` to:
 When performing an audit, check:
 
 ### Security
+
 - [ ] No SQL injection risks
 - [ ] Only allowed domains are called (project-defined)
 - [ ] No unsafe code execution
@@ -248,6 +254,7 @@ When performing an audit, check:
 - [ ] No hidden or obfuscated logic
 
 ### Code Quality
+
 - [ ] Follows project-specific patterns
 - [ ] Proper TypeScript usage
 - [ ] No anti-patterns
@@ -256,12 +263,14 @@ When performing an audit, check:
 - [ ] Proper cleanup in effects
 
 ### Architecture
+
 - [ ] Separation of concerns
 - [ ] Project-specific architectural constraints maintained
 - [ ] Data storage as single source of truth (when applicable)
 - [ ] No shortcuts or hacks
 
 ### Documentation
+
 - [ ] Code is documented
 - [ ] Architecture docs up to date
 - [ ] Progress documentation current

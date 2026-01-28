@@ -20,6 +20,7 @@ npx ai-playbook-cli@latest install --type symlink
 ```
 
 **When to use:**
+
 - You have the playbook repository cloned locally
 - You want to update all projects at once
 - You're actively developing the playbook
@@ -33,6 +34,7 @@ npx ai-playbook-cli@latest install --type copy
 ```
 
 **When to use:**
+
 - You want a self-contained project
 - You don't have the playbook repo locally
 - You want to customize the playbook per project
@@ -46,6 +48,7 @@ npx ai-playbook-cli@latest install --type submodule
 ```
 
 **When to use:**
+
 - You want to pin a specific version
 - You prefer Git submodules
 - You want version control integration

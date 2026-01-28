@@ -115,7 +115,7 @@ Before implementation:
 
 Before committing, **automatically** update (as per `documentation.mdc` rule):
 
-1. **Project progress documentation** (e.g., PROGRESS.md, CHANGELOG.md): 
+1. **Project progress documentation** (e.g., PROGRESS.md, CHANGELOG.md):
    - Add the new feature to completed list with `[x]` checkbox
    - Update "Last updated" timestamp if present
 2. **CHANGELOG.md** (create if missing):
@@ -131,6 +131,7 @@ Before committing, **automatically** update (as per `documentation.mdc` rule):
 ## Step 8: Commit & Push (Required)
 
 After completing the feature (or a meaningful incremental step):
+
 ```bash
 git add .
 git commit -m "feat: <clear description of the new feature>"
@@ -157,6 +158,7 @@ git push origin $(git branch --show-current)
 ## Usage
 
 Use `/feature <description>` to:
+
 - Add new screens or UI components
 - Add new database queries or schema changes
 - Add new external data source integrations

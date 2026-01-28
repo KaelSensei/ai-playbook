@@ -33,7 +33,8 @@ When `/fix <issue description>` is invoked, immediately execute the following st
    - Network request failures or API errors
 3. Determine:
    - Is this a **bug**, **security issue**, **regression**, or **logic flaw**
-   - Which layer is affected (UI, database, external data sources, caching, TypeScript/JavaScript, etc.)
+   - Which layer is affected (UI, database, external data sources, caching, TypeScript/JavaScript,
+     etc.)
 4. Locate the exact code paths involved
 5. **Cross-reference visual evidence with code** to pinpoint root cause
 6. Do **not** assume the fix — verify by reading the code first
@@ -88,6 +89,7 @@ Before writing any code:
 ## Step 6: Commit & Push (Required)
 
 After the fix is complete:
+
 ```bash
 git add .
 git commit -m "fix: <clear description of the issue fixed>"
@@ -113,6 +115,7 @@ git push
 ## Usage
 
 Use `/fix <issue description>` to:
+
 - Debug a bug in UI, database, or external data sources
 - Patch a vulnerability
 - Fix a regression
