@@ -1,6 +1,7 @@
 # Feature Branch Command – Branch Creation & Management Workflow
 
-When `/feature-branch <branch-name>` or `/feature-branch` is invoked, immediately execute the following steps.
+When `/feature-branch <branch-name>` or `/feature-branch` is invoked, immediately execute the
+following steps.
 
 ---
 
@@ -13,7 +14,8 @@ When `/feature-branch <branch-name>` or `/feature-branch` is invoked, immediatel
    - `documentation.mdc` - Documentation update requirements
    - `version-management.mdc` - Git commit/push workflow
 3. Check current git status and branch
-4. Read project progress documentation (e.g., `PROGRESS.md`, `CHANGELOG.md`) to understand current project state
+4. Read project progress documentation (e.g., `PROGRESS.md`, `CHANGELOG.md`) to understand current
+   project state
 
 ---
 
@@ -34,11 +36,13 @@ When `/feature-branch <branch-name>` or `/feature-branch` is invoked, immediatel
 ## Step 3: Check Current State
 
 1. **Check current branch:**
+
    ```bash
    git branch --show-current
    ```
 
 2. **Check for uncommitted changes:**
+
    ```bash
    git status
    ```
@@ -57,17 +61,20 @@ When `/feature-branch <branch-name>` or `/feature-branch` is invoked, immediatel
 ## Step 4: Create Feature Branch
 
 1. **Ensure you're on the base branch** (usually `main` or `master`):
+
    ```bash
    git checkout main  # or master
    git pull origin main  # or master
    ```
 
 2. **Create and switch to new branch:**
+
    ```bash
    git checkout -b <branch-name>
    ```
 
 3. **Push branch to remote** (set upstream):
+
    ```bash
    git push -u origin <branch-name>
    ```
@@ -82,7 +89,7 @@ When `/feature-branch <branch-name>` or `/feature-branch` is invoked, immediatel
 
 If creating a branch for a specific feature:
 
-1. **Project progress documentation**: 
+1. **Project progress documentation**:
    - Note the new branch if starting a major feature
    - Update "Last updated" timestamp if adding branch info
 
@@ -133,11 +140,13 @@ Use these patterns:
 ## Usage
 
 Use `/feature-branch <branch-name>` to:
+
 - Create a new feature branch for development
 - Switch to a clean branch for new work
 - Set up proper git workflow before starting features/fixes
 
 Use `/feature-branch` (no name) to:
+
 - Get help choosing a branch name
 - Create branch based on current work context
 
@@ -161,6 +170,7 @@ Use `/feature-branch` (no name) to:
 ## Integration with Other Commands
 
 After creating a branch with `/feature-branch`:
+
 - Use `/feature <description>` to implement new functionality
 - Use `/fix <description>` to fix issues
 - Use `/refactor <description>` to improve code structure

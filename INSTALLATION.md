@@ -22,6 +22,7 @@ ln -s ../.ai-playbook/.cursor/docs .cursor/docs
 ```
 
 **Benefits:**
+
 - ✅ Update rules in one place
 - ✅ Pull updates into all projects with `git submodule update`
 - ✅ Version-control AI behavior (huge win!)
@@ -30,6 +31,7 @@ ln -s ../.ai-playbook/.cursor/docs .cursor/docs
 - ✅ This is what serious infra teams do
 
 **Updating:**
+
 ```bash
 # Update to latest version
 cd .ai-playbook
@@ -49,7 +51,8 @@ git submodule update --remote .ai-playbook
 npx ai-playbook-cli@latest install
 ```
 
-That's it! The CLI will set up `.cursor/rules/`, `.cursor/commands/`, and `.cursor/docs/` in your project.
+That's it! The CLI will set up `.cursor/rules/`, `.cursor/commands/`, and `.cursor/docs/` in your
+project.
 
 **Installation Options:**
 
@@ -81,6 +84,7 @@ npx ai-playbook-cli@latest status
 ### Local Development Setup
 
 1. **Clone and install dependencies:**
+
    ```bash
    git clone https://github.com/YOUR_USERNAME/ai-playbook.git
    cd ai-playbook/cli
@@ -88,18 +92,21 @@ npx ai-playbook-cli@latest status
    ```
 
 2. **Build the CLI:**
+
    ```bash
    npm run build
    ```
+
    This will:
    - Copy `.cursor` files to `templates/.cursor`
    - Compile TypeScript to `dist/`
 
 3. **Test locally:**
+
    ```bash
    # Test the CLI in development mode
    npm run dev install
-   
+
    # Or test in another project
    cd /path/to/test-project
    node /path/to/ai-playbook/cli/dist/index.js install
@@ -108,14 +115,17 @@ npx ai-playbook-cli@latest status
 ### Testing Before Publishing
 
 1. **Create a test package:**
+
    ```bash
    cd cli
    npm run build
    npm pack
    ```
+
    This creates `ai-playbook-cli-1.0.0.tgz`
 
 2. **Test the package:**
+
    ```bash
    # In a test project
    cd /path/to/test-project
@@ -131,6 +141,7 @@ npx ai-playbook-cli@latest status
 ### Publishing to npm
 
 1. **Update version in `cli/package.json`:**
+
    ```json
    {
      "version": "1.0.1"
@@ -138,6 +149,7 @@ npx ai-playbook-cli@latest status
    ```
 
 2. **Update repository URLs** (if not already done):
+
    ```json
    {
      "repository": {
@@ -149,16 +161,19 @@ npx ai-playbook-cli@latest status
    ```
 
 3. **Login to npm:**
+
    ```bash
    npm login
    ```
 
 4. **Build and publish:**
+
    ```bash
    cd cli
    npm run build
    npm publish
    ```
+
    The `prepublishOnly` script will automatically run the build.
 
 5. **Verify publication:**
@@ -188,19 +203,23 @@ npx ai-playbook-cli@latest status
 ### 1. Symlink (Default)
 
 **What it does:**
+
 - Creates symbolic links from your project's `.cursor/` to the playbook files
 - Updates automatically when playbook is updated
 
 **Pros:**
+
 - Easy updates across all projects
 - No file duplication
 - Always uses latest version
 
 **Cons:**
+
 - Requires playbook repository to be accessible
 - Symlinks may not work on all systems (Windows may need Developer Mode)
 
 **Best for:**
+
 - Development environments
 - When you have the playbook repo locally
 - When you want centralized updates
@@ -208,18 +227,22 @@ npx ai-playbook-cli@latest status
 ### 2. Copy
 
 **What it does:**
+
 - Copies all playbook files directly into your project
 
 **Pros:**
+
 - Works everywhere
 - Project is self-contained
 - No external dependencies
 
 **Cons:**
+
 - Updates require re-running install
 - Files are duplicated in each project
 
 **Best for:**
+
 - Production projects
 - When you want project-specific customizations
 - CI/CD environments
@@ -227,10 +250,12 @@ npx ai-playbook-cli@latest status
 ### 3. Git Submodule (Recommended)
 
 **What it does:**
+
 - Adds the playbook repository as a Git submodule
 - Creates symlinks from your project to the submodule
 
 **Pros:**
+
 - ✅ Version controlled - pin specific versions per project
 - ✅ Update rules in one place, pull into all projects
 - ✅ No npm/node dependencies required
@@ -239,10 +264,12 @@ npx ai-playbook-cli@latest status
 - ✅ This is what serious infra teams do
 
 **Cons:**
+
 - Requires Git submodule knowledge
 - More initial setup steps
 
 **Best for:**
+
 - Teams and organizations
 - Long-term projects
 - When you need to pin specific versions
@@ -250,6 +277,7 @@ npx ai-playbook-cli@latest status
 - When you want centralized rule management
 
 **Setup:**
+
 ```bash
 git submodule add https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook
 mkdir -p .cursor
@@ -265,24 +293,28 @@ ln -s ../.ai-playbook/.cursor/docs .cursor/docs
 ### "Could not find AI Playbook files"
 
 **Solution:**
+
 - If using from npm: The package should include templates. Rebuild and republish if needed.
 - If using from source: Run `npm run build` in the cli directory first.
 
 ### "Symlink creation failed" (Windows)
 
 **Solution:**
+
 - Enable Developer Mode in Windows Settings
 - Or use `--type copy` instead
 
 ### ".cursor directory already exists"
 
 **Solution:**
+
 - Use `--force` to overwrite: `npx ai-playbook-cli@latest install --force`
 - Or manually merge directories
 
 ### Build fails
 
 **Solution:**
+
 - Ensure you're in the `cli` directory
 - Run `npm install` first
 - Check Node.js version (16+ required)
@@ -290,6 +322,7 @@ ln -s ../.ai-playbook/.cursor/docs .cursor/docs
 ### "mcp.json was copied" (shouldn't happen)
 
 **Solution:**
+
 - The CLI automatically excludes `mcp.json` during installation
 - If you see it, it means you manually created it (which is fine)
 - It's already in `.gitignore` and won't be committed
@@ -313,40 +346,48 @@ ls .cursor/commands/
 ### 2. Open in Cursor
 
 Open your project in Cursor. The AI assistant will automatically:
+
 - Load rules from `.cursor/rules/*.mdc`
 - Use commands from `.cursor/commands/*.md`
 
 ### 3. Test a Command
 
 Try using a command in Cursor chat:
+
 ```
 /start
 ```
+
 This should load the project context and start working.
 
 ### 4. Customize for Your Project
 
 You can customize the playbook for your project:
+
 - Add project-specific rules in `.cursor/rules/`
 - Create custom commands in `.cursor/commands/`
 - Update existing rules to match your tech stack
 
 ### 5. Configure MCP (Optional)
 
-You can add project-specific MCP (Model Context Protocol) server configurations in `.cursor/mcp.json`:
+You can add project-specific MCP (Model Context Protocol) server configurations in
+`.cursor/mcp.json`:
 
 ```bash
 # Create your MCP configuration (if needed)
 touch .cursor/mcp.json
 ```
 
-**Important:** 
-- `.cursor/mcp.json` is **already in `.gitignore`** - it contains sensitive tokens and will never be committed
+**Important:**
+
+- `.cursor/mcp.json` is **already in `.gitignore`** - it contains sensitive tokens and will never be
+  committed
 - This file is for your project-specific MCP server configurations
 - The CLI tool automatically excludes `mcp.json` when copying files
 - Each developer can have their own `mcp.json` with their personal tokens
 
 **Example structure:**
+
 ```json
 {
   "mcpServers": {
@@ -361,7 +402,8 @@ touch .cursor/mcp.json
 }
 ```
 
-**Template:** See `.cursor/mcp.json.example` in the playbook repository for a template (without real tokens).
+**Template:** See `.cursor/mcp.json.example` in the playbook repository for a template (without real
+tokens).
 
 ### 6. Commit to Repository
 
@@ -372,7 +414,8 @@ git commit -m "chore: add AI Playbook"
 git push
 ```
 
-**Note:** 
+**Note:**
+
 - `mcp.json` is already in `.gitignore` and will never be committed
 - If using symlinks, you may need to commit the symlink targets or use a different approach
 
@@ -406,7 +449,7 @@ install-playbook:
   image: node:18
   script:
     - npx ai-playbook-cli@latest install --type copy
-    - # Your build/test commands
+    -  # Your build/test commands
 ```
 
 ---
@@ -416,6 +459,7 @@ install-playbook:
 ### Updating the Playbook
 
 **For symlink installations:**
+
 ```bash
 # Update the playbook repository
 cd .ai-playbook
@@ -425,6 +469,7 @@ git pull origin main
 ```
 
 **For copy installations:**
+
 ```bash
 # Re-run installation
 npx ai-playbook-cli@latest install --type copy --force

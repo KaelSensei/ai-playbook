@@ -1,6 +1,7 @@
 # Cleanup Repo Command – Repository Organization and Structure Cleanup
 
-When `/cleanup-repo` is invoked, immediately execute the following steps to analyze, organize, and clean up the repository structure when files are scattered and disorganized.
+When `/cleanup-repo` is invoked, immediately execute the following steps to analyze, organize, and
+clean up the repository structure when files are scattered and disorganized.
 
 ---
 
@@ -25,6 +26,7 @@ When `/cleanup-repo` is invoked, immediately execute the following steps to anal
 ## Step 2: Analyze Current Repository Structure
 
 1. **Scan the entire repository** to understand current organization:
+
    ```bash
    find . -type f -name "*.md" -o -name "*.json" -o -name "*.ps1" -o -name "*.js" | grep -v node_modules | grep -v .git
    ```
@@ -60,7 +62,8 @@ When `/cleanup-repo` is invoked, immediately execute the following steps to anal
    - `CONFIG.md`, `SETUP.md` → `docs/setup/` or `.cursor/docs/setup/`
    - `INSTALL_INSTRUCTIONS.md`, `SETUP.md` → `docs/installation/` or `.cursor/docs/installation/`
    - `PLAY_STORE_DEPLOYMENT.md` → `docs/deployment/` or `.cursor/docs/deployment/`
-   - `TESTING.md`, `TROUBLESHOOTING.md`, `DEBUG.md` → `docs/development/` or `.cursor/docs/development/`
+   - `TESTING.md`, `TROUBLESHOOTING.md`, `DEBUG.md` → `docs/development/` or
+     `.cursor/docs/development/`
    - `SCRAPING_ISSUES.md` → `docs/troubleshooting/` or `.cursor/docs/troubleshooting/`
    - Architecture docs → `docs/architecture/` or `.cursor/docs/architecture/`
    - Step-by-step plans → `docs/development/` or `.cursor/docs/development/`
@@ -95,6 +98,7 @@ When `/cleanup-repo` is invoked, immediately execute the following steps to anal
 ## Step 4: Plan the Reorganization
 
 1. **Create target directory structure** (if needed):
+
    ```
    docs/                    # Root-level docs (or .cursor/docs/)
    ├── setup/
@@ -103,11 +107,11 @@ When `/cleanup-repo` is invoked, immediately execute the following steps to anal
    ├── development/
    ├── troubleshooting/
    └── architecture/
-   
+
    scripts/                 # All scripts
    ├── setup/
    └── utils/
-   
+
    test-data/              # Test data and samples
    misc/                   # Keep if needed, or consolidate
    ```
@@ -153,6 +157,7 @@ Before moving any files:
 ## Step 6: Execute the Reorganization
 
 1. **Create target directories** (if they don't exist):
+
    ```bash
    mkdir -p docs/setup docs/installation docs/deployment docs/development docs/troubleshooting docs/architecture
    mkdir -p scripts/setup scripts/utils
@@ -170,6 +175,7 @@ Before moving any files:
      ```
 
 3. **Move script files**:
+
    ```bash
    git mv *.ps1 scripts/setup/
    git mv setup.js scripts/setup/
@@ -259,6 +265,7 @@ Before moving any files:
 ## Step 10: Commit & Push (Required)
 
 After reorganization is complete:
+
 ```bash
 git add .
 git commit -m "refactor: reorganize repository structure
@@ -292,6 +299,7 @@ git push origin $(git branch --show-current)
 ## Usage
 
 Use `/cleanup-repo` when:
+
 - Documentation files are scattered in the root
 - Scripts are in the root instead of organized folders
 - Test data is mixed with source code
@@ -300,6 +308,7 @@ Use `/cleanup-repo` when:
 - You want to improve maintainability and discoverability
 
 **Examples:**
+
 - `/cleanup-repo` - Analyze and organize the entire repository
 
 ---
@@ -326,6 +335,7 @@ When cleaning up the repo, ensure:
 ## Common Reorganization Patterns
 
 ### Documentation Organization
+
 ```
 Root (scattered) → Organized
 ├── CONFIG.md → docs/setup/CONFIG.md
@@ -335,6 +345,7 @@ Root (scattered) → Organized
 ```
 
 ### Script Organization
+
 ```
 Root (scattered) → Organized
 ├── setup.ps1 → scripts/setup/setup.ps1
@@ -343,6 +354,7 @@ Root (scattered) → Organized
 ```
 
 ### Test Data Organization
+
 ```
 Root/misc (scattered) → Organized
 ├── misc/*.json → test-data/*.json (if test data)
@@ -354,6 +366,7 @@ Root/misc (scattered) → Organized
 ## Integration with Project Rules
 
 All reorganization must respect:
+
 - `.cursor/rules/security.mdc` - Don't move security-critical files
 - `.cursor/rules/technical-stack.mdc` - Maintain project structure
 - `.cursor/rules/documentation.mdc` - Update all documentation
@@ -374,6 +387,7 @@ All reorganization must respect:
 ## Example: Typical Reorganization
 
 **Before:**
+
 ```
 ProjectRoot/
 ├── CONFIG.md
@@ -390,6 +404,7 @@ ProjectRoot/
 ```
 
 **After:**
+
 ```
 ProjectRoot/
 ├── docs/

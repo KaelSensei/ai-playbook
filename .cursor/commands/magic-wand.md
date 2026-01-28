@@ -1,6 +1,8 @@
 # Magic Wand Command – Deep Expert-Level Problem Solving
 
-When `/magic-wand [issue description]` is invoked, immediately execute the following steps to perform a comprehensive, expert-level analysis and fix when standard debugging approaches have failed.
+When `/magic-wand [issue description]` is invoked, immediately execute the following steps to
+perform a comprehensive, expert-level analysis and fix when standard debugging approaches have
+failed.
 
 ---
 
@@ -48,9 +50,11 @@ When `/magic-wand [issue description]` is invoked, immediately execute the follo
 ## Step 3: Comprehensive Context Analysis (Deep Search)
 
 1. **Review recent git history** (last 20-50 commits):
+
    ```bash
    git log --oneline -50
    ```
+
    - Identify all recent changes that could impact the issue
    - Look for changes in related files, not just the reported file
    - Check for configuration changes, dependency updates, refactoring
@@ -226,6 +230,7 @@ When `/magic-wand [issue description]` is invoked, immediately execute the follo
 ## Step 10: Commit & Push (Required)
 
 After the fix is complete:
+
 ```bash
 git add .
 git commit -m "fix: [root cause description] - magic wand deep fix
@@ -259,6 +264,7 @@ git push origin $(git branch --show-current)
 ## Usage
 
 Use `/magic-wand [issue description]` when:
+
 - Standard `/fix` attempts haven't resolved the issue
 - You've iterated multiple times on the same problem
 - The issue seems to be caused by something indirect
@@ -266,6 +272,7 @@ Use `/magic-wand [issue description]` when:
 - Configuration or system-wide issues are suspected
 
 **Examples:**
+
 - `/magic-wand user profile screen not refreshing after reload` - Deep analysis of refresh issue
 - `/magic-wand images not loading` - Comprehensive investigation of image loading
 - `/magic-wand app crashes on startup` - System-wide analysis
@@ -274,14 +281,14 @@ Use `/magic-wand [issue description]` when:
 
 ## Magic Wand vs. Standard Fix
 
-| Standard Fix | Magic Wand |
-|--------------|-----------|
+| Standard Fix                 | Magic Wand                          |
+| ---------------------------- | ----------------------------------- |
 | Quick fix for obvious issues | Deep analysis for persistent issues |
-| Focuses on reported file | Searches entire codebase |
-| Fixes symptoms | Fixes root causes |
-| Standard debugging | Expert-level investigation |
-| Fast iteration | Thorough, comprehensive |
-| Minimal token usage | Higher token usage (acceptable) |
+| Focuses on reported file     | Searches entire codebase            |
+| Fixes symptoms               | Fixes root causes                   |
+| Standard debugging           | Expert-level investigation          |
+| Fast iteration               | Thorough, comprehensive             |
+| Minimal token usage          | Higher token usage (acceptable)     |
 
 ---
 
@@ -340,6 +347,7 @@ When using magic-wand, ensure you:
 ## Integration with Project Rules
 
 All magic-wand fixes must respect:
+
 - `.cursor/rules/security.mdc` - Security validation
 - `.cursor/rules/technical-stack.mdc` - Tech stack patterns
 - `.cursor/rules/general-principles.mdc` - Project philosophy
@@ -362,11 +370,13 @@ All magic-wand fixes must respect:
 **Problem**: Detail screen not refreshing after reload (20+ iterations)
 
 **Magic Wand Analysis**:
+
 1. Reviewed git history - found network security config changes
 2. Searched codebase - found Metro connection issues
 3. Checked project config - found network security configuration blocking localhost
 4. **Root Cause**: Network security config blocking Metro bundler connection, not the refresh logic
 5. **Fix**: Updated `network_security_config.xml` to allow localhost cleartext traffic
-6. **Why previous fixes didn't work**: We were fixing the symptom (refresh logic) not the root cause (Metro connection)
+6. **Why previous fixes didn't work**: We were fixing the symptom (refresh logic) not the root cause
+   (Metro connection)
 
 This is the kind of deep analysis magic-wand should perform.

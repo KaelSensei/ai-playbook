@@ -1,6 +1,7 @@
 # Create Command – Generate New Cursor Commands
 
-When `/create-command <command-name> [description]` is invoked, immediately execute the following steps to generate a new Cursor command file.
+When `/create-command <command-name> [description]` is invoked, immediately execute the following
+steps to generate a new Cursor command file.
 
 ---
 
@@ -42,7 +43,7 @@ When `/create-command <command-name> [description]` is invoked, immediately exec
 
 Create the new command file with the following structure:
 
-```markdown
+````markdown
 # [Command Name] Command – [Brief Description]
 
 When `/[command] <description>` is invoked, immediately execute the following steps.
@@ -76,6 +77,7 @@ When `/[command] <description>` is invoked, immediately execute the following st
 ## Step 3: [Command-Specific Implementation Steps]
 
 [Customize these steps based on the command type. Examples:]
+
 - For testing commands: Run tests, check coverage, update test files
 - For deployment commands: Build, validate, deploy, verify
 - For analysis commands: Analyze code, generate reports, identify issues
@@ -96,6 +98,7 @@ When `/[command] <description>` is invoked, immediately execute the following st
 ## Step 5: Update Documentation (If Required)
 
 If the command affects project structure or workflow:
+
 1. Update project progress documentation if a new feature/workflow was added
 2. Update `CHANGELOG.md` if applicable
 3. Update `README.md` if usage instructions changed
@@ -105,11 +108,13 @@ If the command affects project structure or workflow:
 ## Step 6: Commit & Push (Required)
 
 After the command file is created:
+
 ```bash
 git add .cursor/commands/<command-name>.md
 git commit -m "docs: add <command-name> command"
 git push origin $(git branch --show-current)
 ```
+````
 
 - Never push directly to `main` or `master`
 - Always push to the current feature branch
@@ -128,14 +133,17 @@ git push origin $(git branch --show-current)
 ## Usage
 
 Use `/create-command <command-name> [description]` to:
+
 - Generate a new Cursor command file following project patterns
 - Create command templates for new workflows
 - Ensure consistency across all project commands
 
 **Examples:**
+
 - `/create-command test` - Creates a test command
 - `/create-command deploy "Deploy to production"` - Creates a deploy command with description
 - `/create-command analyze-code` - Creates an analyze-code command
+
 ```
 
 **Important:** Customize Step 3 and other sections based on the specific command type and purpose.
@@ -189,3 +197,4 @@ For more information on creating Cursor commands:
   - Example of npx-based CLI installation
 
 
+```

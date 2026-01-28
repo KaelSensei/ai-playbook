@@ -1,6 +1,8 @@
 # Brainstorm Command – AI-Powered Feature Ideation and Planning
 
-When `/brainstorm [topic]` is invoked, immediately execute the following steps to collaboratively brainstorm, enhance, and plan new features for the app through an iterative product management workflow.
+When `/brainstorm [topic]` is invoked, immediately execute the following steps to collaboratively
+brainstorm, enhance, and plan new features for the app through an iterative product management
+workflow.
 
 ---
 
@@ -14,7 +16,8 @@ When `/brainstorm [topic]` is invoked, immediately execute the following steps t
    - `version-management.mdc` - Git commit/push workflow
    - `general-principles.mdc` - Project philosophy (simple, offline-first, personal)
 3. Read relevant documentation:
-   - Project progress documentation (e.g., `PROGRESS.md`, `CHANGELOG.md`) - Current features and completed work
+   - Project progress documentation (e.g., `PROGRESS.md`, `CHANGELOG.md`) - Current features and
+     completed work
    - `README.md` - App overview and capabilities
    - Architecture documents - Technical constraints
    - Development plan documentation - Planned features
@@ -26,7 +29,8 @@ When `/brainstorm [topic]` is invoked, immediately execute the following steps t
 ## Step 2: Understand the Brainstorming Topic
 
 1. **Parse the topic** provided after `/brainstorm`:
-   - If topic provided: Focus brainstorming on that area (e.g., "search", "user management", "offline features")
+   - If topic provided: Focus brainstorming on that area (e.g., "search", "user management",
+     "offline features")
    - If no topic: Conduct general brainstorming for the entire app
 
 2. **Analyze current app state**:
@@ -198,7 +202,8 @@ For top-priority features (top 3-5):
 
 - **Always respect project philosophy**: Simple, offline-first, personal, fast
 - **Never suggest features that violate constraints**: No backend, no cloud, no auth
-- **Always consider technical feasibility**: Respect project-specific technical stack and constraints
+- **Always consider technical feasibility**: Respect project-specific technical stack and
+  constraints
 - **Prioritize user value**: Focus on what makes the app more useful
 - **Be creative but practical**: Ideas should be implementable
 - **Iterate based on feedback**: Refine ideas through discussion
@@ -209,12 +214,14 @@ For top-priority features (top 3-5):
 ## Usage
 
 Use `/brainstorm [topic]` to:
+
 - Generate new feature ideas for the app
 - Enhance existing features through iteration
 - Plan product roadmap in a structured way
 - Follow product manager workflow for feature planning
 
 **Examples:**
+
 - `/brainstorm` - General brainstorming for entire app
 - `/brainstorm search` - Focus on search functionality improvements
 - `/brainstorm user management` - Brainstorm user-related features
@@ -256,6 +263,7 @@ Use `/brainstorm [topic]` to:
 ## Integration with Project Rules
 
 All brainstormed features must respect:
+
 - `.cursor/rules/general-principles.mdc` - Project philosophy (simple, offline-first)
 - `.cursor/rules/technical-stack.mdc` - Tech stack constraints
 - `.cursor/rules/security.mdc` - Security requirements (no unauthorized APIs)

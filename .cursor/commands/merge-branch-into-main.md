@@ -1,6 +1,7 @@
 # Merge Branch Into Main Command – Safe Branch Merging Workflow
 
-When `/merge-branch-into-main [branch-name]` is invoked, immediately execute the following steps to safely merge a feature branch into the main branch.
+When `/merge-branch-into-main [branch-name]` is invoked, immediately execute the following steps to
+safely merge a feature branch into the main branch.
 
 ---
 
@@ -14,7 +15,8 @@ When `/merge-branch-into-main [branch-name]` is invoked, immediately execute the
    - `version-management.mdc` - Git commit/push workflow
    - `general-principles.mdc` - Project philosophy
 3. Check current git status and branch
-4. Read project progress documentation (e.g., `PROGRESS.md`, `CHANGELOG.md`) to understand current project state
+4. Read project progress documentation (e.g., `PROGRESS.md`, `CHANGELOG.md`) to understand current
+   project state
 
 ---
 
@@ -36,36 +38,46 @@ When `/merge-branch-into-main [branch-name]` is invoked, immediately execute the
 Before merging, perform these checks:
 
 1. **Check current branch status**:
+
    ```bash
    git status
    ```
+
    - If there are uncommitted changes, **stop and ask** user to commit or stash first
    - Never merge with uncommitted changes
 
 2. **Verify branch exists**:
+
    ```bash
    git branch -a | grep <branch-name>
    ```
+
    - If branch doesn't exist, **stop and report error**
 
 3. **Check if branch is already merged**:
+
    ```bash
    git branch --merged main
    ```
+
    - If branch is already merged, inform user and skip merge
 
 4. **Ensure main branch is up to date**:
+
    ```bash
    git checkout main
    git pull origin main
    ```
+
    - Always merge into the latest main branch
 
 5. **Check for conflicts** (dry run):
+
    ```bash
    git merge --no-commit --no-ff <branch-name>
    git merge --abort
    ```
+
    - If conflicts detected, **stop and report** - user must resolve manually
    - Do not attempt automatic conflict resolution
 
@@ -76,9 +88,11 @@ Before merging, perform these checks:
 Before merging:
 
 1. **Review recent commits** on the branch:
+
    ```bash
    git log main..<branch-name> --oneline
    ```
+
    - Check for suspicious patterns (see `security.mdc`)
    - Verify commits follow project conventions
 
@@ -98,19 +112,23 @@ Before merging:
 ## Step 5: Perform the Merge
 
 1. **Switch to main branch**:
+
    ```bash
    git checkout main
    ```
 
 2. **Ensure main is up to date**:
+
    ```bash
    git pull origin main
    ```
 
 3. **Merge the branch**:
+
    ```bash
    git merge --no-ff <branch-name> -m "Merge <branch-name> into main"
    ```
+
    - Use `--no-ff` to create a merge commit (preserves branch history)
    - Use descriptive merge commit message
 
@@ -130,10 +148,12 @@ Before merging:
 ## Step 6: Post-Merge Validation
 
 1. **Verify merge was successful**:
+
    ```bash
    git log --oneline -5
    git branch --merged main
    ```
+
    - Confirm merge commit exists
    - Confirm branch appears in merged list
 
@@ -151,6 +171,7 @@ Before merging:
 ## Step 7: Push to Remote
 
 1. **Push merged main to remote**:
+
    ```bash
    git push origin main
    ```
@@ -171,11 +192,13 @@ Before merging:
 After successful merge:
 
 1. **Delete local branch** (optional, ask user first):
+
    ```bash
    git branch -d <branch-name>
    ```
 
 2. **Delete remote branch** (optional, ask user first):
+
    ```bash
    git push origin --delete <branch-name>
    ```
@@ -214,11 +237,13 @@ If merge completes successfully:
 ## Usage
 
 Use `/merge-branch-into-main [branch-name]` to:
+
 - Merge a completed feature/fix branch into main
 - Safely integrate changes with proper validation
 - Follow git best practices for merging
 
 **Examples:**
+
 - `/merge-branch-into-main feature/add-export` - Merge specific branch
 - `/merge-branch-into-main` - Merge current branch into main
 
@@ -255,6 +280,7 @@ If any step fails:
 ## Integration with Project Rules
 
 All merges must respect:
+
 - `.cursor/rules/security.mdc` - Security validation before merge
 - `.cursor/rules/version-management.mdc` - Git workflow and commit conventions
 - `.cursor/rules/documentation.mdc` - Documentation update requirements

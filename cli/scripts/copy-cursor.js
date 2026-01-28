@@ -15,16 +15,16 @@ async function copyCursorFiles() {
   try {
     // Create templates directory
     await fs.ensureDir(path.join(cliRoot, 'templates'));
-    
+
     // Copy .cursor directory
     await fs.copy(sourceCursor, destCursor, {
       overwrite: true,
       filter: (src) => {
         // Don't copy mcp.json (contains sensitive data)
         return !src.endsWith('mcp.json');
-      }
+      },
     });
-    
+
     console.log('✅ Copied .cursor files to templates/');
   } catch (error) {
     console.error('❌ Error copying .cursor files:', error);
