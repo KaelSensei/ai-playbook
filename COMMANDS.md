@@ -25,5 +25,8 @@ Each command is defined in `.cursor/commands/<name>.md` and follows the shared r
 | `/magic-wand [issue]`          | Perform deep, expert-level debugging and problem-solving when normal commands are not enough.                                  |
 | `/create-command <name> [...]` | Generate a new Cursor command file that matches the project’s command structure and rules.                                     |
 | `/add-commit-push [message]`   | Run project checks, stage all changes, create a conventional commit (using the optional message), and push the current branch. |
+| `/git [message]`               | Same as `/add-commit-push`: stage, conventional commit, and push to the current branch.                                        |
+| `/create-user-guide`           | Generate or regenerate user-facing documentation so end users know how to use the app.                                         |
+| `/update-user-guide`           | Add or update sections in `USER_GUIDE.md` to keep it in sync with the app (e.g. after a new feature).                          |
 
 > For full behavior, see each command’s markdown file in `.cursor/commands/`.

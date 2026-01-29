@@ -121,8 +121,12 @@ Before committing, **automatically** update (as per `documentation.mdc` rule):
 2. **CHANGELOG.md** (create if missing):
    - Add entry under "## [Unreleased]" or new version
    - Format: `- Added: <feature description>`
-3. **Architecture docs**: If database schema, external data sources, or major UI structure changed
-4. **README.md**: If usage or build instructions changed
+3. **USER_GUIDE.md** (user-facing guide):
+   - Add or update the section that describes the new feature in user-facing steps (how to use it)
+   - Update "Last updated" at the top; create the file with `/create-user-guide` if it does not
+     exist
+4. **Architecture docs**: If database schema, external data sources, or major UI structure changed
+5. **README.md**: If usage or build instructions changed
 
 **Do NOT ask** - update docs and changelog automatically. This is mandatory.
 
