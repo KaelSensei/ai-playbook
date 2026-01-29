@@ -7,8 +7,8 @@ development efficiency. Projects should adapt this structure to their specific n
 
 ```
 .cursor/
-├── commands/          # ✅ AI commands (start.md, continue.md, feature.md, etc.)
-├── rules/            # ✅ AI rules (security, technical-stack, etc.)
+├── commands/          # ✅ AI commands (see COMMANDS_STRUCTURE.md for subfolders: bootstrap/, git/, workflow/, etc.)
+├── rules/             # ✅ AI rules (security, technical-stack, etc.)
 └── docs/             # 🆕 NEW: Project-specific documentation
     ├── architecture/
     ├── components/

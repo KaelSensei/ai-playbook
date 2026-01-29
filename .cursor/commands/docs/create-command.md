@@ -9,7 +9,8 @@ steps to generate a new Cursor command file.
 
 1. Assume the project root as the working directory
 2. Load and respect all Cursor rules from `.cursor/rules/*.mdc`
-3. Read existing command files in `.cursor/commands/` to understand the structure
+3. Read existing command files in `.cursor/commands/` (and subfolders: bootstrap/, git/, workflow/,
+   etc.) to understand the structure
 4. Identify the current Git branch and assume it is a **feature branch**, not `main`
 
 ---
@@ -22,7 +23,8 @@ steps to generate a new Cursor command file.
    - Must be lowercase
    - Can use kebab-case for multi-word commands (e.g., `test-integration`)
    - Must not conflict with existing commands
-4. Determine the file path: `.cursor/commands/<command-name>.md`
+4. Determine the file path: `.cursor/commands/<category>/<command-name>.md` (choose category:
+   bootstrap, git, workflow, quality, docs, devops, ideation)
 
 ---
 
@@ -110,7 +112,7 @@ If the command affects project structure or workflow:
 After the command file is created:
 
 ```bash
-git add .cursor/commands/<command-name>.md
+git add .cursor/commands/<category>/<command-name>.md
 git commit -m "docs: add <command-name> command"
 git push origin $(git branch --show-current)
 ```

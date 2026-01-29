@@ -164,8 +164,9 @@ program
       console.log(chalk.cyan('   Optional: Add .cursor/mcp.json for MCP server configuration'));
       console.log(chalk.gray('   (mcp.json is in .gitignore - contains sensitive tokens)\n'));
       console.log(chalk.yellow('   Note: Make sure to commit .cursor/ to your repository\n'));
-    } catch (error: any) {
-      console.log(chalk.red(`❌ Error: ${error.message}\n`));
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      console.log(chalk.red(`❌ Error: ${msg}\n`));
       process.exit(1);
     }
   });
