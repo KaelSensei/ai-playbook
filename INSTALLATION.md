@@ -348,7 +348,8 @@ ls .cursor/commands/
 Open your project in Cursor. The AI assistant will automatically:
 
 - Load rules from `.cursor/rules/*.mdc`
-- Use commands from `.cursor/commands/*.md`
+- Use commands from `.cursor/commands/` (files may be in subfolders: bootstrap/, git/, workflow/,
+  etc.; see COMMANDS.md)
 
 ### 3. Test a Command
 
@@ -365,7 +366,7 @@ This should load the project context and start working.
 You can customize the playbook for your project:
 
 - Add project-specific rules in `.cursor/rules/`
-- Create custom commands in `.cursor/commands/`
+- Create custom commands in `.cursor/commands/<category>/` (see .cursor/docs/COMMANDS_STRUCTURE.md)
 - Update existing rules to match your tech stack
 
 ### 5. Configure MCP (Optional)
