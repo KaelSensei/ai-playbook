@@ -20,6 +20,7 @@ shared rules in `.cursor/rules/*.mdc`.
 | `/merge-branch-into-main [b]`  | Safely merge a completed branch into `main` with pre-merge checks, security review, and documentation updates.                   |
 | `/merge-branch-into-dev [b]`   | Guide a safe merge workflow from a feature branch into `dev`, mirroring the main-merge safety checklist.                         |
 | `/create-pr <target-branch>`   | Open a pull request from the current branch into the given target branch (e.g. `dev`, `main`). Uses `gh` or outputs compare URL. |
+| `/release [version]`           | Generate release notes from commits since last tag and create a GitHub release (requires `gh`).                                  |
 | `/audit-code [target]`         | Analyze code quality, security, and adherence to project standards for the selected scope.                                       |
 | `/brainstorm [topic]`          | Run an AI-assisted product/feature ideation and planning workflow, turning ideas into actionable tasks.                          |
 | `/devops <task>`               | Design or update CI/CD and infrastructure (GitHub Actions, Docker, Kubernetes, etc.) in a security-first way.                    |
@@ -32,7 +33,7 @@ shared rules in `.cursor/rules/*.mdc`.
 
 - **bootstrap/** – start, continue, init-project, adopt-legacy
 - **git/** – add-commit-push, git, create-branch, feature-branch, merge-branch-into-main,
-  merge-branch-into-dev
+  merge-branch-into-dev, create-pr, release
 - **workflow/** – feature, fix, refactor, beautify, clean-code
 - **quality/** – audit-code, magic-wand, cleanup-repo
 - **docs/** – create-user-guide, update-user-guide, create-command
@@ -41,37 +42,39 @@ shared rules in `.cursor/rules/*.mdc`.
 
 ### All commands
 
-| Command                        | Description                                                                           |
-| ------------------------------ | ------------------------------------------------------------------------------------- |
-| **Bootstrap**                  |                                                                                       |
-| `/start`                       | Bootstrap project context, load rules and key docs, pick next task.                   |
-| `/continue`                    | Resume work on this project; reload context and pick next pending task.               |
-| `/init-project [description]`  | Scaffold a new project from scratch (README, .gitignore, optional playbook).          |
-| `/adopt-legacy [scope]`        | Onboard an existing/legacy codebase: analyze, document, optionally add playbook.      |
-| **Git**                        |                                                                                       |
-| `/add-commit-push [message]`   | Run checks, stage, conventional commit, push current branch.                          |
-| `/git [message]`               | Same as `/add-commit-push`.                                                           |
-| `/create-branch`               | Interactively create a new branch (feature/fix/refactor/docs).                        |
-| `/feature-branch <branch>`     | Create and normalize a feature branch with remote tracking.                           |
-| `/merge-branch-into-main [b]`  | Safely merge a branch into `main` with pre-merge checks.                              |
-| `/merge-branch-into-dev [b]`   | Safely merge a branch into `dev`.                                                     |
-| **Workflow**                   |                                                                                       |
-| `/feature <description>`       | Plan and implement new functionality end-to-end.                                      |
-| `/fix <issue>`                 | Diagnose and fix a specific issue with security and regression checks.                |
-| `/refactor <description>`      | Non-functional improvements (structure, clarity) without changing behavior.           |
-| `/beautify <target>`           | Improve UI/UX for a component or screen.                                              |
-| `/clean-code [target]`         | Remove dead code, unused variables, technical debt in a focused area.                 |
-| **Quality**                    |                                                                                       |
-| `/audit-code [target]`         | Analyze code quality, security, and adherence to project standards.                   |
-| `/magic-wand [issue]`          | Deep expert-level debugging when normal approaches fail.                              |
-| `/cleanup-repo`                | Reorganize repo structure (docs, scripts, assets) into a clean layout.                |
-| **Docs**                       |                                                                                       |
-| `/create-user-guide`           | Generate or regenerate user-facing documentation.                                     |
-| `/update-user-guide`           | Add or update sections in `USER_GUIDE.md`.                                            |
-| `/create-command <name> [...]` | Generate a new Cursor command file following project structure.                       |
-| **Devops**                     |                                                                                       |
-| `/devops <task>`               | Design or update CI/CD and infrastructure (GitHub Actions, Docker, Kubernetes, etc.). |
-| **Ideation**                   |                                                                                       |
-| `/brainstorm [topic]`          | AI-assisted feature ideation and planning workflow.                                   |
+| Command                        | Description                                                                            |
+| ------------------------------ | -------------------------------------------------------------------------------------- |
+| **Bootstrap**                  |                                                                                        |
+| `/start`                       | Bootstrap project context, load rules and key docs, pick next task.                    |
+| `/continue`                    | Resume work on this project; reload context and pick next pending task.                |
+| `/init-project [description]`  | Scaffold a new project from scratch (README, .gitignore, optional playbook).           |
+| `/adopt-legacy [scope]`        | Onboard an existing/legacy codebase: analyze, document, optionally add playbook.       |
+| **Git**                        |                                                                                        |
+| `/add-commit-push [message]`   | Run checks, stage, conventional commit, push current branch.                           |
+| `/git [message]`               | Same as `/add-commit-push`.                                                            |
+| `/create-branch`               | Interactively create a new branch (feature/fix/refactor/docs).                         |
+| `/feature-branch <branch>`     | Create and normalize a feature branch with remote tracking.                            |
+| `/merge-branch-into-main [b]`  | Safely merge a branch into `main` with pre-merge checks.                               |
+| `/merge-branch-into-dev [b]`   | Safely merge a branch into `dev`.                                                      |
+| `/create-pr <target-branch>`   | Open a PR from current branch into target (e.g. `dev`, `main`).                        |
+| `/release [version]`           | Generate release notes from commits since last tag and create a GitHub release (`gh`). |
+| **Workflow**                   |                                                                                        |
+| `/feature <description>`       | Plan and implement new functionality end-to-end.                                       |
+| `/fix <issue>`                 | Diagnose and fix a specific issue with security and regression checks.                 |
+| `/refactor <description>`      | Non-functional improvements (structure, clarity) without changing behavior.            |
+| `/beautify <target>`           | Improve UI/UX for a component or screen.                                               |
+| `/clean-code [target]`         | Remove dead code, unused variables, technical debt in a focused area.                  |
+| **Quality**                    |                                                                                        |
+| `/audit-code [target]`         | Analyze code quality, security, and adherence to project standards.                    |
+| `/magic-wand [issue]`          | Deep expert-level debugging when normal approaches fail.                               |
+| `/cleanup-repo`                | Reorganize repo structure (docs, scripts, assets) into a clean layout.                 |
+| **Docs**                       |                                                                                        |
+| `/create-user-guide`           | Generate or regenerate user-facing documentation.                                      |
+| `/update-user-guide`           | Add or update sections in `USER_GUIDE.md`.                                             |
+| `/create-command <name> [...]` | Generate a new Cursor command file following project structure.                        |
+| **Devops**                     |                                                                                        |
+| `/devops <task>`               | Design or update CI/CD and infrastructure (GitHub Actions, Docker, Kubernetes, etc.).  |
+| **Ideation**                   |                                                                                        |
+| `/brainstorm [topic]`          | AI-assisted feature ideation and planning workflow.                                    |
 
 > For full behavior, see each command’s markdown file under `.cursor/commands/<category>/`.
