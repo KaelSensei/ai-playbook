@@ -18,15 +18,15 @@ Commands are organized under `.cursor/commands/` by category. Slash command name
 
 ## Categories
 
-| Folder        | Purpose                                                                     |
-| ------------- | --------------------------------------------------------------------------- |
-| **bootstrap** | Start a session, continue work, init a new project, adopt a legacy codebase |
-| **git**       | Add/commit/push, create branch, feature-branch, merge into main/dev         |
-| **workflow**  | Feature, fix, refactor, beautify, clean-code                                |
-| **quality**   | Audit code, magic-wand (deep debug), cleanup-repo                           |
-| **docs**      | Create/update user guide, create new Cursor commands                        |
-| **devops**    | CI/CD, Docker, Kubernetes, GitHub Actions                                   |
-| **ideation**  | Brainstorm and feature planning                                             |
+| Folder        | Purpose                                                                                 |
+| ------------- | --------------------------------------------------------------------------------------- |
+| **bootstrap** | Start a session, continue work, init a new project, adopt a legacy codebase             |
+| **git**       | Add/commit/push, create branch, feature-branch, merge into main/dev, create-pr, release |
+| **workflow**  | Feature, fix, refactor, beautify, clean-code                                            |
+| **quality**   | Audit code, magic-wand (deep debug), cleanup-repo                                       |
+| **docs**      | Create/update user guide, create new Cursor commands                                    |
+| **devops**    | CI/CD, Docker, Kubernetes, GitHub Actions                                               |
+| **ideation**  | Brainstorm and feature planning                                                         |
 
 ## File Paths
 
