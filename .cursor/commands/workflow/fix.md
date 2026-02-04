@@ -86,18 +86,24 @@ Before writing any code:
 
 ---
 
-## Step 6: Commit & Push (Required)
+## Step 6: Commit & Push (Required – Must Execute)
 
-After the fix is complete:
+After the fix is complete, you **must** run git add, commit, and push. **Do not consider the fix
+complete until you have pushed.**
+
+1. **Run project checks first** (if they exist): e.g. `npm run check`, `npm run format`, lint,
+   tests.
+2. **Stage, commit, and push:**
 
 ```bash
-git add .
+git add -A
 git commit -m "fix: <clear description of the issue fixed>"
-git push
+git push origin $(git branch --show-current)
 ```
 
 - Never push directly to `main` or `master`
 - Always push to the current fix branch
+- **You must execute these commands**; do not stop after Step 5 without committing and pushing
 
 ---
 
@@ -108,7 +114,8 @@ git push
 - Prefer correctness and safety over speed
 - If something is unclear, ask before fixing
 - Never silently fix security-relevant code
-- Every `/fix` must result in a commit unless explicitly blocked
+- Every `/fix` must result in a commit and a push unless explicitly blocked; the fix is not complete
+  until changes are pushed
 
 ---
 

@@ -17,7 +17,7 @@ When `/feature <feature description>` is invoked, immediately execute the follow
    - `PROGRESS.md`
    - Task or requirement documents
    - Architecture and design documents
-4. Identify the current Git branch and assume it is a **feature branch**, not `main`
+4. **Identify the current Git branch** (do not assume it is a feature branch yet)
 5. **Check for attachments** (images, screenshots, mockups, diagrams):
    - Analyze any visual references provided
    - Extract design intentions, UI layouts, or flows from images
@@ -26,7 +26,30 @@ When `/feature <feature description>` is invoked, immediately execute the follow
 
 ---
 
-## Step 2: Understand and Define the Feature
+## Step 2: Ensure Feature Branch (Mandatory)
+
+**Before any feature work**, ensure you are on a feature branch, not `main` or `master`.
+
+1. **Check current branch**: `git branch --show-current`
+2. **If current branch is `main` or `master`**:
+   - **Stop** and create a feature branch first using the **`/feature-branch`** workflow:
+     - Derive a branch name from the feature description: `feature/<kebab-case>` (e.g.
+       `/feature add search reset button` → `feature/add-search-reset-button`).
+     - Run the steps from `/feature-branch`:
+       - `git checkout main` (or `master`), `git pull origin main`
+       - `git checkout -b <branch-name>`
+       - `git push -u origin <branch-name>`
+     - Tell the user: "Created feature branch `<branch-name>`. Proceeding with feature work."
+   - Then continue with Step 3.
+3. **If already on a feature branch** (e.g. `feature/...`, `fix/...`, `docs/...`):
+   - Proceed directly to Step 3.
+
+**Rule:** Never implement a new feature on `main` or `master`. Always create or use a feature branch
+and name it after the feature.
+
+---
+
+## Step 3: Understand and Define the Feature
 
 1. Parse the feature description provided after `/feature`
 2. **Incorporate context from any attached images or screenshots**:
@@ -48,7 +71,7 @@ When `/feature <feature description>` is invoked, immediately execute the follow
 
 ---
 
-## Step 3: Architecture & Design Validation
+## Step 4: Architecture & Design Validation
 
 Before writing code:
 
@@ -69,7 +92,7 @@ Before writing code:
 
 ---
 
-## Step 4: Security & MCP Validation (Mandatory)
+## Step 5: Security & MCP Validation (Mandatory)
 
 Before implementation:
 
@@ -88,7 +111,7 @@ Before implementation:
 
 ---
 
-## Step 5: Implement the Feature
+## Step 6: Implement the Feature
 
 1. Implement the feature incrementally
 2. **Follow visual specifications** from attachments if provided
@@ -99,7 +122,7 @@ Before implementation:
 
 ---
 
-## Step 6: Validate Feature Behavior
+## Step 7: Validate Feature Behavior
 
 1. Reason through the new behavior end-to-end
 2. Confirm:
@@ -111,7 +134,7 @@ Before implementation:
 
 ---
 
-## Step 7: Update Documentation & Changelog (Required)
+## Step 8: Update Documentation & Changelog (Required)
 
 Before committing, **automatically** update (as per `documentation.mdc` rule):
 
@@ -132,12 +155,17 @@ Before committing, **automatically** update (as per `documentation.mdc` rule):
 
 ---
 
-## Step 8: Commit & Push (Required)
+## Step 9: Commit & Push (Required – Must Execute)
 
-After completing the feature (or a meaningful incremental step):
+After completing the feature (or a meaningful incremental step), you **must** run git add, commit,
+and push. **Do not consider the feature complete until you have pushed.**
+
+1. **Run project checks first** (if they exist): e.g. `npm run check`, `npm run format`, lint,
+   tests.
+2. **Stage, commit, and push:**
 
 ```bash
-git add .
+git add -A
 git commit -m "feat: <clear description of the new feature>"
 git push origin $(git branch --show-current)
 ```
@@ -145,23 +173,31 @@ git push origin $(git branch --show-current)
 - Never push directly to `main` or `master`
 - Always push to the current feature branch
 - Large features may be split into multiple incremental commits
+- **You must execute these commands**; do not stop after Step 8 without committing and pushing
 
 ---
 
 ## Cursor Behavior Rules
 
+- **Always ensure a feature branch first** – if on `main` or `master`, create one via
+  `/feature-branch` (name from feature description) before implementing.
 - Features must be intentional and scoped
 - **Always check for and analyze attachments** before starting implementation
 - Never mix fixes or refactors into a feature commit
 - If a bug is discovered while implementing a feature, pause and suggest `/fix`
 - If structural cleanup is needed, pause and suggest `/refactor`
-- Every `/feature` must result in at least one commit unless explicitly blocked
+- Every `/feature` must result in at least one commit and one push unless explicitly blocked; the
+  feature is not complete until changes are pushed
 
 ---
 
 ## Usage
 
 Use `/feature <description>` to:
+
+- **First:** If you are on `main` or `master`, the command creates a feature branch (via
+  `/feature-branch`) named from the feature (e.g. `feature/add-search-reset-button`) before any
+  implementation.
 
 - Add new screens or UI components
 - Add new database queries or schema changes
