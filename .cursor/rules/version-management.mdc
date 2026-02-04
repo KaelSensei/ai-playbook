@@ -7,9 +7,19 @@ alwaysApply: true
 Automatically commit and push changes after completing any feature, bug fix, or significant
 addition.
 
+**Whenever you (the AI) have solved, fixed, or developed something** — i.e. any time you have
+finished implementing a solution, a fix, or a feature — you **must** run `git add`, `git commit`,
+and `git push`. Do not consider the work done until changes are pushed. This applies whether the
+user used `/feature`, `/fix`, or simply asked you to do something; once the work is complete, commit
+and push.
+
 ## Commit Workflow
 
 **CRITICAL: Do this automatically without asking for user confirmation.**
+
+After **every** completed task (feature, fix, refactor, or any developed/solved work), the task is
+**not complete** until you have run `git add`, `git commit`, and `git push`. You **must** execute
+these commands as part of finishing the work; do not stop after writing code or docs.
 
 After completing a task (feature, bug fix, or new addition), **immediately and automatically**
 execute:
@@ -66,6 +76,8 @@ type: brief description
   new - **DO NOT ASK FOR PERMISSION**
 - **ALWAYS push immediately** after committing (unless push fails due to permissions) - **DO NOT ASK
   FOR PERMISSION**
+- **Nothing is “done”** until you have run `git add`, `git commit`, and `git push`. Whenever you
+  have solved, fixed, or developed something, commit and push before considering the task complete.
 - **Never commit** to main/master directly - always use feature branches
 - **Use descriptive messages** that explain what and why
 - **Group related changes** in a single commit when they're part of the same task
