@@ -30,13 +30,14 @@ shared rules in `.cursor/rules/*.mdc`.
 | `/git [message]`               | Same as `/add-commit-push`: stage, conventional commit, and push to the current branch.                                          |
 | `/create-user-guide`           | Generate or regenerate user-facing documentation so end users know how to use the app.                                           |
 | `/update-user-guide`           | Add or update sections in `USER_GUIDE.md` to keep it in sync with the app (e.g. after a new feature).                            |
+| `/export-context [path]`       | Summarize the context window into a compressed markdown file for use by another AI agent (handoff).                              |
 
 - **bootstrap/** – start, continue, init-project, adopt-legacy
 - **git/** – add-commit-push, git, create-branch, feature-branch, merge-branch-into-main,
   merge-branch-into-dev, create-pr, release
 - **workflow/** – feature, fix, refactor, beautify, clean-code
 - **quality/** – audit-code, magic-wand, cleanup-repo
-- **docs/** – create-user-guide, update-user-guide, create-command
+- **docs/** – create-user-guide, update-user-guide, create-command, export-context
 - **devops/** – devops
 - **ideation/** – brainstorm
 
@@ -72,6 +73,7 @@ shared rules in `.cursor/rules/*.mdc`.
 | `/create-user-guide`           | Generate or regenerate user-facing documentation.                                      |
 | `/update-user-guide`           | Add or update sections in `USER_GUIDE.md`.                                             |
 | `/create-command <name> [...]` | Generate a new Cursor command file following project structure.                        |
+| `/export-context [path]`       | Compress context window to markdown for another AI agent (handoff).                    |
 | **Devops**                     |                                                                                        |
 | `/devops <task>`               | Design or update CI/CD and infrastructure (GitHub Actions, Docker, Kubernetes, etc.).  |
 | **Ideation**                   |                                                                                        |

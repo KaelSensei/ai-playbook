@@ -24,7 +24,7 @@ Commands are organized under `.cursor/commands/` by category. Slash command name
 | **git**       | Add/commit/push, create branch, feature-branch, merge into main/dev, create-pr, release |
 | **workflow**  | Feature, fix, refactor, beautify, clean-code                                            |
 | **quality**   | Audit code, magic-wand (deep debug), cleanup-repo                                       |
-| **docs**      | Create/update user guide, create new Cursor commands                                    |
+| **docs**      | Create/update user guide, create commands, export context to markdown for agent handoff |
 | **devops**    | CI/CD, Docker, Kubernetes, GitHub Actions                                               |
 | **ideation**  | Brainstorm and feature planning                                                         |
 
