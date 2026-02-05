@@ -77,4 +77,6 @@ shared rules in `.cursor/rules/*.mdc`.
 | **Ideation**                   |                                                                                        |
 | `/brainstorm [topic]`          | AI-assisted feature ideation and planning workflow.                                    |
 
-> For full behavior, see each command’s markdown file under `.cursor/commands/<category>/`.
+> For full behavior, see each command’s markdown file under `.cursor/commands/<category>/`. For a
+> narrative, step-by-step workflow on how to combine these commands in practice, see
+> `USER_GUIDE.md`.
