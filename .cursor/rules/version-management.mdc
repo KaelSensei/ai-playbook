@@ -89,3 +89,16 @@ type: brief description
 - Work on feature branches: `feature/description` or `fix/description`
 - Current branch: Check with `git branch --show-current`
 - Push to the current branch, never force push to shared branches
+
+## Before you finish (completion check)
+
+**Before ending your response**, run this check:
+
+- **Did I create or modify any files in this repo?** (code, docs, rules, commands, config, etc.)
+  - If **yes** → I **must** have already: (1) created a branch if I was on `main`/`master`, (2) run
+    project checks if they exist, (3) run `git add -A`, `git commit -m "..."`, and
+    `git push origin <branch>`. If I did **not** do that, the task is **not complete** — I must do
+    it now before responding.
+  - If **no** → no commit/push needed.
+
+This applies to **any** change: new files, edits to rules, commands, or documentation. No exception.
