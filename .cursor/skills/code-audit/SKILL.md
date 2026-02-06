@@ -16,6 +16,16 @@ completeness. For security-specific checks, see the `security-review` skill.
 - When reviewing a PR for code quality (not just security).
 - When the user asks "is this code clean?" or "what should I improve?"
 
+## How this skill is used
+
+**Users do not invoke skills directly.** Skills are reference knowledge that the AI loads
+automatically when it detects a matching task, or when a command explicitly says "use the
+`code-audit` skill."
+
+- **Automatic:** The AI loads this skill when auditing code or reviewing a PR.
+- **Referenced by:** `/audit-code` -- the command delegates the quality checklist to this skill (and
+  uses `security-review` for security checks).
+
 ## Code quality checks
 
 ### Patterns and style

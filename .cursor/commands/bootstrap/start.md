@@ -45,9 +45,29 @@ Without asking for confirmation:
 
 ## Usage
 
-Type `/start` when opening a project in a new session. The AI will:
+Type `/start` in the Cursor chat when opening a project in a new session.
 
-1. Load the project docs and rules
-2. Understand what's done and what's next
-3. Pick the next task
-4. Begin implementing it right away
+**Examples:**
+
+- `/start` -- Load project context and begin working on the next task
+
+**Typical flow:**
+
+```
+User: /start
+AI:   Loaded README.md, PROGRESS.md, architecture docs.
+      Current milestone: v1.2 -- search improvements.
+      Next task: add search reset button.
+      Starting implementation now...
+```
+
+**When to use:**
+
+- First time opening a project in Cursor
+- Starting a new work session
+- After a long break from the project
+
+**Related commands:**
+
+- `/continue` -- Similar but lighter; for resuming after a short break
+- `/feature <description>` -- For implementing a specific feature you already have in mind

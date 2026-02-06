@@ -15,6 +15,16 @@ How to name, normalize, and validate Git branches consistently.
 - When `/feature` or `/fix` needs to create a branch automatically.
 - When reviewing branch names for consistency.
 
+## How this skill is used
+
+**Users do not invoke skills directly.** Skills are reference knowledge that the AI loads
+automatically when it detects a matching task, or when a command explicitly says "use the
+`git-branch-naming` skill."
+
+- **Automatic:** The AI loads this skill whenever it needs to create or validate a branch name.
+- **Referenced by:** `/create-branch`, `/feature-branch`, `/feature` -- these commands use this
+  skill for naming conventions, normalization, and validation.
+
 ## Required prefixes
 
 | Prefix      | When to use                             | Example                    |

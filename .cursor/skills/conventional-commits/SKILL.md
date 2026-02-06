@@ -16,6 +16,16 @@ changelogs and releases.
 - When reviewing commit messages in a PR.
 - When the user asks "how should I write this commit message?"
 
+## How this skill is used
+
+**Users do not invoke skills directly.** Skills are reference knowledge that the AI loads
+automatically when it detects a matching task, or when a command explicitly says "use the
+`conventional-commits` skill."
+
+- **Automatic:** The AI loads this skill every time it writes a commit message.
+- **Referenced by:** `/git`, `/add-commit-push`, `/feature`, `/fix`, `/refactor`, `/release` -- any
+  command that ends with a commit step uses this skill for the message format.
+
 ## Format
 
 ```

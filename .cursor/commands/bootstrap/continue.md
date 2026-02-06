@@ -58,9 +58,30 @@ These may live at the project root or in docs/:
 
 ## Usage
 
-Type `/continue` when you come back to a project. The AI will:
+Type `/continue` in the Cursor chat when you return to a project after a break.
 
-1. Reload progress and the dev plan
-2. Understand what was last worked on
-3. Select the next logical task
-4. Continue implementing, updating docs, and committing as work is completed.
+**Examples:**
+
+- `/continue` -- Resume where you left off
+
+**Typical flow:**
+
+```
+User: /continue
+AI:   Current branch: feature/add-search-reset
+      Last commit: "feat: add search input component"
+      Completed: search input, reset button UI.
+      Next: wire up reset logic and update tests.
+      Starting now...
+```
+
+**When to use:**
+
+- Returning to a project after a break (same day or next day)
+- After switching between projects
+- When you want the AI to pick up where it left off without specifying a task
+
+**Related commands:**
+
+- `/start` -- Heavier bootstrap; for first session or after a long break
+- `/feature <description>` -- For a specific feature you already have in mind

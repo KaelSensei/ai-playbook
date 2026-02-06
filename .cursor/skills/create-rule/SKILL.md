@@ -16,6 +16,16 @@ Create project rules in `.cursor/rules/` to give the AI persistent context and c
 - You need to enforce behavior across all conversations (e.g. "always use TypeScript", "never commit
   to main").
 
+## How this skill is used
+
+**Users do not invoke skills directly.** Skills are reference knowledge that the AI loads
+automatically when it detects a matching task, or when a command explicitly says "use the
+`create-rule` skill."
+
+- **Automatic:** The AI loads this skill when the user asks to create a rule or mentions `.mdc`
+  files.
+- **Referenced by:** No specific command -- this is general-purpose expertise.
+
 ## Rule file format
 
 Rules are `.mdc` files with YAML frontmatter:

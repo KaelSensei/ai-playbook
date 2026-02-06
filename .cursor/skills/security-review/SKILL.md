@@ -15,6 +15,16 @@ A structured checklist for reviewing code changes from a security perspective.
 - When running `/audit-code` or `/review`.
 - When the user asks "is this safe to merge?"
 
+## How this skill is used
+
+**Users do not invoke skills directly.** Skills are reference knowledge that the AI loads
+automatically when it detects a matching task, or when a command explicitly says "use the
+`security-review` skill."
+
+- **Automatic:** The AI loads this skill before any merge or when security concerns arise.
+- **Referenced by:** `/merge-branch-into-main`, `/audit-code`, `/feature`, `/fix`, `/refactor` --
+  these commands include a security validation step that uses this skill's checklist.
+
 ## Checklist
 
 ### 1. Secrets and credentials

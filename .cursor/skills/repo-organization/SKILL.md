@@ -15,6 +15,16 @@ Conventions for organizing files and folders in a clean, maintainable repository
 - When deciding where to put a new file.
 - When the user asks "where should this file go?"
 
+## How this skill is used
+
+**Users do not invoke skills directly.** Skills are reference knowledge that the AI loads
+automatically when it detects a matching task, or when a command explicitly says "use the
+`repo-organization` skill."
+
+- **Automatic:** The AI loads this skill when organizing files or deciding on file placement.
+- **Referenced by:** `/cleanup-repo` -- the command delegates file/folder conventions and
+  reorganization patterns to this skill.
+
 ## Standard directory layout
 
 ```

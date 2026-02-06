@@ -15,6 +15,16 @@ A structured approach to finding and fixing root causes when simple debugging ha
 - When a bug persists after multiple fix attempts.
 - When the user says "I've tried everything" or "this keeps coming back."
 
+## How this skill is used
+
+**Users do not invoke skills directly.** Skills are reference knowledge that the AI loads
+automatically when it detects a matching task, or when a command explicitly says "use the
+`debugging-methodology` skill."
+
+- **Automatic:** The AI loads this skill when a bug persists after standard fix attempts.
+- **Referenced by:** `/magic-wand` -- the command delegates the investigation methodology to this
+  skill. `/fix` may also reference it for complex issues.
+
 ## Mindset
 
 - Fix the **root cause**, not the symptom.

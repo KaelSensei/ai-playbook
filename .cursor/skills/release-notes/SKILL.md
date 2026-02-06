@@ -15,6 +15,16 @@ How to turn conventional commits into release notes and GitHub releases.
 - When updating `CHANGELOG.md` manually or via `/changelog`.
 - When the user asks "what should the release notes say?"
 
+## How this skill is used
+
+**Users do not invoke skills directly.** Skills are reference knowledge that the AI loads
+automatically when it detects a matching task, or when a command explicitly says "use the
+`release-notes` skill."
+
+- **Automatic:** The AI loads this skill when preparing a release or updating a changelog.
+- **Referenced by:** `/release` -- the command delegates note formatting and CHANGELOG conventions
+  to this skill.
+
 ## Deriving notes from commits
 
 1. **Get commits since last release:**

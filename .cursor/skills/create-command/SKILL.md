@@ -16,6 +16,16 @@ executes when the user types `/command-name`.
 - User wants to understand command structure or conventions.
 - Complements the `/create-command` command with deeper guidance.
 
+## How this skill is used
+
+**Users do not invoke skills directly.** Skills are reference knowledge that the AI loads
+automatically when it detects a matching task, or when a command explicitly says "use the
+`create-command` skill."
+
+- **Automatic:** The AI loads this skill when the user asks about command structure.
+- **Referenced by:** `/create-command` -- the command delegates structure and convention knowledge
+  to this skill.
+
 ## File location and naming
 
 Commands live under `.cursor/commands/<category>/<name>.md`:
