@@ -42,8 +42,32 @@ git merge --no-ff <branch-name>
 git push origin dev
 ```
 
-## Notes / rules
+## Cursor Behavior Rules
 
-- Prefer PR-based merges when possible (review + CI).
-- Avoid force-pushes to shared branches (`dev`, `main`).
-- If you see secret-like files in the diff, **stop** and fix `.gitignore` / rotate keys.
+- Never merge with uncommitted changes
+- Never force push to `dev`
+- Never auto-resolve conflicts -- let user resolve manually
+- Always use `--no-ff` to preserve branch history
+- If secret-like files appear in the diff, **stop** and fix `.gitignore` / rotate keys
+- Prefer PR-based merges when possible (review + CI)
+
+---
+
+## Usage
+
+Use `/merge-branch-into-dev [branch-name]` to safely merge a feature branch into `dev`.
+
+**Examples:**
+
+- `/merge-branch-into-dev feature/add-export` -- Merge a specific branch into dev
+- `/merge-branch-into-dev` -- Merge the current branch into dev
+
+**Typical flow:**
+
+```
+User: /merge-branch-into-dev feature/add-skills
+AI:   Checking working tree... clean.
+      Fetching origin, checking out dev, pulling...
+      Merging feature/add-skills into dev with --no-ff...
+      Merge successful. Pushed to origin/dev.
+```
