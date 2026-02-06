@@ -1,114 +1,61 @@
 # Git Command – Stage, Commit, and Push Current Changes
 
-When `/git [message]` is invoked, immediately execute the following steps to stage changes, create a
-conventional commit, and push to the current branch.
+When `/git [message]` is invoked, stage changes, create a conventional commit, and push to the
+current branch.
+
+**Skills used:** `conventional-commits` (commit message format and type selection).
 
 ---
 
-## Step 1: Load Project Context & Follow All Rules
+## Step 1: Load Context
 
-1. Assume the project root as the working directory
-2. **Load and strictly follow ALL Cursor rules** from `.cursor/rules/*.mdc`:
-   - `security.mdc` - Security requirements
-   - `documentation.mdc` - Documentation update requirements
-   - `version-management.mdc` - Git workflow and commit conventions
-   - `general-principles.mdc` - Project philosophy (keep it simple)
-3. Read relevant documentation if present:
-   - `README.md`
-   - Project progress / changelog docs (e.g., `PROGRESS.md`, `CHANGELOG.md`)
+1. Assume project root as working directory
+2. Load rules from `.cursor/rules/*.mdc`
 
 ---
 
-## Step 2: Safety Checks (Mandatory)
+## Step 2: Safety Checks
 
-1. **Check current branch**:
-
-   ```bash
-   git branch --show-current
-   ```
-
-2. **Refuse to commit directly to protected branches**:
-   - If branch is `main` or `master`, **stop and ask** the user to create a feature branch first.
-
-3. **Check working tree**:
-
-   ```bash
-   git status
-   ```
-
-4. If there is **nothing to commit**, report that and stop.
+1. Check current branch: `git branch --show-current`
+2. If on `main`/`master`: **stop** -- ask user to create a feature branch first
+3. Check working tree: `git status`
+4. If nothing to commit: report and stop
 
 ---
 
-## Step 3: Run Project Checks (Lint / Format / Tests)
+## Step 3: Run Project Checks
 
-Before committing, run the project's standard checks **if they exist**:
+Run available checks before committing (if they exist):
 
-1. **Detect common check commands** by looking for scripts and config files:
-   - Node: `package.json` scripts like `check`, `lint`, `format:check`, `test`
-   - Python: `pyproject.toml`, `pytest.ini`, `ruff.toml`
-   - Go: `go test ./...`, `golangci-lint run`
-   - Rust: `cargo test`, `cargo fmt --check`, `cargo clippy`
+- Node: `npm run check`, `npm run lint`, `npm run format:check`
+- Python: `pytest`, `ruff check`
+- Go: `go test ./...`, `golangci-lint run`
+- Rust: `cargo test`, `cargo fmt --check`
 
-2. Run the **most relevant, fastest** checks first (format check + lint).
-3. If checks fail:
-   - Stop and report the failures
-   - Fix if safe and straightforward
-   - Re-run the checks until they pass
-
-> Note: if the repo has a pre-commit hook, it will also run automatically when committing.
+If checks fail: stop, report, fix if safe, re-run.
 
 ---
 
-## Step 4: Review Changes and Draft Commit Message
+## Step 4: Draft Commit Message
 
-1. Review the changes:
-
-   ```bash
-   git diff
-   git diff --staged
-   ```
-
-2. If the user provided `/git <message>`, use it as the commit subject (still enforce conventional
-   commits).
-
-3. If no message was provided:
-   - Draft a **conventional commit** message based on the diff:
-     - `feat:` new functionality
-     - `fix:` bug fix
-     - `docs:` documentation-only change
-     - `refactor:` internal restructuring
-     - `chore:` maintenance/config
-     - `test:` test changes
-
-4. Prefer describing **why** over **what**.
+1. Review changes: `git diff` and `git diff --staged`
+2. If user provided `/git <message>`: use it (enforce conventional format)
+3. If no message: use **`conventional-commits` skill** to draft one from the diff:
+   - Choose type (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`, `test:`, etc.)
+   - Write imperative subject, max ~72 chars
+   - Describe **why** over **what**
 
 ---
 
-## Step 5: Stage, Commit, and Push
+## Step 5: Stage, Commit, Push
 
-1. Stage all changes:
+```bash
+git add -A
+git commit -m "type: brief description"
+git push origin $(git branch --show-current)
+```
 
-   ```bash
-   git add -A
-   ```
-
-2. Commit with the drafted message (use a multi-line message when helpful):
-
-   ```bash
-   git commit -m "type: brief description"
-   ```
-
-3. Push to the current branch:
-
-   ```bash
-   git push origin $(git branch --show-current)
-   ```
-
-4. Verify:
-   ```bash
-   git status
-   ```
+Verify: `git status`
 
 ---
 
@@ -116,14 +63,13 @@ Before committing, run the project's standard checks **if they exist**:
 
 - Never commit secrets (tokens, credentials, `.env`, private keys)
 - Never commit directly to `main`/`master`
-- Always run available lint/format checks before committing
-- Always push after a successful commit (unless blocked by permissions)
-- Keep changes grouped logically (avoid mixing unrelated work)
+- Always run available checks before committing
+- Always push after a successful commit
+- Use `conventional-commits` skill for message format
 
 ---
 
 ## Usage
 
-- `/git` — Stage, auto-generate commit message, commit, push
-- `/git docs: update installation instructions` — Use the provided commit subject (still enforce
-  conventional commits)
+- `/git` -- Auto-generate commit message, commit, push
+- `/git docs: update installation instructions` -- Use provided subject

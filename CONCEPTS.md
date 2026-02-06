@@ -103,6 +103,8 @@ The user types `/command-name <arguments>` in the Cursor chat. The AI:
 
 - Commands are **active** — they trigger a sequence of actions.
 - Commands **reference rules** (e.g. "follow `security.mdc`") but don't replace them.
+- Commands **reference skills** for domain knowledge (e.g. "use `security-review` skill" for the
+  security checklist, "use `conventional-commits` skill" for the commit message).
 - Commands should end with a commit+push step (per `version-management.mdc`).
 - See [COMMANDS.md](COMMANDS.md) for the full list.
 
@@ -127,6 +129,10 @@ Think of skills as the AI's **reference manuals** for specialized tasks.
   security-review/         # Security checklist before merge
   conventional-commits/    # Commit message format and types
   release-notes/           # How to generate release notes
+  git-branch-naming/       # Branch naming conventions
+  code-audit/              # Code quality audit checklist
+  debugging-methodology/   # Root-cause analysis for persistent bugs
+  repo-organization/       # File/folder conventions for repos
 ```
 
 Each skill folder contains a `SKILL.md` with YAML frontmatter:
