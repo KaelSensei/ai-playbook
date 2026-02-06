@@ -9,10 +9,15 @@ AI assistants (Cursor, Claude, etc.) contribute to codebases.
 
 It defines:
 
-- Reusable **Cursor rules (`.mdc`)**
-- Structured **AI commands** (`/start`, `/feature`, `/fix`, `/refactor`, etc.)
+- Reusable **Cursor rules (`.mdc`)** — persistent behavior constraints
+- Structured **AI commands** (`/start`, `/feature`, `/fix`, `/refactor`, etc.) — slash-triggered
+  workflows
+- **Agent skills** (`.cursor/skills/`) — on-demand domain expertise (security review, conventional
+  commits, release notes, etc.)
 - **Security-first policies** (MCP validation, backdoor prevention, supply-chain awareness)
 - **Version and branch discipline** for AI-generated commits
+
+For a detailed explanation of rules, commands, skills, and MCP, see [CONCEPTS.md](CONCEPTS.md).
 
 The goal is to ensure AI-assisted development is:
 
@@ -116,10 +121,70 @@ cp -r .ai-playbook/.cursor .cursor
 For detailed installation, deployment, and development instructions, see
 [INSTALLATION.md](INSTALLATION.md).
 
+## Getting Started
+
+After installing the playbook (submodule, CLI, or manual copy), open your project in Cursor and
+start using commands in the chat:
+
+### 1. Bootstrap your session
+
+```
+/start
+```
+
+The AI loads your project docs, rules, and progress tracking, then picks up the next task and begins
+working. Use this at the start of each new session.
+
+### 2. Implement features and fixes
+
+```
+/feature add dark mode toggle
+/fix image loading crash on Android
+/refactor extract database utilities
+```
+
+Each command follows a full workflow: branch creation, implementation, validation, documentation
+update, and commit+push.
+
+### 3. Manage Git
+
+```
+/git                              # stage, commit, push (auto-generates message)
+/create-branch                    # interactive branch creation
+/create-pr dev                    # open PR from current branch into dev
+/merge-branch-into-main           # safe merge with security review
+/release 1.2.0                    # generate release notes + GitHub release
+```
+
+### 4. Quality and debugging
+
+```
+/audit-code src/                  # code quality + security audit
+/magic-wand app crashes on start  # deep root-cause analysis
+/cleanup-repo                     # reorganize scattered files
+/clean-code src/utils/            # remove dead code and clutter
+```
+
+### 5. Resume after a break
+
+```
+/continue
+```
+
+The AI reloads progress, checks the current branch, and picks up where you left off.
+
+### Skills (automatic)
+
+Skills are **not invoked directly**. The AI loads them automatically when a matching task is
+detected, or when a command references them (e.g. `/feature` uses the `security-review` and
+`git-branch-naming` skills). See [CONCEPTS.md](CONCEPTS.md) for details.
+
+---
+
 ## Typical Usage
 
 - Installed via **CLI tool** or **Git submodule**
-- Linked to `.cursor/rules/` and `.cursor/commands/`
+- Linked to `.cursor/rules/`, `.cursor/commands/`, and `.cursor/skills/`
 - Read automatically by AI assistants
 - Updated independently of application code
 
@@ -230,11 +295,16 @@ For installation, deployment, and next steps, see [INSTALLATION.md](INSTALLATION
 
 ---
 
-## Annex – Commands
+## Annex – Commands & Skills
 
 For a consolidated overview of all available Cursor commands in this playbook, see:
 
 - [COMMANDS.md](COMMANDS.md) – summary table of every `/command` and its purpose
+
+For the agent skills bundled with this playbook, see:
+
+- [CONCEPTS.md](CONCEPTS.md) – explains rules, commands, skills, and MCP
+- `.cursor/skills/` – skill files the AI loads on demand
 
 ---
 

@@ -2,129 +2,87 @@
 
 When `/refactor <description>` is invoked, immediately execute the following steps.
 
----
-
-## Step 1: Load Project Context & Follow All Rules
-
-1. Assume the project root as the working directory
-2. **Load and strictly follow ALL Cursor rules** from `.cursor/rules/*.mdc`:
-   - `security.mdc` - Security requirements
-   - `technical-stack.mdc` - Technical stack patterns
-   - `documentation.mdc` - Documentation update requirements
-   - `version-management.mdc` - Git commit/push workflow
-3. Read relevant documentation:
-   - `README.md`
-   - Architecture documents
-   - Any file directly affected by the refactor
-4. Identify the current Git branch and assume it is a **refactor branch**, not `main`
+**Skills used:** `security-review` (validate no behavior change), `conventional-commits` (commit
+message).
 
 ---
 
-## Step 2: Define Refactor Scope (Critical)
+## Step 1: Load Context
 
-1. Parse the description provided after `/refactor`
-2. Explicitly define what is allowed:
-   - Code organization
-   - Naming
-   - Readability
-   - Duplication removal
-   - Type safety improvements
-3. Explicitly define what is **not allowed**:
-   - No behavior changes
-   - No logic changes
-   - No feature additions
-   - No bug fixes (use `/fix` instead)
-4. If scope is ambiguous, **stop and ask before proceeding**
+1. Assume project root as working directory
+2. Load rules from `.cursor/rules/*.mdc`
+3. Read: `README.md`, architecture docs, files affected by the refactor
+4. Identify current Git branch (should be a refactor branch, not `main`)
 
 ---
 
-## Step 3: Security & Safety Validation
+## Step 2: Define Scope (Critical)
 
-Before making changes:
+1. Parse description
+2. Allowed: code organization, naming, readability, duplication removal, type safety
+3. **Not allowed**: behavior changes, logic changes, feature additions, bug fixes
+4. If scope is ambiguous: **stop and ask**
 
-1. Assume refactors can accidentally introduce vulnerabilities
-2. Review affected code for:
-   - Hidden logic changes
-   - Control-flow alterations
-   - Subtle semantic changes
-3. Use **MCP (Model Context Protocol)** or equivalent reasoning to ensure:
-   - Refactor preserves behavior exactly
-   - No new execution paths are introduced
-   - No backdoors, dynamic execution, or unsafe patterns appear
-4. If exact equivalence cannot be guaranteed, **abort and ask**
+---
+
+## Step 3: Security Validation
+
+Use the **`security-review` skill** reasoning to ensure:
+
+- Refactor preserves behavior exactly
+- No new execution paths introduced
+- No backdoors, dynamic execution, or unsafe patterns
+- If exact equivalence cannot be guaranteed: **abort and ask**
 
 ---
 
 ## Step 4: Perform the Refactor
 
-1. Apply **minimal and mechanical** transformations only
-2. Prefer:
-   - Extracting small pure functions
-   - Improving naming consistency
-   - Reducing nesting
-   - Improving typing and explicitness
-3. Avoid:
-   - Reordering logic unless provably equivalent
-   - Changing conditionals or loops
-   - Introducing new dependencies
-4. Keep changes tightly scoped and easily reviewable
+1. Apply **minimal, mechanical** transformations only
+2. Prefer: extracting functions, improving naming, reducing nesting, improving types
+3. Avoid: reordering logic, changing conditionals, introducing dependencies
+4. Keep changes tightly scoped and reviewable
 
 ---
 
-## Step 5: Validate Behavioral Equivalence
+## Step 5: Validate Equivalence
 
-1. Reason through execution paths before and after refactor
-2. Confirm:
-   - Inputs → outputs remain identical
-   - Side effects are unchanged
-   - Error handling is unchanged
-3. If tests exist, ensure they still pass unchanged
-4. If tests do not exist, explain why equivalence is still guaranteed
+1. Reason through execution paths before and after
+2. Confirm: inputs -> outputs identical, side effects unchanged, error handling unchanged
+3. If tests exist, ensure they pass unchanged
 
 ---
 
-## Step 6: Update Documentation & Changelog (Required)
+## Step 6: Update Documentation (Required)
 
-Before committing, **automatically** update (as per `documentation.mdc` rule):
+Automatically update (per `documentation.mdc`):
 
-1. **Project progress documentation**:
-   - Note the refactor if it changes functionality description
-   - Update "Last updated" timestamp
-2. **CHANGELOG.md** (create if missing):
-   - Add entry under "## [Unreleased]" or new version
-   - Format: `- Refactored: <description of structural improvement>`
-3. **Architecture docs**: If file structure or component organization changed significantly
+1. **PROGRESS.md** -- note refactor, update timestamp
+2. **CHANGELOG.md** -- `- Refactored: <description>`
+3. **Architecture docs** -- if file structure or organization changed significantly
 
-**Do NOT ask** - update docs and changelog automatically. This is mandatory.
+---
 
 ## Step 7: Commit & Push (Required)
 
-After refactoring:
-
 ```bash
-git add .
+git add -A
 git commit -m "refactor: <clear description of structural improvement>"
 git push origin $(git branch --show-current)
 ```
 
-Never push directly to main or master Always push to the current refactor branch
+---
 
-Cursor Behavior Rules
+## Cursor Behavior Rules
 
-- Refactor ≠ rewrite
-- Never “improve” logic
-- Never sneak in fixes or features
-- If tempted to change behavior, stop and suggest /fix instead
-- Every /refactor must result in a commit unless explicitly blocked
+- Refactor is not rewrite
+- Never "improve" logic -- never sneak in fixes or features
+- If tempted to change behavior: stop and suggest `/fix`
+- Every `/refactor` must result in a commit unless explicitly blocked
+
+---
 
 ## Usage
 
-Use `/refactor <description>` to:
-
-- Improve readability
-- Clean up structure
-- Reduce duplication
-- Improve naming or typing
-- Extract reusable components or utilities
-- Reorganize file structure
-- Make code easier to audit without changing behavior
+- `/refactor extract database utilities` -- Extract reusable DB helpers
+- `/refactor improve naming in auth module` -- Rename for clarity
