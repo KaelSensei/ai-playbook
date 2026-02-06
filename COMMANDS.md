@@ -25,7 +25,7 @@ shared rules in `.cursor/rules/*.mdc`.
 | `/brainstorm [topic]`          | Run an AI-assisted product/feature ideation and planning workflow, turning ideas into actionable tasks.                          |
 | `/devops <task>`               | Design or update CI/CD and infrastructure (GitHub Actions, Docker, Kubernetes, etc.) in a security-first way.                    |
 | `/magic-wand [issue]`          | Perform deep, expert-level debugging and problem-solving when normal commands are not enough.                                    |
-| `/create-command <name> [...]` | Generate a new Cursor command file that matches the project’s command structure and rules.                                       |
+| `/create-command <name> [...]` | Generate a new Cursor command file that matches the project's command structure and rules.                                       |
 | `/add-commit-push [message]`   | Run project checks, stage all changes, create a conventional commit (using the optional message), and push the current branch.   |
 | `/git [message]`               | Same as `/add-commit-push`: stage, conventional commit, and push to the current branch.                                          |
 | `/create-user-guide`           | Generate or regenerate user-facing documentation so end users know how to use the app.                                           |
@@ -79,4 +79,18 @@ shared rules in `.cursor/rules/*.mdc`.
 | **Ideation**                   |                                                                                        |
 | `/brainstorm [topic]`          | AI-assisted feature ideation and planning workflow.                                    |
 
-> For full behavior, see each command’s markdown file under `.cursor/commands/<category>/`.
+### Agent Skills
+
+The playbook also includes **agent skills** in `.cursor/skills/`. Skills are loaded on demand when
+the AI detects a matching task:
+
+| Skill                  | Purpose                                              |
+| ---------------------- | ---------------------------------------------------- |
+| `create-rule`          | How to write and structure a `.mdc` rule.            |
+| `create-command`       | How to create a new Cursor command.                  |
+| `security-review`      | Security checklist before merging a branch.          |
+| `conventional-commits` | Commit message format (feat/fix/docs/refactor/etc.). |
+| `release-notes`        | How to generate release notes from commits.          |
+
+> For full behavior, see each command's markdown file under `.cursor/commands/<category>/`. For
+> details on rules, commands, skills, and MCP, see [CONCEPTS.md](CONCEPTS.md).

@@ -9,10 +9,15 @@ AI assistants (Cursor, Claude, etc.) contribute to codebases.
 
 It defines:
 
-- Reusable **Cursor rules (`.mdc`)**
-- Structured **AI commands** (`/start`, `/feature`, `/fix`, `/refactor`, etc.)
+- Reusable **Cursor rules (`.mdc`)** — persistent behavior constraints
+- Structured **AI commands** (`/start`, `/feature`, `/fix`, `/refactor`, etc.) — slash-triggered
+  workflows
+- **Agent skills** (`.cursor/skills/`) — on-demand domain expertise (security review, conventional
+  commits, release notes, etc.)
 - **Security-first policies** (MCP validation, backdoor prevention, supply-chain awareness)
 - **Version and branch discipline** for AI-generated commits
+
+For a detailed explanation of rules, commands, skills, and MCP, see [CONCEPTS.md](CONCEPTS.md).
 
 The goal is to ensure AI-assisted development is:
 
@@ -230,11 +235,16 @@ For installation, deployment, and next steps, see [INSTALLATION.md](INSTALLATION
 
 ---
 
-## Annex – Commands
+## Annex – Commands & Skills
 
 For a consolidated overview of all available Cursor commands in this playbook, see:
 
 - [COMMANDS.md](COMMANDS.md) – summary table of every `/command` and its purpose
+
+For the agent skills bundled with this playbook, see:
+
+- [CONCEPTS.md](CONCEPTS.md) – explains rules, commands, skills, and MCP
+- `.cursor/skills/` – skill files the AI loads on demand
 
 ---
 
