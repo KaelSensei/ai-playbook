@@ -1,0 +1,90 @@
+---
+alwaysApply: true
+---
+
+# Token Optimization and Noise Reduction
+
+These rules help the AI assistant reduce unnecessary token usage and context size while still
+following all security, documentation, and version‑management rules.
+
+The goal is **not** to run fewer checks, but to **see less noise** from them.
+
+## 1. Prefer token‑efficient tooling (RTK – Rust Token Killer)
+
+- **RTK overview**:
+  - [RTK (Rust Token Killer)](https://github.com/rtk-ai/rtk) is a single‑binary CLI proxy that
+    compresses command output before it reaches the LLM.
+  - It typically saves **60–90%** of tokens on common dev commands (git, tests, ls, grep, etc.).
+  - It is explicitly documented as compatible with Claude Code and other AI dev tools (see
+    `TOKEN_OPTIMIZATION.md`).
+
+- **Detection rule (per workspace / repo)**:
+  - At most **once per session**, and only when you are about to run a heavy shell command (tests,
+    git, large listings), you may run:
+    - `rtk --version`
+  - If this fails (command not found or clear error), assume **RTK is not installed** and do **not**
+    retry in that session.
+  - Do **not** auto‑install RTK or modify user configuration; only the human user installs and
+    configures RTK.
+
+- **Usage rule when RTK is available**:
+  - When `rtk --version` succeeds, prefer the `rtk` wrappers instead of raw commands for noisy
+    operations, for example:
+    - `rtk git status` instead of `git status`
+    - `rtk git diff` instead of `git diff`
+    - `rtk test cargo test` or `rtk cargo test` instead of `cargo test`
+    - `rtk err npm run build` instead of `npm run build`
+    - `rtk ls .` instead of `ls -la`
+  - Keep the **intent** of the command identical (same flags and arguments), only wrapped by RTK.
+  - If an `rtk` command fails in a way that looks like “feature not supported” but the underlying
+    base command is important (e.g. tests, lint, git), fall back to the plain command and continue.
+
+- **Safety & security**:
+  - Treat RTK like any other local CLI binary:
+    - Never pass secrets or credentials via command‑line arguments.
+    - Never rely on RTK for access control or sandboxing.
+  - When in doubt, you may ask the user whether they want RTK usage in this project, but **do not**
+    modify their global tool configuration automatically.
+
+## 2. Shell usage guidelines to reduce noise
+
+Even without RTK installed, follow these patterns to keep shell output compact:
+
+- **Prefer focused commands**:
+  - Use `git status -sb` instead of the default `git status` when you only need a quick overview.
+  - Limit logs and lists with flags when available (e.g. `--max-count`, `--depth`, `-n`).
+
+- **Avoid noisy generic listings**:
+  - Prefer the IDE tools (`Glob`, `Grep`, `Read`) over shell commands like `ls -la`, `find`, or
+    `grep` for exploration.
+  - When you must use `ls`/`tree` style commands, keep the target directory as small as possible and
+    avoid repeatedly listing the same large directories.
+
+- **Summarize test and build results**:
+  - It is acceptable (and encouraged) to run full test/build commands, but **you do not have to echo
+    all raw output back to the user**.
+  - In explanations to the user:
+    - Summarize which tests passed/failed and why.
+    - Quote only the most relevant error messages and stack traces, not the entire log.
+
+## 3. Context hygiene when reading files and search results
+
+- **Scope searches aggressively**:
+  - When using `Grep` / `Glob` / semantic search, restrict:
+    - The directories (e.g. `src/` instead of repo root when possible).
+    - The file types (e.g. `*.ts`, `*.py`) when known.
+    - The number of results (`head_limit`) when exploring large codebases.
+
+- **Avoid re‑pasting large unchanged blocks**:
+  - When showing code to the user, prefer **minimal, focused snippets** rather than entire files.
+  - Do not repeatedly show the same large snippet unless it has changed or is directly relevant to
+    the current question.
+
+- **Prefer summaries over raw dumps**:
+  - When a tool returns a lot of data (e.g. linter output, big JSON, long logs), summarize it in
+    your own words and include only the most important lines or examples.
+  - Make it clear when a snippet is representative (e.g. “example error”) rather than the complete
+    output.
+
+These practices, combined with optional RTK usage, are intended to **extend session length, reduce
+rate‑limit pressure, and lower token costs** without sacrificing correctness or safety.

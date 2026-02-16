@@ -26,6 +26,9 @@ The goal is to ensure AI-assisted development is:
 - **Auditable** and reviewable
 - **Explicit in intent** (feature vs fix vs refactor)
 
+For guidance on reducing LLM token usage (especially for shell commands and search), see
+[TOKEN_OPTIMIZATION.md](TOKEN_OPTIMIZATION.md).
+
 ---
 
 ## Why This Exists
@@ -292,6 +295,9 @@ For installation, deployment, and next steps, see [INSTALLATION.md](INSTALLATION
   configurations
   - Inspiration for CLI structure
   - Example of npx-based installation
+
+- **[TOKEN_OPTIMIZATION.md](TOKEN_OPTIMIZATION.md)** - Practical guide to reducing token usage with
+  RTK (Rust Token Killer) and playbook-level token hygiene.
 
 ---
 
