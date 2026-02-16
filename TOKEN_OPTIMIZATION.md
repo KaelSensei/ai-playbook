@@ -63,6 +63,17 @@ Follow the official installation instructions in the RTK repo:
 - RTK README: [`https://github.com/rtk-ai/rtk`](https://github.com/rtk-ai/rtk)
 - Install guide: [`INSTALL.md`](https://github.com/rtk-ai/rtk/blob/master/INSTALL.md)
 
+RTK is a **cross‑platform** CLI:
+
+- **Linux / macOS**
+  - Recommended: use the install script from the README (see upstream docs for latest command).
+  - Alternative: build from source with `cargo install --git https://github.com/rtk-ai/rtk`.
+- **Windows**
+  - Use the pre‑built Windows binary from the RTK releases page:
+    [`https://github.com/rtk-ai/rtk/releases`](https://github.com/rtk-ai/rtk/releases)  
+    (e.g. `rtk-x86_64-pc-windows-msvc.zip`), or build from source with Cargo.
+  - Add the extracted `rtk.exe` directory to your `PATH` so that `rtk --version` works in a shell.
+
 Typical steps (simplified, see upstream docs for the latest version):
 
 ```bash
@@ -70,7 +81,7 @@ Typical steps (simplified, see upstream docs for the latest version):
 rtk --version
 rtk gain
 
-# 2. Quick install (Linux/macOS, from RTK README)
+# 2. Quick install (Linux/macOS only, from RTK README)
 curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
 
 # 3. Verify installation
@@ -173,6 +184,9 @@ playbook.
   - Internally, agents following the rules should:
     - Prefer RTK wrappers for noisy shell commands when available.
     - Apply token‑hygiene patterns when reading files, running searches, and summarizing results.
+- **MCP**:
+  - RTK is a **local CLI binary**, not an MCP server; it runs wherever your shell runs.
+  - You do **not** need to modify `.cursor/mcp.json` to use RTK with this playbook.
 - **Security and reliability**:
   - Token optimization must **never** skip essential checks (tests, lint, security review).
   - The goal is to **compress noise**, not to avoid work.
