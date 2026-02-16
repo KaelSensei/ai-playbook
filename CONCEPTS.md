@@ -21,10 +21,11 @@ Think of rules as the AI's **operating manual** for your project.
 ```
 .cursor/rules/
   general-principles.mdc     # Project philosophy and mental model
-  technical-stack.mdc         # Languages, frameworks, build tools
-  security.mdc                # Security policies and merge safety
-  documentation.mdc           # What docs to update and when
-  version-management.mdc      # Git workflow, commit conventions, auto-push
+  technical-stack.mdc        # Languages, frameworks, build tools
+  security.mdc               # Security policies and merge safety
+  documentation.mdc          # What docs to update and when
+  version-management.mdc     # Git workflow, commit conventions, auto-push
+  ethskills.mdc              # (Optional) Ethereum-specific knowledge & guardrails for onchain apps
 ```
 
 ### How do they work?
