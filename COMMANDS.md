@@ -84,17 +84,18 @@ shared rules in `.cursor/rules/*.mdc`.
 The playbook also includes **agent skills** in `.cursor/skills/`. Skills are loaded on demand when
 the AI detects a matching task:
 
-| Skill                   | Purpose                                              |
-| ----------------------- | ---------------------------------------------------- |
-| `create-rule`           | How to write and structure a `.mdc` rule.            |
-| `create-command`        | How to create a new Cursor command.                  |
-| `security-review`       | Security checklist before merging a branch.          |
-| `conventional-commits`  | Commit message format (feat/fix/docs/refactor/etc.). |
-| `release-notes`         | How to generate release notes from commits.          |
-| `git-branch-naming`     | Branch naming conventions and normalization rules.   |
-| `code-audit`            | Code quality and architecture audit checklist.       |
-| `debugging-methodology` | Root-cause analysis for persistent bugs.             |
-| `repo-organization`     | File/folder conventions for repo structure.          |
+| Skill                   | Purpose                                                       |
+| ----------------------- | ------------------------------------------------------------- |
+| `create-rule`           | How to write and structure a `.mdc` rule.                     |
+| `create-command`        | How to create a new Cursor command.                           |
+| `security-review`       | Security checklist before merging a branch.                   |
+| `conventional-commits`  | Commit message format (feat/fix/docs/refactor/etc.).          |
+| `release-notes`         | How to generate release notes from commits.                   |
+| `git-branch-naming`     | Branch naming conventions and normalization rules.            |
+| `code-audit`            | Code quality and architecture audit checklist.                |
+| `debugging-methodology` | Root-cause analysis for persistent bugs.                      |
+| `repo-organization`     | File/folder conventions for repo structure.                   |
+| `token-optimization`    | Lightweight, RTK-free token hygiene for commands and context. |
 
 > For full behavior, see each command's markdown file under `.cursor/commands/<category>/`. For
 > details on rules, commands, skills, and MCP, see [CONCEPTS.md](CONCEPTS.md).
