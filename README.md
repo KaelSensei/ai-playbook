@@ -280,6 +280,12 @@ For installation, deployment, and next steps, see [INSTALLATION.md](INSTALLATION
   - Understand command structure and syntax
   - See examples of effective commands
 
+### Multi-agent Playbook Usage
+
+- **[CONCEPTS.md](CONCEPTS.md)** – core model for rules, commands, skills, and MCP
+- **[.cursor/docs/AGENTS_COMPATIBILITY.md](.cursor/docs/AGENTS_COMPATIBILITY.md)** – how to reuse
+  this playbook with other agents (e.g. Claude Code) even though `.cursor/` is Cursor-specific
+
 ### Community Examples
 
 - **[cursor-commands Repository](https://github.com/hamzafer/cursor-commands/tree/main/.cursor/commands)** -
