@@ -1,9 +1,8 @@
-## Annex – Cursor Commands Overview
+## Annex – Commands Overview
 
-This annex lists all available Cursor commands. Commands are grouped under
-`.cursor/commands/<category>/` (see
-[.cursor/docs/COMMANDS_STRUCTURE.md](.cursor/docs/COMMANDS_STRUCTURE.md)). Each command follows the
-shared rules in `.cursor/rules/*.mdc`.
+This annex lists all available commands. Commands are grouped under `.agents/commands/<category>/`
+(see [.agents/docs/COMMANDS_STRUCTURE.md](.agents/docs/COMMANDS_STRUCTURE.md)). Each command follows
+the shared rules in `.agents/rules/*.mdc`.
 
 | Command                        | Description                                                                                                                      |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
@@ -81,13 +80,13 @@ shared rules in `.cursor/rules/*.mdc`.
 
 ### Agent Skills
 
-The playbook also includes **agent skills** in `.cursor/skills/`. Skills are loaded on demand when
+The playbook also includes **agent skills** in `.agents/skills/`. Skills are loaded on demand when
 the AI detects a matching task:
 
 | Skill                   | Purpose                                                       |
 | ----------------------- | ------------------------------------------------------------- |
 | `create-rule`           | How to write and structure a `.mdc` rule.                     |
-| `create-command`        | How to create a new Cursor command.                           |
+| `create-command`        | How to create a new command.                                  |
 | `security-review`       | Security checklist before merging a branch.                   |
 | `conventional-commits`  | Commit message format (feat/fix/docs/refactor/etc.).          |
 | `release-notes`         | How to generate release notes from commits.                   |
@@ -97,5 +96,5 @@ the AI detects a matching task:
 | `repo-organization`     | File/folder conventions for repo structure.                   |
 | `token-optimization`    | Lightweight, RTK-free token hygiene for commands and context. |
 
-> For full behavior, see each command's markdown file under `.cursor/commands/<category>/`. For
+> For full behavior, see each command's markdown file under `.agents/commands/<category>/`. For
 > details on rules, commands, skills, and MCP, see [CONCEPTS.md](CONCEPTS.md).

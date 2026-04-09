@@ -1,0 +1,8 @@
+{
+  "hooks": [
+    {
+      "event": "Stop",
+      "script": "hooks/on-stop.sh"
+    }
+  ]
+}

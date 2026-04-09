@@ -12,13 +12,13 @@ This guide covers how to install, build, test, and deploy the AI Playbook CLI to
 # Add the playbook as a Git submodule
 git submodule add https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook
 
-# Create .cursor directory structure
-mkdir -p .cursor
+# Create your tool's config directory (.claude, .cursor, etc.)
+mkdir -p .claude
 
 # Create symlinks to the playbook
-ln -s ../.ai-playbook/.cursor/rules .cursor/rules
-ln -s ../.ai-playbook/.cursor/commands .cursor/commands
-ln -s ../.ai-playbook/.cursor/docs .cursor/docs
+ln -s ../.ai-playbook/.agents/rules .claude/rules
+ln -s ../.ai-playbook/.agents/commands .claude/commands
+ln -s ../.ai-playbook/.agents/skills .claude/skills
 ```
 
 **Benefits:**
@@ -51,8 +51,7 @@ git submodule update --remote .ai-playbook
 npx ai-playbook-cli@latest install
 ```
 
-That's it! The CLI will set up `.cursor/rules/`, `.cursor/commands/`, and `.cursor/docs/` in your
-project.
+That's it! The CLI will set up rules, commands, and skills in your project.
 
 **Installation Options:**
 
@@ -134,8 +133,8 @@ npx ai-playbook-cli@latest status
    ```
 
 3. **Verify everything works:**
-   - Check that `.cursor/rules/` exists
-   - Check that `.cursor/commands/` exists
+   - Check that `.agents/rules/` exists
+   - Check that `.agents/commands/` exists
    - Verify symlinks or copies were created correctly
 
 ### Publishing to npm
@@ -204,7 +203,7 @@ npx ai-playbook-cli@latest status
 
 **What it does:**
 
-- Creates symbolic links from your project's `.cursor/` to the playbook files
+- Creates symbolic links from your project's `.agents/` to the playbook files
 - Updates automatically when playbook is updated
 
 **Pros:**
@@ -280,10 +279,10 @@ npx ai-playbook-cli@latest status
 
 ```bash
 git submodule add https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook
-mkdir -p .cursor
-ln -s ../.ai-playbook/.cursor/rules .cursor/rules
-ln -s ../.ai-playbook/.cursor/commands .cursor/commands
-ln -s ../.ai-playbook/.cursor/docs .cursor/docs
+mkdir -p .claude  # or .cursor
+ln -s ../.ai-playbook/.agents/rules .claude/rules
+ln -s ../.ai-playbook/.agents/commands .claude/commands
+ln -s ../.ai-playbook/.agents/skills .claude/skills
 ```
 
 ---
@@ -304,7 +303,7 @@ ln -s ../.ai-playbook/.cursor/docs .cursor/docs
 - Enable Developer Mode in Windows Settings
 - Or use `--type copy` instead
 
-### ".cursor directory already exists"
+### "Config directory already exists"
 
 **Solution:**
 
@@ -339,21 +338,21 @@ ln -s ../.ai-playbook/.cursor/docs .cursor/docs
 npx ai-playbook-cli@latest status
 
 # Verify files exist
-ls .cursor/rules/
-ls .cursor/commands/
+ls .agents/rules/
+ls .agents/commands/
 ```
 
-### 2. Open in Cursor
+### 2. Open in Your AI Tool
 
-Open your project in Cursor. The AI assistant will automatically:
+Open your project in your AI tool (Claude Code, Cursor, etc.). The AI assistant will automatically:
 
-- Load rules from `.cursor/rules/*.mdc`
-- Use commands from `.cursor/commands/` (files may be in subfolders: bootstrap/, git/, workflow/,
+- Load rules from `.agents/rules/*.mdc`
+- Use commands from `.agents/commands/` (files may be in subfolders: bootstrap/, git/, workflow/,
   etc.; see COMMANDS.md)
 
 ### 3. Test a Command
 
-Try using a command in Cursor chat:
+Try using a command in chat:
 
 ```
 /start
@@ -365,23 +364,23 @@ This should load the project context and start working.
 
 You can customize the playbook for your project:
 
-- Add project-specific rules in `.cursor/rules/`
-- Create custom commands in `.cursor/commands/<category>/` (see .cursor/docs/COMMANDS_STRUCTURE.md)
+- Add project-specific rules in `.agents/rules/`
+- Create custom commands in `.agents/commands/<category>/` (see .agents/docs/COMMANDS_STRUCTURE.md)
 - Update existing rules to match your tech stack
 
 ### 5. Configure MCP (Optional)
 
 You can add project-specific MCP (Model Context Protocol) server configurations in
-`.cursor/mcp.json`:
+`.agents/mcp.json`:
 
 ```bash
 # Create your MCP configuration (if needed)
-touch .cursor/mcp.json
+touch .agents/mcp.json
 ```
 
 **Important:**
 
-- `.cursor/mcp.json` is **already in `.gitignore`** - it contains sensitive tokens and will never be
+- `.agents/mcp.json` is **already in `.gitignore`** - it contains sensitive tokens and will never be
   committed
 - This file is for your project-specific MCP server configurations
 - The CLI tool automatically excludes `mcp.json` when copying files
@@ -403,14 +402,14 @@ touch .cursor/mcp.json
 }
 ```
 
-**Template:** See `.cursor/mcp.json.example` in the playbook repository for a template (without real
+**Template:** See `.agents/mcp.json.example` in the playbook repository for a template (without real
 tokens).
 
 ### 6. Commit to Repository
 
 ```bash
-# Add .cursor to your repository (mcp.json is automatically excluded)
-git add .cursor
+# Add your config directory to your repository (mcp.json is automatically excluded)
+git add .claude  # or .cursor
 git commit -m "chore: add AI Playbook"
 git push
 ```

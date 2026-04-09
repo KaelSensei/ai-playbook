@@ -1,0 +1,9 @@
+{
+  "hooks": [
+    {
+      "event": "PostToolUse",
+      "tools": ["Bash", "Write"],
+      "script": "hooks/post-tool-use.sh"
+    }
+  ]
+}

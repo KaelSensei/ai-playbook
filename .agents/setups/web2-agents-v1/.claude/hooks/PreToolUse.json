@@ -1,0 +1,9 @@
+{
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "tools": ["Bash"],
+      "script": "hooks/pre-tool-use.sh"
+    }
+  ]
+}
