@@ -6,20 +6,19 @@ together.
 
 ---
 
-## 1. Rules (`.cursor/rules/*.mdc`)
+## 1. Rules (`.agents/rules/*.mdc`)
 
 ### What are rules?
 
 Rules are persistent instructions that tell the AI assistant **how to behave** in every
-conversation. They are loaded automatically when you open the project in Cursor — no slash command
-needed.
+conversation. They are loaded automatically when you open the project — no slash command needed.
 
 Think of rules as the AI's **operating manual** for your project.
 
 ### Where do they live?
 
 ```
-.cursor/rules/
+.agents/rules/
   general-principles.mdc     # Project philosophy and mental model
   technical-stack.mdc        # Languages, frameworks, build tools
   security.mdc               # Security policies and merge safety
@@ -64,7 +63,7 @@ Instructions for the AI...
 
 ---
 
-## 2. Commands (`.cursor/commands/<category>/*.md`)
+## 2. Commands (`.agents/commands/<category>/*.md`)
 
 ### What are commands?
 
@@ -76,7 +75,7 @@ Think of commands as the AI's **playbook of procedures**.
 ### Where do they live?
 
 ```
-.cursor/commands/
+.agents/commands/
   bootstrap/     # /start, /continue, /init-project, /adopt-legacy
   git/           # /git, /create-branch, /create-pr, /release
   workflow/      # /feature, /fix, /refactor, /beautify, /clean-code
@@ -88,7 +87,7 @@ Think of commands as the AI's **playbook of procedures**.
 
 ### How do they work?
 
-The user types `/command-name <arguments>` in the Cursor chat. The AI:
+The user types `/command-name <arguments>` in the chat. The AI:
 
 1. Loads the command's markdown file.
 2. Reads each numbered step.
@@ -111,7 +110,7 @@ The user types `/command-name <arguments>` in the Cursor chat. The AI:
 
 ---
 
-## 3. Skills (`.cursor/skills/<name>/SKILL.md`)
+## 3. Skills (`.agents/skills/<name>/SKILL.md`)
 
 ### What are skills?
 
@@ -124,7 +123,7 @@ Think of skills as the AI's **reference manuals** for specialized tasks.
 ### Where do they live?
 
 ```
-.cursor/skills/
+.agents/skills/
   create-rule/             # How to write .mdc rules
   create-command/          # How to create new commands
   security-review/         # Security checklist before merge
@@ -183,7 +182,8 @@ merging").
 - Skills are **passive knowledge** — they don't trigger actions on their own.
 - Skills complement commands (commands say **what** to do, skills say **how**).
 - Skills should be concise and actionable (checklists, step-by-step, examples).
-- Skills can be project-level (`.cursor/skills/`) or user-level (`~/.cursor/skills/`).
+- Skills can be project-level (`.claude/skills/`, `.cursor/skills/`) or user-level
+  (`~/.claude/skills/`).
 
 ---
 
@@ -212,7 +212,7 @@ optionally configure MCP servers to give the AI access to external tools:
 ### Where is MCP configured?
 
 ```
-.cursor/mcp.json    # Project-level MCP config (gitignored — contains tokens)
+.agents/mcp.json    # Project-level MCP config (gitignored — contains tokens)
 ```
 
 This file maps MCP server names to their endpoints and credentials. It is **never committed** to Git
@@ -231,7 +231,7 @@ because it typically contains personal access tokens.
 
 - MCP is **optional** — the playbook works without it.
 - MCP servers can expose **tools** (actions) and **resources** (data) to the AI.
-- Configuration lives in `.cursor/mcp.json` (gitignored).
+- Configuration lives in `.agents/mcp.json` (gitignored).
 - Security rule: **no new MCP servers without explicit approval** (per `security.mdc`).
 
 ---
@@ -272,10 +272,10 @@ because it typically contains personal access tokens.
 
 | Building block | File location                      | Trigger         | Purpose               |
 | -------------- | ---------------------------------- | --------------- | --------------------- |
-| Rule           | `.cursor/rules/*.mdc`              | Auto / glob     | Enforce constraints   |
-| Command        | `.cursor/commands/<category>/*.md` | `/command-name` | Execute workflow      |
-| Skill          | `.cursor/skills/<name>/SKILL.md`   | On demand       | Provide expertise     |
-| MCP config     | `.cursor/mcp.json`                 | When tools used | Connect external APIs |
+| Rule           | `.agents/rules/*.mdc`              | Auto / glob     | Enforce constraints   |
+| Command        | `.agents/commands/<category>/*.md` | `/command-name` | Execute workflow      |
+| Skill          | `.agents/skills/<name>/SKILL.md`   | On demand       | Provide expertise     |
+| MCP config     | `.agents/mcp.json`                 | When tools used | Connect external APIs |
 
 ---
 
@@ -286,5 +286,5 @@ because it typically contains personal access tokens.
 - [Cursor Agent Skills Documentation](https://cursor.com/docs/context/skills)
 - [Model Context Protocol Specification](https://modelcontextprotocol.io/)
 - [COMMANDS.md](COMMANDS.md) — Full list of playbook commands
-- [.cursor/docs/COMMANDS_STRUCTURE.md](.cursor/docs/COMMANDS_STRUCTURE.md) — Command folder
+- [.agents/docs/COMMANDS_STRUCTURE.md](.agents/docs/COMMANDS_STRUCTURE.md) — Command folder
   organization

@@ -9,11 +9,13 @@ AI assistants (Cursor, Claude, etc.) contribute to codebases.
 
 It defines:
 
-- Reusable **Cursor rules (`.mdc`)** — persistent behavior constraints
+- Reusable **rules (`.mdc`)** — persistent behavior constraints
 - Structured **AI commands** (`/start`, `/feature`, `/fix`, `/refactor`, etc.) — slash-triggered
   workflows
-- **Agent skills** (`.cursor/skills/`) — on-demand domain expertise (security review, conventional
+- **Agent skills** (`.agents/skills/`) — on-demand domain expertise (security review, conventional
   commits, release notes, etc.)
+- **Multi-agent setups** (`.agents/setups/`) — pre-configured teams for dev, legacy, PM/BA, web2,
+  and web3 projects
 - **Security-first policies** (MCP validation, backdoor prevention, supply-chain awareness)
 - **Version and branch discipline** for AI-generated commits
 
@@ -64,70 +66,59 @@ Each project can pin a specific version of the playbook and upgrade intentionall
 
 ## Installation
 
-### Option 1: Git Submodule (Recommended for Teams)
+### Option 1: Multi-Agent Setup (Recommended)
 
-**Best for teams, long-term projects, and version-controlled AI behavior.**
+**Install a pre-configured agent team into your project:**
 
 ```bash
-# Add as Git submodule
+# Clone the playbook
+git clone https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook
+
+# Pick a setup and install (default target: .claude/)
+bash .ai-playbook/.agents/setups/dev-squad-v2/install.sh
+
+# Or target a different tool directory
+bash .ai-playbook/.agents/setups/dev-squad-v2/install.sh .cursor
+```
+
+Available setups:
+
+| Setup              | Agents                   | Best for              |
+| ------------------ | ------------------------ | --------------------- |
+| `dev-squad-v2`     | 3 (tech-lead, 2 seniors) | TypeScript/React TDD  |
+| `pm-ba-squad-v2`   | 3 (PO, BA, reviewer)     | Specs, stories, BDD   |
+| `legacy-agents-v1` | 14 (full team)           | Legacy modernization  |
+| `web2-agents-v1`   | 13 (full team)           | Full-stack SaaS       |
+| `web3-agents-v3`   | 10 (full team)           | Smart contracts, DeFi |
+
+See each setup's README in `.agents/setups/` for details.
+
+### Option 2: Git Submodule (Base Playbook Only)
+
+**For the base rules, commands, and skills without multi-agent teams:**
+
+```bash
 git submodule add https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook
 
-# Create symlinks
-mkdir -p .cursor
-ln -s ../.ai-playbook/.cursor/rules .cursor/rules
-ln -s ../.ai-playbook/.cursor/commands .cursor/commands
-ln -s ../.ai-playbook/.cursor/docs .cursor/docs
+# Symlink into your tool's config directory (.claude, .cursor, etc.)
+mkdir -p .claude
+ln -s ../.ai-playbook/.agents/rules .claude/rules
+ln -s ../.ai-playbook/.agents/commands .claude/commands
+ln -s ../.ai-playbook/.agents/skills .claude/skills
 ```
 
-**Benefits:**
-
-- ✅ Update rules in one place, pull into all projects
-- ✅ Version-control AI behavior (huge win!)
-- ✅ Pin specific versions per project
-- ✅ No npm/node dependencies
-- ✅ This is what serious infra teams do
-
-**Updating:**
+### Option 3: CLI Tool (Quick Setup)
 
 ```bash
-git submodule update --remote .ai-playbook
-```
-
-### Option 2: CLI Tool (Quick Setup)
-
-**Best for quick setup and individual developers.**
-
-```bash
-# Install in your project (creates symlinks)
 npx ai-playbook-cli@latest install
-
-# Or copy files directly
-npx ai-playbook-cli@latest install --type copy
 ```
 
-**Next Steps:**
-
-1. Verify installation: `npx ai-playbook-cli@latest status`
-2. Open your project in Cursor
-3. Start using commands like `/start`, `/feature`, `/fix`
-4. See [INSTALLATION.md](INSTALLATION.md) for detailed setup and troubleshooting
-
-### Option 3: Manual Copy
-
-For one-off installations without Git submodules:
-
-```bash
-git clone https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook
-cp -r .ai-playbook/.cursor .cursor
-```
-
-For detailed installation, deployment, and development instructions, see
-[INSTALLATION.md](INSTALLATION.md).
+See [INSTALLATION.md](INSTALLATION.md) for detailed setup and troubleshooting.
 
 ## Getting Started
 
-After installing the playbook (submodule, CLI, or manual copy), open your project in Cursor and
-start using commands in the chat:
+After installing a setup or linking the base playbook, open your project in your AI tool and start
+using commands:
 
 ### 1. Bootstrap your session
 
@@ -186,21 +177,10 @@ detected, or when a command references them (e.g. `/feature` uses the `security-
 
 ## Typical Usage
 
-- Installed via **CLI tool** or **Git submodule**
-- Linked to `.cursor/rules/`, `.cursor/commands/`, and `.cursor/skills/`
+- Install a **multi-agent setup** or link the **base playbook**
+- Config lives in your tool's directory (`.claude/`, `.cursor/`, etc.)
 - Read automatically by AI assistants
 - Updated independently of application code
-
-### Project-Specific Configuration
-
-You can add project-specific MCP (Model Context Protocol) server configurations in
-`.cursor/mcp.json`:
-
-- **Already in `.gitignore`** - contains sensitive tokens, never committed
-- Each developer can have their own `mcp.json` with personal tokens
-- The CLI automatically excludes `mcp.json` when installing
-
-See [INSTALLATION.md](INSTALLATION.md) for details.
 
 ---
 
@@ -283,9 +263,15 @@ For installation, deployment, and next steps, see [INSTALLATION.md](INSTALLATION
   - Understand command structure and syntax
   - See examples of effective commands
 
+### Multi-agent Playbook Usage
+
+- **[CONCEPTS.md](CONCEPTS.md)** – core model for rules, commands, skills, and MCP
+- **[.agents/docs/AGENTS_COMPATIBILITY.md](.agents/docs/AGENTS_COMPATIBILITY.md)** – how to reuse
+  this playbook with different AI tools
+
 ### Community Examples
 
-- **[cursor-commands Repository](https://github.com/hamzafer/cursor-commands/tree/main/.cursor/commands)** -
+- **[cursor-commands Repository](https://github.com/hamzafer/cursor-commands/tree/main/.agents/commands)** -
   Community-maintained collection of Cursor command examples
   - Real-world command implementations
   - Additional command patterns and workflows
@@ -310,7 +296,7 @@ For a consolidated overview of all available Cursor commands in this playbook, s
 For the agent skills bundled with this playbook, see:
 
 - [CONCEPTS.md](CONCEPTS.md) – explains rules, commands, skills, and MCP
-- `.cursor/skills/` – skill files the AI loads on demand
+- `.agents/skills/` – skill files the AI loads on demand
 
 ---
 

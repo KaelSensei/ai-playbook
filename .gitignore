@@ -22,9 +22,11 @@ coverage/
 .env.test.local
 .env.production.local
 
-# Cursor MCP config (contains sensitive tokens - NEVER COMMIT!)
+# MCP config (contains sensitive tokens - NEVER COMMIT!)
+.agents/mcp.json
 .cursor/mcp.json
 # Example template is safe to commit
+!.agents/mcp.json.example
 !.cursor/mcp.json.example
 
 # CLI
