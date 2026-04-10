@@ -258,8 +258,20 @@ npm run check
 
 ## Versioning
 
-Changes to AI behavior are versioned and must be consciously pulled into projects. Breaking changes
-are documented.
+The playbook follows [Semantic Versioning](https://semver.org/). Releases are cut as **git tags**
+(e.g. `v0.2.0`) and listed on the
+[GitHub Releases page](https://github.com/KaelSensei/ai-playbook/releases). Pin a specific tag in
+your project's submodule or CLI install to freeze playbook behavior, and upgrade intentionally.
+
+- **Playbook version** — git tags (`v0.2.0`, `v0.3.0`, …). Each tag has a matching CHANGELOG entry.
+- **CLI version** — independent, published as `ai-playbook-cli` on npm. See
+  [`cli/PUBLISH.md`](cli/PUBLISH.md).
+
+All notable changes are documented in [CHANGELOG.md](CHANGELOG.md). The rubric for when a change is
+MAJOR / MINOR / PATCH, the release process, and rollback rules live in [RELEASE.md](RELEASE.md).
+
+While the playbook is below `1.0.0`, MINOR bumps may contain breaking changes — the shape of the
+playbook is still evolving. Once it hits `1.0.0`, MAJOR bumps will be used strictly.
 
 ---
 
