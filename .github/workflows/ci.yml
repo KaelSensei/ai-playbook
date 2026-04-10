@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   check:
-    name: Lint & format
+    name: Lint, format & test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,3 +35,6 @@ jobs:
 
       - name: Lint CLI
         run: npm run lint
+
+      - name: Test CLI (builds then runs smoke tests)
+        run: npm test

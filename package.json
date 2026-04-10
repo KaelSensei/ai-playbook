@@ -4,11 +4,12 @@
   "description": "Shared AI playbook for standardizing AI assistant behavior across projects",
   "private": true,
   "scripts": {
-    "format": "prettier --write \"**/*.{md,json,yml,yaml}\" \".agents/**/*.md\" \".agents/rules/*.mdc\" \"cli/src/**/*.{ts,js}\" \"cli/scripts/**/*.{ts,js}\"",
-    "format:check": "prettier --check \"**/*.{md,json,yml,yaml}\" \".agents/**/*.md\" \".agents/rules/*.mdc\" \"cli/src/**/*.{ts,js}\" \"cli/scripts/**/*.{ts,js}\"",
+    "format": "prettier --write \"**/*.{md,json,yml,yaml}\" \".agents/**/*.md\" \".agents/rules/*.mdc\" \"cli/src/**/*.{ts,js}\" \"cli/scripts/**/*.{ts,js}\" \"cli/test/**/*.mjs\"",
+    "format:check": "prettier --check \"**/*.{md,json,yml,yaml}\" \".agents/**/*.md\" \".agents/rules/*.mdc\" \"cli/src/**/*.{ts,js}\" \"cli/scripts/**/*.{ts,js}\" \"cli/test/**/*.mjs\"",
     "lint": "npm run lint --prefix cli",
     "lint:fix": "npm run lint:fix --prefix cli",
-    "check": "npm run format:check && npm run lint"
+    "test": "npm test --prefix cli",
+    "check": "npm run format:check && npm run lint && npm test"
   },
   "devDependencies": {
     "husky": "^9.0.11",
@@ -16,7 +17,7 @@
     "prettier": "^3.2.4"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "lint-staged": {
     "*.{md,json,yml,yaml}": [

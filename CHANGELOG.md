@@ -35,8 +35,23 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `.github/ISSUE_TEMPLATE/bug_report.yml` and `feature_request.yml` — structured forms replacing
   blank issues, with a `config.yml` that routes security reports to the private advisory flow and
   questions to Discussions.
-- `.github/workflows/ci.yml` — GitHub Actions CI running prettier format check and eslint on every
-  push and PR to `main`.
+- `.github/workflows/ci.yml` — GitHub Actions CI running prettier format check, eslint, and the CLI
+  smoke test suite on every push and PR to `main`.
+- `cli/test/cli.smoke.test.mjs` — 7 end-to-end smoke tests for the CLI, run via Node's built-in
+  `node --test` runner (zero new dependencies). Each test spawns `cli/dist/index.js` against a fresh
+  temp directory and asserts on stdout and filesystem state. Coverage:
+  - `status` on an empty directory reports "Not installed"
+  - `install --type copy` populates `.cursor/rules`, `.cursor/commands`, `.cursor/docs` with actual
+    files
+  - `status` after install reports "installed"
+  - `install` does not copy `mcp.json` (sensitive-data guard)
+  - `install` fails with a clear error on a pre-existing `.cursor/` unless `--force` is passed
+  - `install --force` overwrites successfully
+  - `install --type submodule` prints instructions that reference the `.agents/` source layout
+- `npm test` script at the root delegating to the CLI test suite; `pretest` hook in
+  `cli/package.json` automatically builds the CLI before tests run.
+- `engines.node` bumped from `>=16.0.0` to `>=18.0.0` in both `package.json` files because the
+  `node --test` runner is only stable from Node 18 onward.
 
 ### Fixed
 
