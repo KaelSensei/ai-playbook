@@ -1,0 +1,75 @@
+name: Feature request
+description: Propose a new rule, command, skill, setup, or CLI feature
+title: '[feature] '
+labels: ['enhancement']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement. Please describe the problem first, then the
+        proposed solution. See [CONCEPTS.md](../blob/main/CONCEPTS.md) for the difference
+        between rules, commands, and skills.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What problem does this solve? Who hits it and how often?
+      placeholder: When modernizing a legacy Rails app, the playbook has no guidance for...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of addition is this?
+      options:
+        - New rule (`.agents/rules/*.mdc`)
+        - New command (`.agents/commands/<category>/*.md`)
+        - New skill (`.agents/skills/<skill-name>/`)
+        - New multi-agent setup (`.agents/setups/<setup-name>/`)
+        - CLI feature
+        - Documentation improvement
+        - Other / not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: |
+        Rough sketch of what you want to add. For rules/commands/skills, describe when the AI
+        should use it and what it should produce.
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Example usage
+      description: A realistic example a reviewer can visualize.
+      placeholder: |
+        User types: `/rails-upgrade 6.1 to 7.0`
+        AI should: ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What else did you consider? Why is your proposal better?
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: duplication
+    attributes:
+      label: Pre-flight checks
+      options:
+        - label:
+            I searched existing rules, commands, and skills and this does not duplicate anything
+          required: true
+        - label: This proposal is generic enough to be reused across projects, not project-specific
+          required: true
