@@ -2,13 +2,13 @@
 
 <!-- last-verified: YYYY-MM-DD -->
 
-## Environnements
+## Environments
 
-| Env        | API URL                          | Notes |
-| ---------- | -------------------------------- | ----- |
-| Local      | http://localhost:3000            |       |
-| Staging    | https://api.staging.[projet].com |       |
-| Production | https://api.[projet].com         |       |
+| Env        | API URL                           | Notes |
+| ---------- | --------------------------------- | ----- |
+| Local      | http://localhost:3000             |       |
+| Staging    | https://api.staging.[project].com |       |
+| Production | https://api.[project].com         |       |
 
 ---
 
@@ -18,23 +18,23 @@
 node: 20.x LTS
 typescript: 5.x
 prisma: 5.x
-vitest: 1.x  # ou jest: 29.x
+vitest: 1.x  # or jest: 29.x
 react: 18.x
 ```
 
 ---
 
-## Scripts NPM
+## NPM Scripts
 
 ```bash
 # Development
-npm run dev          # serveur avec hot reload
-npm run dev:db       # démarrer la base de données locale
+npm run dev          # server with hot reload
+npm run dev:db       # start the local database
 
-# Tests (pendant TDD — utiliser en watch)
-npm test             # tous les tests
-npm run test:watch   # watch mode pour TDD
-npm run test:coverage # rapport de couverture
+# Tests (during TDD — use watch mode)
+npm test             # all tests
+npm run test:watch   # watch mode for TDD
+npm run test:coverage # coverage report
 
 # Quality
 npm run lint         # ESLint
@@ -42,29 +42,29 @@ npm run type-check   # TypeScript strict
 npm run format       # Prettier
 
 # Database
-npm run db:migrate   # appliquer les migrations
-npm run db:seed      # données de test
-npm run db:reset     # reset complet (dev uniquement)
+npm run db:migrate   # apply migrations
+npm run db:seed      # seed test data
+npm run db:reset     # full reset (dev only)
 ```
 
 ---
 
-## Variables d'Environnement Requises
+## Required Environment Variables
 
 ```bash
-# .env.example — copier en .env
-DATABASE_URL=postgresql://localhost:5432/[projet]
-JWT_SECRET=[générer avec: openssl rand -base64 32]
-# Ajouter les autres variables ici
+# .env.example — copy to .env
+DATABASE_URL=postgresql://localhost:5432/[project]
+JWT_SECRET=[generate with: openssl rand -base64 32]
+# Add the other variables here
 ```
 
 ---
 
-## Seuils de Coverage
+## Coverage Thresholds
 
-| Couche          | Minimum requis |
-| --------------- | -------------- |
-| domain/         | 100%           |
-| application/    | 90%            |
-| infrastructure/ | 70%            |
-| presentation/   | 60%            |
+| Layer           | Minimum required |
+| --------------- | ---------------- |
+| domain/         | 100%             |
+| application/    | 90%              |
+| infrastructure/ | 70%              |
+| presentation/   | 60%              |

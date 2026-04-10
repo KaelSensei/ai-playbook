@@ -1,86 +1,86 @@
 # Test Plan
 
-<!-- Mis à jour par qa-automation après chaque exécution -->
-<!-- Mettre à jour les seuils et flows au début du projet -->
+<!-- Updated by qa-automation after each run -->
+<!-- Set the thresholds and flows at the start of the project -->
 
-## Stack QA configuré
+## Configured QA Stack
 
-<!-- Configurer une seule fois -->
+<!-- Configure once -->
 
-- E2E : Playwright / Cypress (choisir)
-- Perf frontend : Lighthouse CLI
-- Accessibilité : axe-core (intégré Playwright)
-- Tests de charge : k6 / Artillery (choisir)
-- Observabilité : voir `.claude/observability.md`
+- E2E: Playwright / Cypress (pick one)
+- Frontend perf: Lighthouse CLI
+- Accessibility: axe-core (integrated into Playwright)
+- Load testing: k6 / Artillery (pick one)
+- Observability: see `.claude/observability.md`
 
 ---
 
-## Flows Critiques (E2E)
+## Critical Flows (E2E)
 
-### Smoke Tests (pré-merge, < 2 min)
+### Smoke Tests (pre-merge, < 2 min)
 
-<!-- Les flows les plus critiques — ceux qui, s'ils cassent, bloquent tout -->
+<!-- The most critical flows — the ones that block everything if they break -->
 
-- [ ] Authentification (login + logout)
-- [ ] [Flow critique 2 — ex: checkout, création d'un objet principal]
-- [ ] [Flow critique 3]
+- [ ] Authentication (login + logout)
+- [ ] [Critical flow 2 — e.g. checkout, creating a primary object]
+- [ ] [Critical flow 3]
 
 ### Full Suite (post-deploy staging)
 
-<!-- Tous les flows utilisateur importants -->
+<!-- All important user flows -->
 
-#### Authentification
+#### Authentication
 
-- [ ] Login avec email/password valide → redirection dashboard
-- [ ] Login avec mauvais password → message d'erreur
-- [ ] Login avec email inexistant → message d'erreur
-- [ ] Logout → retour page login
-- [ ] Session expirée → redirection login
-- [ ] Reset password → email reçu + lien valide
+- [ ] Login with valid email/password → redirect to dashboard
+- [ ] Login with wrong password → error message
+- [ ] Login with nonexistent email → error message
+- [ ] Logout → back to login page
+- [ ] Expired session → redirect to login
+- [ ] Password reset → email received + valid link
 
-#### [Module 2 — ex: Profil]
+#### [Module 2 — e.g. Profile]
 
-- [ ] Voir son profil
-- [ ] Modifier son profil → changements sauvegardés
-- [ ] Upload avatar → visible immédiatement
-- [ ] Champs invalides → erreurs affichées
+- [ ] View profile
+- [ ] Edit profile → changes saved
+- [ ] Upload avatar → visible immediately
+- [ ] Invalid fields → errors displayed
 
-#### [Module 3 — ajouter par feature]
+#### [Module 3 — added per feature]
 
-<!-- Alimenté par scribe après chaque /build -->
+<!-- Populated by scribe after each /build -->
 
 ---
 
-## Seuils de Performance Frontend
+## Frontend Performance Thresholds
 
-<!-- Core Web Vitals — adapter par page -->
+<!-- Core Web Vitals — adapt per page -->
 
-| Page            | LCP max | FCP max | TTI max | CLS max | Score Lighthouse min |
+| Page            | LCP max | FCP max | TTI max | CLS max | Min Lighthouse score |
 | --------------- | ------- | ------- | ------- | ------- | -------------------- |
 | Home / Landing  | 2.5s    | 1.8s    | 3.8s    | 0.1     | 85                   |
 | Dashboard       | 3s      | 2s      | 4s      | 0.1     | 80                   |
-| [Page critique] | 2.5s    | 1.8s    | 3.8s    | 0.1     | 85                   |
+| [Critical page] | 2.5s    | 1.8s    | 3.8s    | 0.1     | 85                   |
 
 ---
 
-## Seuils de Performance Backend
+## Backend Performance Thresholds
 
 | Endpoint                | p50 max | p95 max | p99 max | Error rate max |
 | ----------------------- | ------- | ------- | ------- | -------------- |
 | GET /api/v1/users       | 50ms    | 150ms   | 300ms   | 0.1%           |
 | POST /api/v1/auth/login | 100ms   | 300ms   | 500ms   | 0.5%           |
-| [Endpoint critique]     |         |         |         |                |
+| [Critical endpoint]     |         |         |         |                |
 
 ---
 
-## Scénarios de Charge
+## Load Scenarios
 
-### Scénario 1 — Charge nominale
+### Scenario 1 — Nominal load
 
 ```javascript
 // tests/load/nominal.js
 export const options = {
-  vus: 50, // utilisateurs simultanés
+  vus: 50, // concurrent users
   duration: '2m',
   thresholds: {
     http_req_duration: ['p(95)<200', 'p(99)<500'],
@@ -89,14 +89,14 @@ export const options = {
 };
 ```
 
-### Scénario 2 — Pic de charge
+### Scenario 2 — Peak load
 
 ```javascript
 export const options = {
   stages: [
-    { duration: '1m', target: 50 }, // montée
-    { duration: '3m', target: 200 }, // pic
-    { duration: '1m', target: 0 }, // descente
+    { duration: '1m', target: 50 }, // ramp up
+    { duration: '3m', target: 200 }, // peak
+    { duration: '1m', target: 0 }, // ramp down
   ],
   thresholds: {
     http_req_duration: ['p(95)<500'],
@@ -105,7 +105,7 @@ export const options = {
 };
 ```
 
-### Scénario 3 — Stress (adapter)
+### Scenario 3 — Stress (adapt)
 
 ```javascript
 export const options = {
@@ -121,36 +121,36 @@ export const options = {
 
 ## SLAs
 
-| Métrique                  | SLA          |
-| ------------------------- | ------------ |
-| Disponibilité             | 99.9% / mois |
-| Temps de réponse p95      | < 200ms      |
-| Temps de réponse p99      | < 500ms      |
-| Error rate                | < 0.1%       |
-| Déploiement sans downtime | obligatoire  |
+| Metric                   | SLA           |
+| ------------------------ | ------------- |
+| Availability             | 99.9% / month |
+| Response time p95        | < 200ms       |
+| Response time p99        | < 500ms       |
+| Error rate               | < 0.1%        |
+| Zero-downtime deployment | required      |
 
 ---
 
-## Historique des Exécutions
+## Run History
 
-<!-- Mis à jour automatiquement par qa-automation -->
+<!-- Updated automatically by qa-automation -->
 
-| Date | Env        | Type    | E2E  | Lighthouse | k6 p95 | Erreurs Sentry | Verdict |
-| ---- | ---------- | ------- | ---- | ---------- | ------ | -------------- | ------- | ------- | --- |
-| <!-- | 2024-03-15 | staging | full | ✅ 42/42   | 87/100 | 182ms          | 0       | ✅ PASS | --> |
+| Date | Env        | Type    | E2E  | Lighthouse | k6 p95 | Sentry errors | Verdict |
+| ---- | ---------- | ------- | ---- | ---------- | ------ | ------------- | ------- | ------- | --- |
+| <!-- | 2024-03-15 | staging | full | ✅ 42/42   | 87/100 | 182ms         | 0       | ✅ PASS | --> |
 
 ---
 
-## Régressions Connues
+## Known Regressions
 
-<!-- Régressions détectées mais non encore corrigées -->
+<!-- Regressions detected but not yet fixed -->
 
-| Régression | Détectée le | Ticket | Impact |
+| Regression | Detected on | Ticket | Impact |
 | ---------- | ----------- | ------ | ------ |
 
 ---
 
-## Configuration Playwright
+## Playwright Configuration
 
 ```typescript
 // playwright.config.ts

@@ -2,14 +2,14 @@
 
 ## Stack
 
-<!-- Renseigner avant la première session -->
+<!-- Fill in before the first session -->
 
 - Language: (e.g. PHP 7.x / Java 8 / Python 2.7 / Node 10)
 - Framework: (e.g. Symfony 3 / Spring Boot 1.x / Django 1.x)
 - Database: (e.g. MySQL 5.7 / Oracle / SQL Server)
-- Test runner: (e.g. PHPUnit / JUnit / pytest — souvent absent ou partiel)
-- Age estimé du codebase: (e.g. 8 ans)
-- Coverage actuelle: (e.g. ~12%)
+- Test runner: (e.g. PHPUnit / JUnit / pytest — often absent or partial)
+- Estimated codebase age: (e.g. 8 years)
+- Current coverage: (e.g. ~12%)
 
 ---
 
@@ -36,28 +36,32 @@
 
 ## Flows
 
-| `/qa [mode]` | Smoke / E2E / Perf / Load — couplé observabilité | | `/pr <feature>` | Créer PR,
-review, merge auto, documenter | | `/task <description>` | Point d'entrée universel — orchestrateur
-décide tout | | Commande | Quand l'utiliser | |---|---| | `/understand <module>` | Cartographier
-avant de toucher | | `/characterize <code>` | Tests de caractérisation sur code existant | |
-`/refactor <cible>` | Refactoring sécurisé avec filet de tests | | `/strangler <feature>` | Nouveau
-code autour du legacy | | `/review` | Review legacy-aware (risque d'abord) | | `/debt` | Audit et
-priorisation de la dette |
+| Command                | When to use it                                              |
+| ---------------------- | ----------------------------------------------------------- |
+| `/task <description>`  | Universal entry point — the orchestrator decides everything |
+| `/understand <module>` | Map before touching                                         |
+| `/characterize <code>` | Characterization tests on existing code                     |
+| `/refactor <target>`   | Safe refactoring with a test safety net                     |
+| `/strangler <feature>` | New code around the legacy                                  |
+| `/review`              | Legacy-aware review (risk first)                            |
+| `/debt`                | Debt audit and prioritization                               |
+| `/qa [mode]`           | Smoke / E2E / Perf / Load — paired with observability       |
+| `/pr <feature>`        | Create PR, review, auto-merge, document                     |
 
 ---
 
-## Règle Fondamentale
+## Fundamental Rule
 
-JAMAIS toucher du code legacy sans filet de tests. Sur code existant : UNDERSTAND → CHARACTERIZE →
-REFACTOR Sur nouveau code : TDD classique (RED → GREEN → BLUE) Strangler Fig : nouveau module propre
-AUTOUR du legacy, migration progressive.
+NEVER touch legacy code without a test safety net. On existing code: UNDERSTAND → CHARACTERIZE →
+REFACTOR. On new code: classic TDD (RED → GREEN → BLUE). Strangler Fig: a clean new module AROUND
+the legacy, progressive migration.
 
 ---
 
 ## Skill Resolution
 
-| Priorité    | Chemin                   |
-| ----------- | ------------------------ |
-| 1 — HIGHEST | <projet>/.claude/skills/ |
-| 2 — MEDIUM  | .claude/skills/          |
-| 3 — LOWEST  | ~/.claude/skills/        |
+| Priority    | Path                      |
+| ----------- | ------------------------- |
+| 1 — HIGHEST | <project>/.claude/skills/ |
+| 2 — MEDIUM  | .claude/skills/           |
+| 3 — LOWEST  | ~/.claude/skills/         |

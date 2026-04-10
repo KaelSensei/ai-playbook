@@ -1,105 +1,105 @@
 ---
 name: task
 description: >
-  Point d'entrée universel Legacy. Décris ta tâche en langage naturel. L'orchestrateur vérifie
-  d'abord si le module est cartographié et si un filet de tests existe. Si non, il lance understand
-  + characterize avant tout. Tu ne peux pas contourner cette étape.
-argument-hint: '[description libre de la tâche]'
+  Universal Legacy entry point. Describe your task in natural language. The orchestrator first
+  checks whether the module is mapped and whether a test safety net exists. If not, it launches
+  understand + characterize before anything else. You cannot bypass this step.
+argument-hint: '[free-form task description]'
 ---
 
 # /task (Legacy)
 
-Update `tasks/current_task.md` : status=ORCHESTRATING, task=$ARGUMENTS
+Update `tasks/current_task.md`: status=ORCHESTRATING, task=$ARGUMENTS
 
 ---
 
-## Étape 1 — Orchestrateur analyse
+## Step 1 — Orchestrator analyzes
 
 ```
-Tu es orchestrator.
-Charge .claude/agents/orchestrator.md.
-Charge project-architecture.md, legacy-map.md, constants.md.
-Charge le tableau ## Agent Team depuis CLAUDE.md.
+You are orchestrator.
+Load .claude/agents/orchestrator.md.
+Load project-architecture.md, legacy-map.md, constants.md.
+Load the ## Agent Team table from CLAUDE.md.
 
-Tâche reçue : $ARGUMENTS
+Task received: $ARGUMENTS
 
-PREMIÈRE QUESTION : le module concerné est-il dans legacy-map.md ?
-DEUXIÈME QUESTION : des tests de caractérisation existent-ils ?
+FIRST QUESTION: is the affected module in legacy-map.md?
+SECOND QUESTION: do characterization tests exist?
 
-Si non à l'une des deux → plan préalable obligatoire.
-Sinon → analyser le type de tâche et la complexité.
+If no to either → mandatory prior plan.
+Otherwise → analyze the task type and complexity.
 
-Produis ton plan complet.
+Produce your full plan.
 ```
 
-Présenter le plan. **Gate** : _"Ce plan est-il correct ?"_
+Present the plan. **Gate**: _"Is this plan correct?"_
 
 ---
 
-## Étape 2 — Exécution selon le plan
+## Step 2 — Execution per the plan
 
-### Si filet manquant → Prérequis d'abord
+### If net is missing → Prerequisites first
 
 ```
-Filet manquant. Ordre d'exécution :
+Net missing. Execution order:
 
 1. /understand [module] → legacy-analyst + archaeologist
 2. /characterize [module] → characterization-tester
-3. Revenir à /task $ARGUMENTS une fois le filet en place
+3. Return to /task $ARGUMENTS once the net is in place
 ```
 
-Spawner legacy-analyst + archaeologist en parallèle. Puis characterization-tester. Puis relancer
-l'analyse.
+Spawn legacy-analyst + archaeologist in parallel. Then characterization-tester. Then restart the
+analysis.
 
 ---
 
-### Si filet en place → Exécution directe
+### If net is in place → Direct execution
 
-**Refactoring (niveau 1-2) :**
+**Refactoring (level 1-2):**
 
 ```
-refactoring-guide → plan micro-incréments
-dev-senior-a → implémentation
-dev-senior-b → review après chaque étape
+refactoring-guide → micro-increments plan
+dev-senior-a → implementation
+dev-senior-b → review after each step
 ```
 
-**Nouveau code Strangler (niveau 2-3) :**
+**New Strangler code (level 2-3):**
 
 ```
 → /strangler $ARGUMENTS
 ```
 
-**Bug fix :**
+**Bug fix:**
 
 ```
-characterization-tester → test de régression d'abord
+characterization-tester → regression test first
 dev-senior-a → fix
 dev-senior-b → review
 ```
 
-**Complexe (niveau 3) :**
+**Complex (level 3):**
 
 ```
-→ /spec → /build (flows formels complets)
+→ /spec → /build (full formal flows)
 ```
 
 ---
 
-## Étape 3 — Complétion
+## Step 3 — Completion
 
-Update `tasks/current_task.md` : status=IDLE
+Update `tasks/current_task.md`: status=IDLE
 
 ---
 
-## Exemples de Routing
+## Routing Examples
 
-| Tâche                                     | Filet ? | Niveau    | Action                                |
-| ----------------------------------------- | ------- | --------- | ------------------------------------- |
-| "comprendre le module billing"            | N/A     | explore   | /understand billing                   |
-| "corriger le bug de calcul de remise"     | non     | prérequis | understand → characterize → fix       |
-| "corriger le bug de calcul de remise"     | oui     | 2         | test régression → fix → review        |
-| "refactorer UserController (2000 lignes)" | non     | prérequis | understand → characterize → refactor  |
-| "refactorer UserController (2000 lignes)" | oui     | 3         | /refactor micro-incrémental           |
-| "nouveau module de notifications"         | N/A     | 3         | /strangler (nouveau code TDD)         |
-| "audit de la dette technique"             | N/A     | explore   | /debt                                 |
-| "migrer l'envoi d'email vers SendGrid"    | non     | prérequis | understand → characterize → strangler |
+| Task                                   | Net? | Level   | Action                                |
+| -------------------------------------- | ---- | ------- | ------------------------------------- |
+| "understand the billing module"        | N/A  | explore | /understand billing                   |
+| "fix the discount calculation bug"     | no   | prereq  | understand → characterize → fix       |
+| "fix the discount calculation bug"     | yes  | 2       | regression test → fix → review        |
+| "refactor UserController (2000 lines)" | no   | prereq  | understand → characterize → refactor  |
+| "refactor UserController (2000 lines)" | yes  | 3       | /refactor micro-incremental           |
+| "new notifications module"             | N/A  | 3       | /strangler (new TDD code)             |
+| "technical debt audit"                 | N/A  | explore | /debt                                 |
+| "migrate email sending to SendGrid"    | no   | prereq  | understand → characterize → strangler |

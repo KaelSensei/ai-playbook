@@ -1,84 +1,84 @@
 ---
 name: task
 description: >
-  Point d'entrée universel Web3. Décris ta tâche en langage naturel. L'orchestrateur vérifie d'abord
-  si ça touche des contrats (= niveau 3 automatique), puis analyse la complexité et lance les bons
+  Universal Web3 entry point. Describe your task in natural language. The orchestrator first checks
+  whether it touches contracts (= automatic level 3), then analyzes complexity and spawns the right
   agents.
-argument-hint: '[description libre de la tâche]'
+argument-hint: '[free-form task description]'
 ---
 
 # /task (Web3)
 
-Update `tasks/current_task.md` : status=ORCHESTRATING, task=$ARGUMENTS
+Update `tasks/current_task.md`: status=ORCHESTRATING, task=$ARGUMENTS
 
 ---
 
-## Étape 1 — Orchestrateur analyse
+## Step 1 — Orchestrator analyzes
 
 ```
-Tu es orchestrator.
-Charge .claude/agents/orchestrator.md.
-Charge project-architecture.md, data-architecture.md, constants.md.
-Charge le tableau ## Agent Team depuis CLAUDE.md.
+You are orchestrator.
+Load .claude/agents/orchestrator.md.
+Load project-architecture.md, data-architecture.md, constants.md.
+Load the ## Agent Team table from CLAUDE.md.
 
-Tâche reçue : $ARGUMENTS
+Task received: $ARGUMENTS
 
-PREMIÈRE QUESTION : est-ce que ça touche un contrat ou de la valeur ?
-Si oui → niveau 3 immédiat, smart-contract-engineer obligatoire.
-Sinon → analyser les domaines et la complexité.
+FIRST QUESTION: does this touch a contract or value?
+If yes → immediate level 3, smart-contract-engineer mandatory.
+Otherwise → analyze the domains and complexity.
 
-Produis ton plan d'exécution.
+Produce your execution plan.
 ```
 
-Présenter le plan. **Gate** : _"Ce plan est-il correct ?"_
+Present the plan. **Gate**: _"Is this plan correct?"_
 
 ---
 
-## Étape 2 — Exécution selon le niveau
+## Step 2 — Execution by level
 
-### Niveau 1 — Direct (frontend/docs uniquement)
+### Level 1 — Direct (frontend/docs only)
 
 ```
-Tu es [AGENT].
-Tâche : $ARGUMENTS
-Implémenter directement. Lancer les tests.
+You are [AGENT].
+Task: $ARGUMENTS
+Implement directly. Run the tests.
 ```
 
 ---
 
-### Niveau 2 — Modéré (frontend + indexer)
+### Level 2 — Moderate (frontend + indexer)
 
-**Agent propriétaire → implémente** **Agent reviewer → review en parallèle ou juste après**
-Appliquer `team--skill-refine` si nécessaire.
+**Owning agent → implements** **Reviewer agent → reviews in parallel or just after** Apply
+`team--skill-refine` if needed.
 
 ---
 
-### Niveau 3 — Contrats ou complexe (flow complet)
+### Level 3 — Contracts or complex (full flow)
 
 ```
-Niveau 3 détecté — smart-contract-engineer obligatoire.
-Lancement : /spec → /implement → /review
+Level 3 detected — smart-contract-engineer mandatory.
+Launching: /spec → /implement → /review
 ```
 
-Enchaîner les flows formels automatiquement.
+Chain the formal flows automatically.
 
 ---
 
-## Étape 3 — Complétion
+## Step 3 — Completion
 
-Update `tasks/current_task.md` : status=IDLE
+Update `tasks/current_task.md`: status=IDLE
 
 ---
 
-## Exemples de Routing
+## Routing Examples
 
-| Tâche                                                      | Niveau | Agents                              | Flow               |
-| ---------------------------------------------------------- | ------ | ----------------------------------- | ------------------ |
-| "fix le style du bouton Connect Wallet"                    | 1      | frontend-engineer                   | direct             |
-| "ajouter une query GraphQL pour les deposits"              | 2      | backend-engineer + reviewer         | impl + review      |
-| "checkout multi-wallet MetaMask + WalletConnect + Rainbow" | 2-3    | frontend + backend                  | impl/spec          |
-| "nouveau vault ERC-4626"                                   | 3      | smart-contract-engineer + tous      | /spec → /implement |
-| "ajouter des fees sur les withdrawals"                     | **3**  | smart-contract-engineer + tous      | /spec → /implement |
-| "upgrade le proxy UUPS"                                    | **3**  | smart-contract-engineer + architect | /spec → /implement |
-| "mettre à jour le subgraph pour un nouvel event"           | 2      | backend-engineer + reviewer         | impl + review      |
-| "corriger l'affichage du solde en wei"                     | 1      | frontend-engineer                   | direct             |
+| Task                                                        | Level | Agents                              | Flow               |
+| ----------------------------------------------------------- | ----- | ----------------------------------- | ------------------ |
+| "fix the Connect Wallet button styling"                     | 1     | frontend-engineer                   | direct             |
+| "add a GraphQL query for deposits"                          | 2     | backend-engineer + reviewer         | impl + review      |
+| "multi-wallet checkout: MetaMask + WalletConnect + Rainbow" | 2-3   | frontend + backend                  | impl/spec          |
+| "new ERC-4626 vault"                                        | 3     | smart-contract-engineer + all       | /spec → /implement |
+| "add fees on withdrawals"                                   | **3** | smart-contract-engineer + all       | /spec → /implement |
+| "upgrade the UUPS proxy"                                    | **3** | smart-contract-engineer + architect | /spec → /implement |
+| "update the subgraph for a new event"                       | 2     | backend-engineer + reviewer         | impl + review      |
+| "fix the balance display shown in wei"                      | 1     | frontend-engineer                   | direct             |

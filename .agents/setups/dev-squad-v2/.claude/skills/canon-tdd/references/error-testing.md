@@ -3,13 +3,13 @@
 ## Typed Errors — Hierarchy
 
 ```typescript
-// Erreurs de base — à mettre dans domain/errors/
+// Base errors — place in domain/errors/
 export abstract class DomainError extends Error {
   abstract readonly code: string;
   constructor(message: string) {
     super(message);
     this.name = this.constructor.name;
-    // Fix prototype chain pour instanceof
+    // Fix prototype chain for instanceof
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
@@ -39,7 +39,7 @@ export class UserNotFoundError extends DomainError {
 ## Testing That an Error is Thrown
 
 ```typescript
-// Méthode 1 : rejects.toThrow (simple)
+// Method 1: rejects.toThrow (simple)
 it('should throw EmailAlreadyExistsError for duplicate email', async () => {
   await repo.save(aUser({ email: 'taken@test.com' }));
 
@@ -48,7 +48,7 @@ it('should throw EmailAlreadyExistsError for duplicate email', async () => {
   ).rejects.toThrow(EmailAlreadyExistsError);
 });
 
-// Méthode 2 : rejects.toMatchObject (vérifier les propriétés)
+// Method 2: rejects.toMatchObject (check properties)
 it('should include email in error', async () => {
   await repo.save(aUser({ email: 'taken@test.com' }));
 
@@ -61,7 +61,7 @@ it('should include email in error', async () => {
   });
 });
 
-// Méthode 3 : catch explicite (vérifications détaillées)
+// Method 3: explicit catch (detailed checks)
 it('should list all password violations', async () => {
   try {
     await registration.execute({ email: 'user@test.com', password: 'abc' });
@@ -79,7 +79,7 @@ it('should list all password violations', async () => {
 ## Testing Synchronous Errors
 
 ```typescript
-// Pour les Value Objects — validation dans le constructeur
+// For Value Objects — validation in the constructor
 it('should throw for invalid email format', () => {
   expect(() => Email.create('not-an-email')).toThrow(InvalidEmailError);
 });
@@ -87,20 +87,20 @@ it('should throw for invalid email format', () => {
 it('should throw for empty email', () => {
   expect(() => Email.create(''))
     .toThrow(new InvalidEmailError('Email cannot be empty'))
-    // OU
+    // OR
     .toThrow('Email cannot be empty');
 });
 
-// Vérifier qu'une erreur N'est PAS levée
+// Verify that an error is NOT thrown
 it('should not throw for valid email', () => {
   expect(() => Email.create('valid@test.com')).not.toThrow();
 });
 ```
 
-## Testing Error Mapping Domaine → HTTP
+## Testing Error Mapping Domain → HTTP
 
 ```typescript
-// Dans les tests d'intégration du controller
+// In the controller's integration tests
 describe('POST /api/users — error mapping', () => {
   it('should return 409 for duplicate email', async () => {
     await repo.save(aUser({ email: 'taken@test.com' }));
@@ -113,7 +113,7 @@ describe('POST /api/users — error mapping', () => {
     expect(response.body).toMatchObject({
       error: { code: 'EMAIL_ALREADY_EXISTS' },
     });
-    // Ne pas exposer l'adresse email dans le message d'erreur public
+    // Do not expose the email address in the public error message
     expect(response.body.error.message).not.toContain('taken@test.com');
   });
 
@@ -130,10 +130,10 @@ describe('POST /api/users — error mapping', () => {
 });
 ```
 
-## Unexpected Errors — Ne Pas Masquer
+## Unexpected Errors — Do Not Mask
 
 ```typescript
-// ✅ Gérer les erreurs métier connues, laisser passer les autres
+// ✅ Handle known business errors, let the others propagate
 try {
   await registration.execute(input);
 } catch (error) {
@@ -143,14 +143,14 @@ try {
   if (error instanceof WeakPasswordError) {
     return res.status(400).json({ error: { code: error.code, violations: error.violations } });
   }
-  // Erreur inattendue → propager (sera catchée par le middleware global)
+  // Unexpected error → propagate (will be caught by the global middleware)
   throw error;
 }
 
-// ❌ Catch-all qui cache les bugs
+// ❌ Catch-all that hides bugs
 try {
   await registration.execute(input);
 } catch (error) {
-  return res.status(400).json({ error: 'Something went wrong' }); // masque tout
+  return res.status(400).json({ error: 'Something went wrong' }); // hides everything
 }
 ```

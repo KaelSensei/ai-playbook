@@ -1,7 +1,7 @@
 # Current Task
 
-<!-- Géré automatiquement par l'orchestrateur.
-     Les agents lisent ce fichier pour comprendre le contexte en cours. -->
+<!-- Managed automatically by the orchestrator.
+     Agents read this file to understand the current context. -->
 
 ## Status
 
@@ -19,24 +19,24 @@ none
 
 ## Active Spec
 
-<!-- Chemin vers .claude/specs/[feature].md si en /build -->
+<!-- Path to .claude/specs/[feature].md if in /build -->
 
 none
 
-## Test List en cours
+## Active Test List
 
-<!-- Items cochés au fil du /build -->
+<!-- Items checked off during /build -->
 
 none
 
 ## Decisions Made
 
-<!-- Format: [agent] → [décision] → [rationale] -->
+<!-- Format: [agent] → [decision] → [rationale] -->
 
 ## Deferred Items
 
-<!-- Format: [item] — [flagged by] — [follow-up suggéré] -->
+<!-- Format: [item] — [flagged by] — [suggested follow-up] -->
 
 ---
 
-<!-- Tâches archivées ci-dessous -->
+<!-- Archived tasks below -->

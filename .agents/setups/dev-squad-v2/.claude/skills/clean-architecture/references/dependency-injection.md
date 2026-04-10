@@ -1,10 +1,10 @@
 # Dependency Injection — TypeScript
 
-## Injection Manuelle (sans framework)
+## Manual Injection (no framework)
 
 ```typescript
-// Composition Root — src/app.ts ou src/infrastructure/container.ts
-// C'est le seul endroit où on instancie les vraies dépendances
+// Composition Root — src/app.ts or src/infrastructure/container.ts
+// This is the only place where real dependencies are instantiated
 
 import { PrismaClient } from '@prisma/client';
 import { BcryptPasswordHasher } from './security/BcryptPasswordHasher';
@@ -27,10 +27,10 @@ const registerUser = new RegisterUser(userRepo, passwordHasher, emailService, ev
 export const userController = new UserController(registerUser);
 ```
 
-## Dans les Tests — Injection de Fakes
+## In Tests — Injecting Fakes
 
 ```typescript
-// test/setup.ts — utilitaires partagés
+// test/setup.ts — shared utilities
 export function createTestDependencies() {
   const userRepo = new InMemoryUserRepository();
   const passwordHasher = new FakePasswordHasher();
@@ -57,11 +57,11 @@ describe('RegisterUser', () => {
 });
 ```
 
-## FakePasswordHasher — Exemple de Fake Simple
+## FakePasswordHasher — Simple Fake Example
 
 ```typescript
 export class FakePasswordHasher implements PasswordHasher {
-  // Préfixe reconnaissable pour vérifier dans les tests
+  // Recognisable prefix for assertions in tests
   async hash(password: Password): Promise<HashedPassword> {
     return new HashedPassword(`hashed:${password.value}`);
   }
@@ -71,7 +71,7 @@ export class FakePasswordHasher implements PasswordHasher {
   }
 }
 
-// Dans un test :
+// In a test:
 it('should not store plain text password', async () => {
   await sut.execute({ email: 'a@b.com', password: 'Pass1!' });
   const user = await deps.userRepo.findByEmail('a@b.com');

@@ -1,27 +1,27 @@
 ---
 name: refactoring-patterns
 description: >
-  Catalogue Martin Fowler, refactorings sécurisés, ordre des opérations. Auto-chargé par
-  refactoring-guide, dev-senior-a/b. Invoke pour tout refactoring sur code legacy ou nouveau.
+  Martin Fowler catalogue, safe refactorings, order of operations. Auto-loaded by refactoring-guide,
+  dev-senior-a/b. Invoke for any refactoring on legacy or new code.
 ---
 
 # Refactoring Patterns Reference
 
-Source : Martin Fowler — _Refactoring_ (2e édition, 2018)
+Source: Martin Fowler — _Refactoring_ (2nd edition, 2018)
 
-## Règle Fondamentale
+## Fundamental Rule
 
-Un refactoring ne change pas le comportement observable. Si le comportement change → c'est un bug ou
-une feature, pas un refactoring.
+A refactoring does not change observable behavior. If behavior changes → it's a bug or a feature,
+not a refactoring.
 
-## Catalogue des Refactorings Courants
+## Catalogue of Common Refactorings
 
 ### Extract Function / Method
 
-Quand : un bloc de code a besoin d'un commentaire pour être compris.
+When: a block of code needs a comment to be understood.
 
 ```javascript
-// ❌ Avant
+// Bad — before
 function printOwing(invoice) {
   let outstanding = 0;
   // calculate outstanding
@@ -33,7 +33,7 @@ function printOwing(invoice) {
   console.log(`amount: ${outstanding}`);
 }
 
-// ✅ Après
+// Good — after
 function printOwing(invoice) {
   const outstanding = calculateOutstanding(invoice);
   printDetails(invoice, outstanding);
@@ -49,30 +49,30 @@ function printDetails(invoice, outstanding) {
 
 ### Inline Function
 
-Quand : le corps d'une fonction est aussi clair que son nom.
+When: the body of a function is as clear as its name.
 
 ```javascript
-// ❌ Indirection inutile
+// Bad — useless indirection
 function moreThanFiveLateDeliveries(driver) {
   return driver.numberOfLateDeliveries > 5;
 }
-// ✅ Inline directement
+// Good — inline directly
 if (driver.numberOfLateDeliveries > 5) { ... }
 ```
 
 ### Extract Variable
 
-Quand : une expression complexe a besoin d'un nom.
+When: a complex expression needs a name.
 
 ```javascript
-// ❌
+// Bad
 return (
   order.quantity * order.itemPrice -
   Math.max(0, order.quantity - 500) * order.itemPrice * 0.05 +
   Math.min(order.quantity * order.itemPrice * 0.1, 100)
 );
 
-// ✅
+// Good
 const basePrice = order.quantity * order.itemPrice;
 const quantityDiscount = Math.max(0, order.quantity - 500) * order.itemPrice * 0.05;
 const shipping = Math.min(basePrice * 0.1, 100);
@@ -81,28 +81,28 @@ return basePrice - quantityDiscount + shipping;
 
 ### Move Function
 
-Quand : une fonction utilise plus les données d'une autre classe que les siennes.
+When: a function uses another class's data more than its own.
 
 ```javascript
-// ❌ AccountType.isPremium() utilise Account data
+// Bad — AccountType.isPremium() uses Account data
 class Account {
   get overdraftCharge() {
-    if (this.type.isPremium) { ... }  // AccountType décide
+    if (this.type.isPremium) { ... }  // AccountType decides
   }
 }
 
-// ✅ Déplacer overdraftCharge dans AccountType
+// Good — move overdraftCharge into AccountType
 class AccountType {
-  overdraftCharge(account) { ... }  // logique là où elle appartient
+  overdraftCharge(account) { ... }  // logic where it belongs
 }
 ```
 
 ### Replace Conditional with Polymorphism
 
-Quand : un switch/if-else sur un type fait la même chose partout.
+When: a switch/if-else on a type does the same thing everywhere.
 
 ```javascript
-// ❌ switch sur type partout
+// Bad — switch on type everywhere
 switch (bird.type) {
   case 'EuropeanSwallow':
     return 35;
@@ -110,7 +110,7 @@ switch (bird.type) {
     return 40 - 2 * bird.numberOfCoconuts;
 }
 
-// ✅ Polymorphisme
+// Good — polymorphism
 class EuropeanSwallow {
   get speed() {
     return 35;
@@ -125,58 +125,58 @@ class AfricanSwallow {
 
 ### Introduce Parameter Object
 
-Quand : plusieurs paramètres sont toujours passés ensemble.
+When: several parameters are always passed together.
 
 ```javascript
-// ❌
+// Bad
 function amountInvoiced(startDate, endDate) { ... }
 function amountReceived(startDate, endDate) { ... }
 
-// ✅
+// Good
 function amountInvoiced(dateRange) { ... }
 function amountReceived(dateRange) { ... }
 ```
 
 ### Replace Magic Literal
 
-Quand : une valeur littérale n'a pas de sens sans contexte.
+When: a literal value has no meaning without context.
 
 ```javascript
-// ❌
+// Bad
 if (status === 3) { ... }
 
-// ✅
+// Good
 const STATUS_SHIPPED = 3;
 if (status === STATUS_SHIPPED) { ... }
 ```
 
-## Ordre des Refactorings (du plus sûr au plus risqué)
+## Refactoring Order (safest to riskiest)
 
 ```
-1. Renommage                 → IDE le gère, atomique
-2. Extract variable          → sans effet de bord
-3. Extract function          → sans effet de bord
-4. Inline function/variable  → inverse des précédents
-5. Move function             → attention aux appelants
-6. Extract class             → vérifier toutes les dépendances
-7. Changer signature         → le plus risqué — vérifier TOUS les appelants
+1. Rename                    → IDE handles it, atomic
+2. Extract variable          → no side effects
+3. Extract function          → no side effects
+4. Inline function/variable  → inverse of the above
+5. Move function             → watch the callers
+6. Extract class             → check all dependencies
+7. Change signature          → riskiest — check ALL callers
 ```
 
-## Checklist Avant Refactoring
+## Checklist Before Refactoring
 
 ```
-[ ] Tests en place (caractérisation ou TDD)
-[ ] Tous les tests passent (baseline verte)
-[ ] Périmètre défini (quoi changer, quoi pas)
-[ ] IDE avec support refactoring automatique si possible
-[ ] Commit avant de commencer (rollback facile)
+[ ] Tests in place (characterization or TDD)
+[ ] All tests pass (green baseline)
+[ ] Scope defined (what to change, what not)
+[ ] IDE with automatic refactoring support if possible
+[ ] Commit before starting (easy rollback)
 ```
 
-## Micro-Incréments sur Legacy
+## Micro-Increments on Legacy
 
 ```
-Règle : chaque étape doit être committable en isolation.
-Si une étape prend > 30 min → trop grande → découper.
-Si un test casse → git revert immédiat, pas de debug.
-Recommencer avec une étape plus petite.
+Rule: each step must be committable in isolation.
+If a step takes > 30 min → too big → split it.
+If a test breaks → immediate git revert, no debug.
+Restart with a smaller step.
 ```

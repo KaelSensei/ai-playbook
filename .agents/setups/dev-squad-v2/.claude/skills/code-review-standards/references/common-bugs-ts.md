@@ -3,103 +3,103 @@
 ## 1. Null / Undefined not handled
 
 ```typescript
-// ❌ BLOCKER — accès sans vérification
+// ❌ BLOCKER — access without a check
 const user = await repo.findById(id);
-console.log(user.email); // TypeError si user est null
+console.log(user.email); // TypeError if user is null
 
-// ✅ Vérification explicite
+// ✅ Explicit check
 const user = await repo.findById(id);
 if (!user) throw new UserNotFoundError(id);
-console.log(user.email); // TS sait que user est User, pas null
+console.log(user.email); // TS knows user is User, not null
 
-// ❌ Non-null assertion sans raison — masque les bugs
+// ❌ Non-null assertion without reason — hides bugs
 const user = await repo.findById(id);
-console.log(user!.email); // crash silencieux si null
+console.log(user!.email); // silent crash if null
 
-// ✅ Optional chaining pour accès conditionnel
+// ✅ Optional chaining for conditional access
 const email = user?.email ?? 'anonymous';
 ```
 
-## 2. Promesses non await
+## 2. Unawaited promises
 
 ```typescript
-// ❌ BLOCKER — fire and forget silencieux
-emailService.sendWelcomeEmail(user.email); // erreur perdue
-repo.save(user); // pas certain que c'est sauvé avant la réponse
+// ❌ BLOCKER — silent fire and forget
+emailService.sendWelcomeEmail(user.email); // error lost
+repo.save(user); // not guaranteed to be saved before the response
 
-// ✅ Toujours await les promesses
+// ✅ Always await promises
 await emailService.sendWelcomeEmail(user.email);
 await repo.save(user);
 
-// ✅ Si intentionnellement fire-and-forget, nommer clairement et gérer l'erreur
+// ✅ If intentionally fire-and-forget, name it clearly and handle the error
 void emailService
   .sendWelcomeEmail(user.email)
   .catch((err) => logger.error('Failed to send welcome email', { err, userId: user.id }));
 ```
 
-## 3. Type any implicite ou explicite
+## 3. Implicit or explicit any
 
 ```typescript
-// ❌ any perd toute la sécurité TypeScript
+// ❌ any loses all TypeScript safety
 function processPayload(data: any): any {
   return data.items.map((x: any) => x.value);
 }
 
-// ❌ JSON.parse retourne any — à typer explicitement
-const config = JSON.parse(rawConfig); // any implicite
-config.database.host; // pas de vérification, crash possible
+// ❌ JSON.parse returns any — must be typed explicitly
+const config = JSON.parse(rawConfig); // implicit any
+config.database.host; // no check, possible crash
 
-// ✅ Zod pour parser et typer
+// ✅ Zod to parse and type
 const ConfigSchema = z.object({
   database: z.object({ host: z.string(), port: z.number() }),
 });
 const config = ConfigSchema.parse(JSON.parse(rawConfig));
-// config.database.host est string — TypeScript vérifié
+// config.database.host is string — TypeScript verified
 
-// ✅ unknown + type guard quand JSON.parse nécessaire
+// ✅ unknown + type guard when JSON.parse is necessary
 const parsed: unknown = JSON.parse(rawConfig);
 if (!isConfig(parsed)) throw new Error('Invalid config');
-config.database.host; // TS vérifié après le type guard
+config.database.host; // TS verified after the type guard
 ```
 
-## 4. Mutations inattendues
+## 4. Unexpected mutations
 
 ```typescript
-// ❌ SHOULD — muter les arguments
+// ❌ SHOULD — mutating arguments
 function addItemToOrder(order: Order, item: CartItem): void {
-  order.items.push(item); // mute l'objet reçu — surprenant
+  order.items.push(item); // mutates the received object — surprising
 }
 
-// ✅ Retourner un nouvel objet
+// ✅ Return a new object
 function addItemToOrder(order: Order, item: CartItem): Order {
   return { ...order, items: [...order.items, item] };
 }
 
-// ❌ forEach qui mute un tableau externe
+// ❌ forEach that mutates an external array
 const results: Result[] = [];
-items.forEach((item) => results.push(process(item))); // mute results
+items.forEach((item) => results.push(process(item))); // mutates results
 
-// ✅ map pour transformer
+// ✅ map to transform
 const results = items.map((item) => process(item));
 ```
 
-## 5. Switch sans default / exhaustive check
+## 5. Switch without default / exhaustive check
 
 ```typescript
-// ❌ SHOULD — nouveau statut ajouté → comportement silencieux
+// ❌ SHOULD — new status added → silent behaviour
 function getStatusLabel(status: OrderStatus): string {
   switch (status) {
     case OrderStatus.PENDING:
-      return 'En attente';
+      return 'Pending';
     case OrderStatus.CONFIRMED:
-      return 'Confirmée';
+      return 'Confirmed';
     case OrderStatus.SHIPPED:
-      return 'Expédiée';
-    // Oubli : DELIVERED, CANCELLED → retourne undefined silencieusement
+      return 'Shipped';
+    // Missing: DELIVERED, CANCELLED → silently returns undefined
   }
 }
 
-// ✅ Exhaustive check — TypeScript error si cas manquant
+// ✅ Exhaustive check — TypeScript error if a case is missing
 function assertNever(x: never): never {
   throw new Error(`Unexpected value: ${x}`);
 }
@@ -107,29 +107,29 @@ function assertNever(x: never): never {
 function getStatusLabel(status: OrderStatus): string {
   switch (status) {
     case OrderStatus.PENDING:
-      return 'En attente';
+      return 'Pending';
     case OrderStatus.CONFIRMED:
-      return 'Confirmée';
+      return 'Confirmed';
     case OrderStatus.SHIPPED:
-      return 'Expédiée';
+      return 'Shipped';
     case OrderStatus.DELIVERED:
-      return 'Livrée';
+      return 'Delivered';
     case OrderStatus.CANCELLED:
-      return 'Annulée';
+      return 'Cancelled';
     default:
-      return assertNever(status); // TS error si cas manquant
+      return assertNever(status); // TS error if a case is missing
   }
 }
 ```
 
-## 6. Erreurs dans les Promesses.all
+## 6. Errors in Promise.all
 
 ```typescript
-// ❌ Si une promesse échoue, les autres continuent mais le résultat est perdu
+// ❌ If one promise fails, the others keep going but the result is lost
 const [users, orders] = await Promise.all([userRepo.findAll(), orderRepo.findAll()]);
-// Si orderRepo.findAll() throw → users est ignoré
+// If orderRepo.findAll() throws → users is discarded
 
-// ✅ allSettled quand on veut les deux résultats même si l'un échoue
+// ✅ allSettled when you want both results even if one fails
 const [usersResult, ordersResult] = await Promise.allSettled([
   userRepo.findAll(),
   orderRepo.findAll(),
@@ -138,21 +138,21 @@ if (usersResult.status === 'rejected') logger.error('Failed to fetch users');
 const users = usersResult.status === 'fulfilled' ? usersResult.value : [];
 ```
 
-## 7. Closures et Boucles
+## 7. Closures and Loops
 
 ```typescript
-// ❌ SHOULD — var dans une boucle
+// ❌ SHOULD — var inside a loop
 for (var i = 0; i < handlers.length; i++) {
   setTimeout(() => console.log(i), 100);
-  // Affiche handlers.length fois la même valeur (bug classique)
+  // Prints the same value handlers.length times (classic bug)
 }
 
-// ✅ let ou const
+// ✅ let or const
 for (const handler of handlers) {
-  setTimeout(() => handler.process(), 100); // capture correcte
+  setTimeout(() => handler.process(), 100); // correct capture
 }
 
-// ✅ Avec index si nécessaire
+// ✅ With index when needed
 handlers.forEach((handler, index) => {
   setTimeout(() => console.log(index, handler), 100);
 });
@@ -161,19 +161,19 @@ handlers.forEach((handler, index) => {
 ## 8. Reference vs Value Comparison
 
 ```typescript
-// ❌ Comparaison de Value Objects par référence
+// ❌ Comparing Value Objects by reference
 const email1 = Email.create('user@test.com')
 const email2 = Email.create('user@test.com')
-if (email1 === email2) { ... } // false — objets différents
+if (email1 === email2) { ... } // false — different objects
 
-// ✅ Utiliser equals()
-if (email1.equals(email2)) { ... } // true — même valeur
+// ✅ Use equals()
+if (email1.equals(email2)) { ... } // true — same value
 
-// ❌ Comparaison de Date par référence
+// ❌ Comparing Date by reference
 const date1 = new Date('2024-01-01')
 const date2 = new Date('2024-01-01')
 date1 === date2 // false!
 
-// ✅ Comparer les timestamps
+// ✅ Compare the timestamps
 date1.getTime() === date2.getTime() // true
 ```

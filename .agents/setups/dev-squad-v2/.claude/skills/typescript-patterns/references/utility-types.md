@@ -3,7 +3,7 @@
 ## Pick, Omit, Partial — Real Usage
 
 ```typescript
-// Type de base
+// Base type
 type User = {
   id: UserId;
   email: string;
@@ -13,19 +13,19 @@ type User = {
   deletedAt: Date | null;
 };
 
-// DTO de réponse — exclure les données sensibles
+// Response DTO — exclude sensitive data
 type UserResponse = Omit<User, 'passwordHash' | 'deletedAt'>;
 // → { id, email, role, createdAt }
 
-// DTO de création — sans id ni timestamps (générés)
+// Creation DTO — without id or timestamps (generated)
 type CreateUserInput = Omit<User, 'id' | 'createdAt' | 'deletedAt'>;
 // → { email, passwordHash, role }
 
-// DTO de mise à jour — tout optionnel sauf id
+// Update DTO — everything optional except id
 type UpdateUserInput = Partial<Omit<User, 'id' | 'createdAt'>>;
 // → { email?, passwordHash?, role?, deletedAt? }
 
-// Sélection précise pour un use case spécifique
+// Precise selection for a specific use case
 type UserCredentials = Pick<User, 'email' | 'passwordHash'>;
 // → { email, passwordHash }
 ```
@@ -33,7 +33,7 @@ type UserCredentials = Pick<User, 'email' | 'passwordHash'>;
 ## Record — Typed Maps
 
 ```typescript
-// Config de taux de TVA par pays
+// VAT rate config by country
 type VATRates = Record<CountryCode, number>;
 const vatRates: VATRates = {
   FR: 0.2,
@@ -42,7 +42,7 @@ const vatRates: VATRates = {
   US: 0,
 };
 
-// Mapping erreur domaine → status HTTP
+// Domain error → HTTP status mapping
 type ErrorStatusMap = Record<string, number>;
 const httpStatusByErrorCode: ErrorStatusMap = {
   EMAIL_ALREADY_EXISTS: 409,
@@ -51,7 +51,7 @@ const httpStatusByErrorCode: ErrorStatusMap = {
   UNAUTHORIZED: 403,
 };
 
-// Permissions par rôle
+// Permissions by role
 type PermissionMap = Record<UserRole, string[]>;
 const permissions: PermissionMap = {
   [UserRole.ADMIN]: ['users:read', 'users:write', 'users:delete', 'reports:read'],
@@ -63,17 +63,17 @@ const permissions: PermissionMap = {
 ## Conditional Types
 
 ```typescript
-// Extraire le type de retour d'une promesse
+// Extract the return type of a promise
 type Awaited<T> = T extends Promise<infer R> ? R : T;
-// Déjà inclus dans TS 4.5+
+// Already built-in since TS 4.5+
 
-// Rendre certains champs obligatoires
+// Make certain fields required
 type RequireFields<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
 type UserWithRequiredEmail = RequireFields<User, 'email'>;
 // → id?, email (required), passwordHash?, role?, ...
 
-// Type différent selon le contexte
+// Different type depending on context
 type ApiResponse<T> =
   | { status: 'success'; data: T }
   | { status: 'error'; error: { code: string; message: string } };
@@ -92,25 +92,25 @@ async function getUser(id: string): Promise<ApiResponse<UserResponse>> {
 ## Template Literal Types
 
 ```typescript
-// IDs spécifiques pour éviter les confusions
+// Specific IDs to avoid confusion
 type PrefixedId<Prefix extends string> = `${Prefix}_${string}`
 type UserId = PrefixedId<'usr'>    // "usr_abc123"
 type OrderId = PrefixedId<'ord'>   // "ord_xyz789"
 
-// Routes API typées
+// Typed API routes
 type ApiRoute = `/api/v1/${string}`
 function callApi(route: ApiRoute) { ... }
 callApi('/api/v1/users')      // ✅
 callApi('/api/v2/users')      // ❌ TypeScript error
 
-// Event names typés
+// Typed event names
 type DomainEventName =
   | `${string}Created`
   | `${string}Updated`
   | `${string}Deleted`
   | `${string}Cancelled`
 
-// Toutes les clés d'un objet en event names
+// All the keys of an object as event names
 type UserEvents = `User${Capitalize<keyof User>}Changed`
 // → "UserIdChanged" | "UserEmailChanged" | ...
 ```
@@ -118,14 +118,14 @@ type UserEvents = `User${Capitalize<keyof User>}Changed`
 ## Mapped Types
 
 ```typescript
-// Transformer toutes les méthodes en async
+// Transform every method into async
 type Async<T> = {
   [K in keyof T]: T[K] extends (...args: infer A) => infer R
     ? (...args: A) => Promise<Awaited<R>>
     : T[K];
 };
 
-// Readonly profond (récursif)
+// Deep readonly (recursive)
 type DeepReadonly<T> = {
   readonly [P in keyof T]: T[P] extends object
     ? T[P] extends Function
@@ -134,10 +134,10 @@ type DeepReadonly<T> = {
     : T[P];
 };
 
-// Nullable toutes les propriétés
+// Make every property nullable
 type Nullable<T> = { [K in keyof T]: T[K] | null };
 
-// Rendre optional les propriétés d'un sous-objet
+// Make selected properties optional
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type CreateOrder = PartialBy<Order, 'id' | 'createdAt' | 'updatedAt'>;
 ```

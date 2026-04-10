@@ -1,9 +1,9 @@
 ---
 name: testing-patterns-ts
 description: >
-  Patterns de tests TypeScript au-delà du unit : intégration, contrats d'API, tests React Testing
-  Library, stratégie de pyramide. Full examples. Loaded by dev-senior-a/b pour les features avec
-  tests d'intégration.
+  TypeScript testing patterns beyond unit tests: integration, API contracts, React Testing Library
+  tests, pyramid strategy. Full examples. Loaded by dev-senior-a/b for features that need
+  integration tests.
 ---
 
 # Testing Patterns TypeScript — Integration and Beyond
@@ -14,21 +14,21 @@ description: >
 
 ```
            /\
-          /E2E\         Peu, lents, coûteux
-         /------\       → Smoke tests, happy path critique
-        /  Intég. \     Moyen, vérifient les coutures
-       /------------\   → Use cases avec vraie DB (en-mémoire)
-      /  Unit (TDD)  \  Beaucoup, rapides, précis
-     /----------------\ → Tout le domain, use cases avec fakes
+          /E2E\         Few, slow, expensive
+         /------\       → Smoke tests, critical happy path
+        /  Integ. \     Medium, verify the seams
+       /------------\   → Use cases with a real DB (in-memory)
+      /  Unit (TDD)  \  Many, fast, precise
+     /----------------\ → All of domain, use cases with fakes
 ```
 
-**Règle pratique :**
+**Rule of thumb:**
 
-- Domain (entities, VOs, erreurs) → 100% unit
-- Use cases → 100% unit avec fakes
-- Repositories (PrismaUserRepository) → tests d'intégration avec vraie DB
-- Controllers → tests d'intégration avec supertest
-- Flows critiques (inscription → email → connexion) → 1-2 E2E
+- Domain (entities, VOs, errors) → 100% unit
+- Use cases → 100% unit with fakes
+- Repositories (PrismaUserRepository) → integration tests with a real DB
+- Controllers → integration tests with supertest
+- Critical flows (signup → email → login) → 1-2 E2E
 
 ---
 
@@ -36,7 +36,7 @@ description: >
 
 ```typescript
 // tests/integration/PrismaUserRepository.test.ts
-// Utiliser une DB de test séparée (DATABASE_TEST_URL dans .env.test)
+// Use a separate test DB (DATABASE_TEST_URL in .env.test)
 
 describe('PrismaUserRepository — integration', () => {
   let prisma: PrismaClient;
@@ -50,7 +50,7 @@ describe('PrismaUserRepository — integration', () => {
   });
 
   beforeEach(async () => {
-    // Nettoyer dans l'ordre pour respecter les FK
+    // Clean up in order to respect FKs
     await prisma.order.deleteMany();
     await prisma.user.deleteMany();
   });
@@ -131,7 +131,7 @@ describe('POST /api/v1/users', () => {
       name: 'Alice',
       role: 'USER',
     });
-    // Vérifier que le password hash n'est pas exposé
+    // Verify the password hash is not exposed
     expect(res.body.data.passwordHash).toBeUndefined();
     expect(res.body.data.password).toBeUndefined();
   });
@@ -147,7 +147,7 @@ describe('POST /api/v1/users', () => {
     expect(res.body.error.details).toContainEqual(expect.objectContaining({ field: 'email' }));
   });
 
-  // Règle métier
+  // Business rule
   it('should return 409 for duplicate email', async () => {
     await request(app)
       .post('/api/v1/users')
@@ -159,13 +159,13 @@ describe('POST /api/v1/users', () => {
 
     expect(res.status).toBe(409);
     expect(res.body.error.code).toBe('EMAIL_ALREADY_EXISTS');
-    // Ne pas exposer l'email dans l'erreur publique
+    // Do not expose the email in the public error
     expect(res.body.error.message).not.toContain('taken@test.com');
   });
 
   // Auth
   it('should return 401 without token for protected route', async () => {
-    const res = await request(app).get('/api/v1/users'); // route protégée
+    const res = await request(app).get('/api/v1/users'); // protected route
     expect(res.status).toBe(401);
   });
 
@@ -202,13 +202,13 @@ describe('BookingCard', () => {
 
   it('should show cancel button for cancellable booking', () => {
     render(<BookingCard booking={mockBooking} onCancel={vi.fn()} onViewDetails={vi.fn()} />)
-    expect(screen.getByRole('button', { name: /annuler/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument()
   })
 
   it('should not show cancel button for non-cancellable booking', () => {
     const delivered = aBooking({ isCancellable: false })
     render(<BookingCard booking={delivered} onCancel={vi.fn()} onViewDetails={vi.fn()} />)
-    expect(screen.queryByRole('button', { name: /annuler/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /cancel/i })).not.toBeInTheDocument()
   })
 
   it('should call onCancel with booking id when cancel button clicked', async () => {
@@ -216,7 +216,7 @@ describe('BookingCard', () => {
     const user = userEvent.setup()
 
     render(<BookingCard booking={mockBooking} onCancel={onCancel} onViewDetails={vi.fn()} />)
-    await user.click(screen.getByRole('button', { name: /annuler/i }))
+    await user.click(screen.getByRole('button', { name: /cancel/i }))
 
     expect(onCancel).toHaveBeenCalledOnce()
     expect(onCancel).toHaveBeenCalledWith(mockBooking.id)
@@ -224,7 +224,7 @@ describe('BookingCard', () => {
 
   it('should disable cancel button when isLoading is true', () => {
     render(<BookingCard booking={mockBooking} onCancel={vi.fn()} onViewDetails={vi.fn()} isLoading />)
-    expect(screen.getByRole('button', { name: /annulation/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /cancelling/i })).toBeDisabled()
   })
 })
 ```
@@ -238,7 +238,7 @@ describe('BookingCard', () => {
 import { renderHook, act } from '@testing-library/react';
 import { useCancelBooking } from './useCancelBooking';
 
-// Mock du service
+// Mock the service
 vi.mock('../services/bookingService', () => ({
   cancel: vi.fn(),
 }));
@@ -296,7 +296,7 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     globals: true,
-    environment: 'node', // 'jsdom' pour les tests React
+    environment: 'node', // 'jsdom' for React tests
     setupFiles: ['./tests/setup.ts'],
     coverage: {
       provider: 'v8',
@@ -309,15 +309,15 @@ export default defineConfig({
         lines: 80,
       },
     },
-    // Tests d'intégration séparés — ne pas lancer par défaut
+    // Integration tests kept separate — not run by default
     exclude: ['tests/integration/**', 'tests/e2e/**'],
   },
 });
 
 // tests/setup.ts
-import '@testing-library/jest-dom'; // pour les tests React
+import '@testing-library/jest-dom'; // for React tests
 
-// Environnement de test
+// Test environment
 process.env.NODE_ENV = 'test';
 process.env.JWT_SECRET = 'test-secret-not-for-production';
 ```

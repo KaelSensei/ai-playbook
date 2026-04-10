@@ -36,12 +36,15 @@
 
 ## Flows
 
-| `/qa [mode]` | Smoke / E2E / Perf / Load — couplé observabilité | | `/pr <feature>` | Créer PR,
-review, merge auto, documenter | | `/task <description>` | Point d'entrée universel — orchestrateur
-décide tout | | Command | What it does | |---|---| | `/research <topic>` | 2 agents in parallel +
-web access → merged findings | | `/spec <feature>` | Explore → Draft → Parallel review loop →
-Approved spec | | `/implement <spec>` | Plan → per-step pair-code + review → Verify → Final review |
-| `/review` | All agents in parallel, read-only, merged verdict |
+| Command               | What it does                                                |
+| --------------------- | ----------------------------------------------------------- |
+| `/task <description>` | Universal entry point — the orchestrator decides everything |
+| `/research <topic>`   | 2 agents in parallel + web access → merged findings         |
+| `/spec <feature>`     | Explore → Draft → Parallel review loop → Approved spec      |
+| `/implement <spec>`   | Plan → per-step pair-code + review → Verify → Final review  |
+| `/review`             | All agents in parallel, read-only, merged verdict           |
+| `/qa [mode]`          | Smoke / E2E / Perf / Load — coupled with observability      |
+| `/pr <feature>`       | Create PR, review, auto-merge, document                     |
 
 ---
 

@@ -1,8 +1,8 @@
 ---
 name: react-patterns
 description: >
-  Patterns React 18 + TypeScript pour projets production. Composants typés, hooks custom, gestion
-  d'état, forms, erreurs, tests. Full examples. Loaded by dev-senior-a/b pour les features frontend.
+  React 18 + TypeScript patterns for production projects. Typed components, custom hooks, state
+  management, forms, errors, tests. Full examples. Loaded by dev-senior-a/b for frontend features.
 ---
 
 # React Patterns — TypeScript Production
@@ -13,33 +13,33 @@ description: >
 
 ```
 src/
-├── components/          # Composants réutilisables, sans logique métier
-│   ├── ui/             # Atoms : Button, Input, Modal, Badge
-│   └── shared/         # Molecules : UserAvatar, PriceDisplay, StatusBadge
-├── features/           # Domaines fonctionnels
+├── components/          # Reusable components, no business logic
+│   ├── ui/             # Atoms: Button, Input, Modal, Badge
+│   └── shared/         # Molecules: UserAvatar, PriceDisplay, StatusBadge
+├── features/           # Functional domains
 │   └── bookings/
-│       ├── components/ # Composants spécifiques à ce domaine
+│       ├── components/ # Components specific to this domain
 │       │   ├── BookingCard.tsx
 │       │   ├── BookingList.tsx
 │       │   └── CancelBookingModal.tsx
-│       ├── hooks/      # Logique extraite dans des hooks
+│       ├── hooks/      # Logic extracted into hooks
 │       │   ├── useBookings.ts
 │       │   └── useCancelBooking.ts
-│       ├── types.ts    # Types du domaine frontend
-│       └── index.ts    # Exports publics du feature
-├── hooks/              # Hooks globaux réutilisables
-├── services/           # Appels API (pas de fetch inline dans les composants)
-└── types/              # Types partagés
+│       ├── types.ts    # Frontend domain types
+│       └── index.ts    # Public exports of the feature
+├── hooks/              # Reusable global hooks
+├── services/           # API calls (no inline fetch in components)
+└── types/              # Shared types
 ```
 
 ---
 
 ## Typed Components — Patterns
 
-### Props explicites avec interface
+### Explicit props with an interface
 
 ```typescript
-// ✅ Interface nommée — lisible, extensible
+// ✅ Named interface — readable, extensible
 interface BookingCardProps {
   booking: Booking
   onCancel: (bookingId: string) => void
@@ -62,7 +62,7 @@ export function BookingCard({
       <PriceDisplay amount={booking.total} currency="EUR" />
       <div className="flex gap-2 mt-4">
         <Button variant="secondary" onClick={() => onViewDetails(booking.id)}>
-          Voir les détails
+          View details
         </Button>
         {booking.isCancellable && (
           <Button
@@ -70,7 +70,7 @@ export function BookingCard({
             onClick={() => onCancel(booking.id)}
             disabled={isLoading}
           >
-            {isLoading ? 'Annulation...' : 'Annuler'}
+            {isLoading ? 'Cancelling...' : 'Cancel'}
           </Button>
         )}
       </div>
@@ -79,10 +79,10 @@ export function BookingCard({
 }
 ```
 
-### Discriminated Union Props — Composants Polymorphes
+### Discriminated Union Props — Polymorphic Components
 
 ```typescript
-// Props qui varient selon un état
+// Props that vary by state
 type AlertProps =
   | { variant: 'success'; title: string; description?: string }
   | { variant: 'error'; title: string; error: Error; retry?: () => void }
@@ -97,7 +97,7 @@ export function Alert(props: AlertProps) {
       return (
         <div className="bg-red-50 p-4 rounded">
           <p>{props.title}: {props.error.message}</p>
-          {props.retry && <button onClick={props.retry}>Réessayer</button>}
+          {props.retry && <button onClick={props.retry}>Retry</button>}
         </div>
       )
 
@@ -160,7 +160,7 @@ function BookingList({ userId }: { userId: string }) {
   const state = useAsync(() => bookingService.getByUser(userId), [userId])
 
   if (state.status === 'loading') return <Spinner />
-  if (state.status === 'error') return <Alert variant="error" title="Erreur" error={state.error} retry={state.refetch} />
+  if (state.status === 'error') return <Alert variant="error" title="Error" error={state.error} retry={state.refetch} />
   if (state.status === 'idle' || state.status !== 'success') return null
 
   return (
@@ -211,35 +211,35 @@ function useMutation<TInput, TOutput>(
   return [mutate, state]
 }
 
-// Usage dans un composant
+// Usage in a component
 function CancelBookingModal({ bookingId, onClose }: CancelModalProps) {
   const [cancelBooking, cancelState] = useMutation(
     (id: string) => bookingService.cancel(id),
     {
       onSuccess: () => {
-        toast.success('Réservation annulée')
+        toast.success('Booking cancelled')
         onClose()
       },
       onError: (error) => {
-        toast.error(`Erreur : ${error.message}`)
+        toast.error(`Error: ${error.message}`)
       },
     }
   )
 
   return (
-    <Modal title="Confirmer l'annulation">
-      <p>Êtes-vous sûr de vouloir annuler cette réservation ?</p>
+    <Modal title="Confirm cancellation">
+      <p>Are you sure you want to cancel this booking?</p>
       {cancelState.status === 'error' && (
-        <Alert variant="error" title="Annulation impossible" error={cancelState.error} />
+        <Alert variant="error" title="Cancellation failed" error={cancelState.error} />
       )}
       <div className="flex gap-2 justify-end">
-        <Button variant="secondary" onClick={onClose}>Annuler</Button>
+        <Button variant="secondary" onClick={onClose}>Cancel</Button>
         <Button
           variant="destructive"
           onClick={() => cancelBooking(bookingId)}
           disabled={cancelState.status === 'loading'}
         >
-          {cancelState.status === 'loading' ? 'Annulation...' : 'Confirmer'}
+          {cancelState.status === 'loading' ? 'Cancelling...' : 'Confirm'}
         </Button>
       </div>
     </Modal>
@@ -249,7 +249,7 @@ function CancelBookingModal({ bookingId, onClose }: CancelModalProps) {
 
 ---
 
-## Typed Forms avec React Hook Form + Zod
+## Typed Forms with React Hook Form + Zod
 
 ```typescript
 import { useForm } from 'react-hook-form'
@@ -257,15 +257,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 const RegisterFormSchema = z.object({
-  email: z.string().email('Email invalide'),
+  email: z.string().email('Invalid email'),
   password: z.string()
-    .min(8, '8 caractères minimum')
-    .regex(/[A-Z]/, 'Une majuscule requise')
-    .regex(/[0-9]/, 'Un chiffre requis'),
+    .min(8, 'Minimum 8 characters')
+    .regex(/[A-Z]/, 'One uppercase required')
+    .regex(/[0-9]/, 'One digit required'),
   confirmPassword: z.string(),
 }).refine(
   data => data.password === data.confirmPassword,
-  { message: 'Les mots de passe ne correspondent pas', path: ['confirmPassword'] }
+  { message: 'Passwords do not match', path: ['confirmPassword'] }
 )
 
 type RegisterFormValues = z.infer<typeof RegisterFormSchema>
@@ -285,9 +285,9 @@ function RegisterForm({ onSubmit }: { onSubmit: (values: RegisterFormValues) => 
       await onSubmit(values)
     } catch (error) {
       if (error instanceof EmailAlreadyExistsError) {
-        setError('email', { message: 'Cet email est déjà utilisé' })
+        setError('email', { message: 'This email is already in use' })
       } else {
-        setError('root', { message: 'Une erreur est survenue. Réessayez.' })
+        setError('root', { message: 'An error occurred. Please try again.' })
       }
     }
   }
@@ -298,14 +298,14 @@ function RegisterForm({ onSubmit }: { onSubmit: (values: RegisterFormValues) => 
       <FormField label="Email" error={errors.email?.message}>
         <input type="email" {...register('email')} className="input" />
       </FormField>
-      <FormField label="Mot de passe" error={errors.password?.message}>
+      <FormField label="Password" error={errors.password?.message}>
         <input type="password" {...register('password')} className="input" />
       </FormField>
-      <FormField label="Confirmer" error={errors.confirmPassword?.message}>
+      <FormField label="Confirm" error={errors.confirmPassword?.message}>
         <input type="password" {...register('confirmPassword')} className="input" />
       </FormField>
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Inscription...' : 'S\'inscrire'}
+        {isSubmitting ? 'Signing up...' : 'Sign up'}
       </Button>
     </form>
   )
@@ -346,8 +346,8 @@ export class ErrorBoundary extends React.Component<
       }
       return (
         <div className="p-8 text-center">
-          <h2>Une erreur est survenue</h2>
-          <button onClick={this.reset}>Réessayer</button>
+          <h2>Something went wrong</h2>
+          <button onClick={this.reset}>Retry</button>
         </div>
       )
     }
@@ -357,7 +357,7 @@ export class ErrorBoundary extends React.Component<
 
 // Usage
 <ErrorBoundary fallback={(error, reset) => (
-  <Alert variant="error" title="Erreur d'affichage" error={error} retry={reset} />
+  <Alert variant="error" title="Display error" error={error} retry={reset} />
 )}>
   <BookingList />
 </ErrorBoundary>

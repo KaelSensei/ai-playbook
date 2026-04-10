@@ -64,26 +64,26 @@ export class InsufficientPermissionsError extends AuthorizationError {
 }
 ```
 
-## Domain Error Mapping → HTTP dans le Controller
+## Domain Error Mapping → HTTP in the Controller
 
 ```typescript
 // presentation/http/errorMapper.ts
 
-// Générique — pour tous les controllers
+// Generic — for all controllers
 export const mapDomainErrorToHttp = (error: unknown, res: Response, req: Request): boolean => {
   if (!(error instanceof DomainError)) return false;
 
-  // Les DomainErrors portent leur httpStatus — pas besoin de switch
+  // DomainErrors carry their httpStatus — no switch needed
   const body: ApiError = {
     error: {
       code: error.code,
-      // Message public générique pour les 403/401 (ne pas divulguer)
+      // Generic public message for 403/401 (do not leak details)
       message: error.httpStatus >= 403 ? getPublicMessage(error.code) : error.message,
       requestId: req.headers['x-request-id'] as string,
     },
   };
 
-  // Ajouter les détails structurés si disponibles
+  // Add structured details when available
   if (error instanceof WeakPasswordError) {
     body.error.details = error.violations.map((v) => ({ field: 'password', message: v }));
   }
@@ -100,13 +100,13 @@ const publicMessages: Record<string, string> = {
 
 const getPublicMessage = (code: string): string => publicMessages[code] ?? 'Request failed';
 
-// Usage dans un controller
+// Usage in a controller
 const handleError = (error: unknown, req: Request, res: Response, next: NextFunction): void => {
   if (mapDomainErrorToHttp(error, res, req)) return;
-  next(error); // erreur non-domaine → middleware global
+  next(error); // non-domain error → global middleware
 };
 
-// Dans chaque controller
+// In every controller
 findById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const user = await this.getUser.execute({ id: req.params.id });
@@ -122,8 +122,8 @@ findById = async (req: Request, res: Response, next: NextFunction): Promise<void
 ```typescript
 // middlewares/globalErrorHandler.ts
 export const globalErrorHandler: ErrorRequestHandler = (error, req, res, _next) => {
-  // DomainErrors devraient déjà être gérées dans les controllers
-  // Ici on reçoit les erreurs inattendues
+  // DomainErrors should already be handled in the controllers
+  // Here we receive the unexpected errors
   const requestId = req.headers['x-request-id'] as string;
 
   logger.error('Unhandled application error', {
@@ -149,25 +149,25 @@ export const globalErrorHandler: ErrorRequestHandler = (error, req, res, _next) 
   });
 };
 
-// Dans app.ts — toujours en dernier
+// In app.ts — always last
 app.use(globalErrorHandler);
 ```
 
-## Errors in Use Cases — Pas d'Exception pour le Flux Normal
+## Errors in Use Cases — No Exceptions for Normal Flow
 
 ```typescript
-// ✅ Use case qui throw des erreurs domaine typées
+// ✅ Use case that throws typed domain errors
 export class RegisterUser {
   async execute(input: RegisterInput): Promise<UserDTO> {
-    // Validation input → WeakPasswordError ou InvalidEmailError (DomainError)
-    const email = Email.create(input.email); // throw InvalidEmailError si invalide
-    const password = Password.create(input.password); // throw WeakPasswordError si faible
+    // Input validation → WeakPasswordError or InvalidEmailError (DomainError)
+    const email = Email.create(input.email); // throws InvalidEmailError if invalid
+    const password = Password.create(input.password); // throws WeakPasswordError if weak
 
-    // Règle métier → EmailAlreadyExistsError (DomainError)
+    // Business rule → EmailAlreadyExistsError (DomainError)
     const existing = await this.userRepo.findByEmail(email.value);
     if (existing) throw new EmailAlreadyExistsError(email.value);
 
-    // Traitement nominal → pas d'exception
+    // Normal flow → no exception
     const user = User.register({
       id: UserId.generate(),
       email,
@@ -180,6 +180,6 @@ export class RegisterUser {
   }
 }
 
-// ❌ À éviter — Error générique sans type
-throw new Error('Email already exists'); // pas typable, pas mappable
+// ❌ Avoid — generic Error without a type
+throw new Error('Email already exists'); // not typeable, not mappable
 ```

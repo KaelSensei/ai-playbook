@@ -1,61 +1,61 @@
 ---
 name: security-web2
 description: >
-  OWASP Top 10 web2, auth/authz, injections SQL/NoSQL/XSS, secrets management, headers de sécurité,
-  rate limiting, CORS. Auto-chargé par security-reviewer. Invoke pour toute question de sécurité
-  applicative web.
+  OWASP Top 10 web2, auth/authz, SQL/NoSQL/XSS injection, secrets management, security headers, rate
+  limiting, CORS. Auto-loaded by security-reviewer. Invoke for any web application security
+  question.
 ---
 
 # Security Web2 Reference
 
-## OWASP Top 10 — Patterns Concrets
+## OWASP Top 10 — Concrete Patterns
 
 ### A01 — Injection
 
 ```typescript
-// ❌ SQL injection
+// Bad — SQL injection
 const query = `SELECT * FROM users WHERE email = '${email}'`;
 
-// ✅ Paramétré toujours
+// Good — always parameterized
 const user = await prisma.user.findUnique({ where: { email } });
 
-// ❌ NoSQL injection (MongoDB)
-db.users.find({ email: req.body.email }); // si email = { $ne: null }
+// Bad — NoSQL injection (MongoDB)
+db.users.find({ email: req.body.email }); // if email = { $ne: null }
 
-// ✅ Validation de type avant requête
+// Good — type validation before the query
 const email = z.string().email().parse(req.body.email);
 db.users.find({ email });
 
-// ❌ Command injection
+// Bad — command injection
 exec(`ls ${userInput}`);
 
-// ✅ Jamais exec avec input utilisateur — utiliser des APIs natives
+// Good — never exec with user input — use native APIs
 ```
 
 ### A02 — Broken Authentication
 
 ```typescript
-// ✅ Hachage des mots de passe
+// Good — password hashing
 import bcrypt from 'bcrypt';
 const COST = 12;
 const hash = await bcrypt.hash(password, COST);
 const valid = await bcrypt.compare(input, hash);
 
-// ✅ JWT sécurisé
+// Good — secure JWT
 const token = jwt.sign(
   { sub: user.id, role: user.role },
   process.env.JWT_SECRET, // min 256 bits random
   { expiresIn: '15m', algorithm: 'HS256' }
 );
 
-// ✅ Refresh token rotation
-// access token : 15min, en mémoire (pas localStorage)
-// refresh token : 7j, httpOnly cookie, rotation à chaque use
+// Good — refresh token rotation
+// access token: 15min, in memory (not localStorage)
+// refresh token: 7d, httpOnly cookie, rotate on each use
 
-// ✅ Brute force protection
-// Rate limit : 5 tentatives / 15min par IP sur /auth/login
+// Good — brute force protection
+// Rate limit: 5 attempts / 15min per IP on /auth/login
 
-// ✅ Timing-safe comparison (tokens)
+// Good — timing-safe comparison (tokens)
 import { timingSafeEqual } from 'crypto';
 const valid = timingSafeEqual(Buffer.from(providedToken), Buffer.from(storedHash));
 ```
@@ -63,19 +63,19 @@ const valid = timingSafeEqual(Buffer.from(providedToken), Buffer.from(storedHash
 ### A03 — Sensitive Data Exposure
 
 ```typescript
-// ✅ Jamais logguer de données sensibles
+// Good — never log sensitive data
 logger.info('User login', { userId: user.id }); // OK
-logger.info('User login', { user }); // ❌ inclut le password hash
+logger.info('User login', { user }); // Bad — includes the password hash
 
-// ✅ Exclure les champs sensibles des réponses API
+// Good — exclude sensitive fields from API responses
 const userResponse = exclude(user, ['password', 'refreshToken']);
 
-// ✅ Variables d'env pour les secrets (jamais dans le code)
-const secret = process.env.JWT_SECRET; // ✅
-const secret = 'hardcoded_secret'; // ❌
+// Good — env vars for secrets (never in the code)
+const secret = process.env.JWT_SECRET; // Good
+const secret = 'hardcoded_secret'; // Bad
 
-// ✅ HTTPS forcé en production
-// ✅ Cookies avec Secure + HttpOnly + SameSite=Strict
+// Good — HTTPS enforced in production
+// Good — cookies with Secure + HttpOnly + SameSite=Strict
 res.cookie('refreshToken', token, {
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
@@ -87,13 +87,13 @@ res.cookie('refreshToken', token, {
 ### A05 — Broken Access Control
 
 ```typescript
-// ✅ Vérifier les permissions au niveau service, pas juste controller
+// Good — check permissions at the service level, not just in the controller
 class PostService {
   async deletePost(postId: string, requestingUserId: string) {
     const post = await this.repo.findById(postId)
     if (!post) throw new NotFoundException()
 
-    // IDOR prevention : vérifier que l'user est propriétaire
+    // IDOR prevention: verify the user is the owner
     if (post.userId !== requestingUserId) {
       throw new ForbiddenException()
     }
@@ -101,14 +101,14 @@ class PostService {
   }
 }
 
-// ✅ RBAC : vérifier le rôle, pas juste l'authentification
+// Good — RBAC: check the role, not just authentication
 @Roles('ADMIN')
 @Get('/admin/users')
 async getAllUsers() { ... }
 
-// ✅ CORS restrictif
+// Good — restrictive CORS
 app.use(cors({
-  origin: ['https://monapp.com', 'https://www.monapp.com'],
+  origin: ['https://myapp.com', 'https://www.myapp.com'],
   credentials: true,
 }))
 ```
@@ -116,22 +116,22 @@ app.use(cors({
 ### A06 — Security Misconfiguration
 
 ```typescript
-// ✅ Headers de sécurité (Helmet.js)
+// Good — security headers (Helmet.js)
 import helmet from 'helmet';
 app.use(helmet());
-// Inclut : X-Content-Type-Options, X-Frame-Options, HSTS,
-//          Content-Security-Policy, X-XSS-Protection
+// Includes: X-Content-Type-Options, X-Frame-Options, HSTS,
+//           Content-Security-Policy, X-XSS-Protection
 
-// ✅ Désactiver les infos de version
+// Good — disable version info
 app.disable('x-powered-by');
 
-// ✅ Pas de stack trace en production
+// Good — no stack trace in production
 app.use((err, req, res, next) => {
   const message = process.env.NODE_ENV === 'production' ? 'Internal server error' : err.message;
   res.status(500).json({ error: { code: 'INTERNAL_ERROR', message } });
 });
 
-// ✅ Variables d'env validées au démarrage
+// Good — env vars validated at startup
 const env = z
   .object({
     JWT_SECRET: z.string().min(32),
@@ -143,10 +143,10 @@ const env = z
 ### A07 — XSS
 
 ```typescript
-// ✅ Jamais injecter du HTML non-échappé
-// React échappe automatiquement — dangerouslySetInnerHTML = ❌ sauf nécessité absolue
+// Good — never inject unescaped HTML
+// React escapes automatically — dangerouslySetInnerHTML = Bad unless absolutely necessary
 
-// ✅ Content-Security-Policy
+// Good — Content-Security-Policy
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
@@ -158,7 +158,7 @@ app.use(
   })
 );
 
-// ✅ Sanitizer si HTML utilisateur nécessaire
+// Good — sanitizer if user HTML is required
 import DOMPurify from 'dompurify';
 const clean = DOMPurify.sanitize(userHtml);
 ```
@@ -168,7 +168,7 @@ const clean = DOMPurify.sanitize(userHtml);
 ```typescript
 import rateLimit from 'express-rate-limit';
 
-// Auth endpoints : strict
+// Auth endpoints: strict
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
   max: 5,
@@ -179,7 +179,7 @@ const authLimiter = rateLimit({
 app.use('/api/v1/auth/login', authLimiter);
 app.use('/api/v1/auth/register', rateLimit({ windowMs: 3600000, max: 3 }));
 
-// API globale
+// Global API
 const apiLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1h
   max: 1000,
@@ -190,7 +190,7 @@ app.use('/api/', apiLimiter);
 ## Input Validation
 
 ```typescript
-// Toujours valider avec un schema avant de toucher la BDD
+// Always validate with a schema before touching the DB
 import { z } from 'zod';
 
 const CreateUserDto = z.object({
@@ -204,7 +204,7 @@ const CreateUserDto = z.object({
   name: z.string().min(1).max(100).trim(),
 });
 
-// Middleware de validation
+// Validation middleware
 const validate = (schema: ZodSchema) => (req, res, next) => {
   const result = schema.safeParse(req.body);
   if (!result.success) {
@@ -218,24 +218,24 @@ const validate = (schema: ZodSchema) => (req, res, next) => {
       },
     });
   }
-  req.body = result.data; // données sanitisées
+  req.body = result.data; // sanitized data
   next();
 };
 ```
 
-## Checklist Déploiement Sécurisé
+## Secure Deployment Checklist
 
 ```
-[ ] HTTPS forcé, HSTS activé
-[ ] Helmet.js configuré
-[ ] CORS whitelist explicite
-[ ] Rate limiting sur auth endpoints
-[ ] Validation input sur tous les endpoints
-[ ] Pas de secrets dans le code (audit : grep -r "password\|secret\|key" src/)
+[ ] HTTPS enforced, HSTS enabled
+[ ] Helmet.js configured
+[ ] CORS explicit whitelist
+[ ] Rate limiting on auth endpoints
+[ ] Input validation on all endpoints
+[ ] No secrets in the code (audit: grep -r "password\|secret\|key" src/)
 [ ] JWT_SECRET >= 32 chars random
 [ ] Cookies httpOnly + Secure + SameSite
-[ ] Stack traces désactivées en production
-[ ] npm audit / pip audit propre
-[ ] Logs sans données sensibles
-[ ] RBAC vérifié au niveau service
+[ ] Stack traces disabled in production
+[ ] npm audit / pip audit clean
+[ ] Logs without sensitive data
+[ ] RBAC verified at the service level
 ```

@@ -2,87 +2,87 @@
 
 <!-- last-verified: YYYY-MM-DD -->
 <!--
-  Document vivant. Mis à jour par /understand et /characterize.
-  C'est la carte du territoire — elle est toujours incomplète,
-  mais elle grandit à chaque exploration.
+  Living document. Updated by /understand and /characterize.
+  It is the map of the territory — it is always incomplete,
+  but it grows with each exploration.
 
-  RÈGLE : ne jamais supprimer une entrée. Annoter si obsolète.
+  RULE: never delete an entry. Annotate if obsolete.
 -->
 
-## Modules Cartographiés
+## Mapped Modules
 
 <!--
-  Format par module :
+  Format per module:
 
-  ### [nom du module / fichier]
-  - **Localisation** : chemin/vers/fichier
-  - **Taille** : ~N lignes
-  - **Rôle réel** : ce qu'il fait réellement (basé sur le code, pas les commentaires)
-  - **Responsabilités multiples** : liste si god class / god function
-  - **Dépendances entrantes** : qui l'appelle
-  - **Dépendances sortantes** : ce qu'il appelle
-  - **Tests existants** : oui / non / partiels (fichier)
-  - **Dernière modification** : date (git blame)
-  - **Niveau de risque** : 🟢 faible / 🟡 moyen / 🔴 élevé
-  - **Notes** : observations importantes, pièges identifiés
+  ### [module / file name]
+  - **Location**: path/to/file
+  - **Size**: ~N lines
+  - **Actual role**: what it really does (based on the code, not the comments)
+  - **Multiple responsibilities**: list if god class / god function
+  - **Incoming dependencies**: who calls it
+  - **Outgoing dependencies**: what it calls
+  - **Existing tests**: yes / no / partial (file)
+  - **Last modification**: date (git blame)
+  - **Risk level**: green low / yellow medium / red high
+  - **Notes**: important observations, identified traps
 -->
 
-## Seams Identifiés
+## Identified Seams
 
 <!--
-  Un "seam" (Michael Feathers) = un endroit où on peut insérer
-  un point de contrôle sans modifier le code qui l'entoure.
+  A "seam" (Michael Feathers) = a place where you can insert
+  a control point without modifying the code around it.
 
-  Format :
-  - **[nom]** : [description] — [comment l'exploiter]
+  Format:
+  - **[name]**: [description] — [how to exploit it]
 
-  Exemple :
-  - **Interface de paiement** : PaymentGateway.php — peut être mockée via config
-  - **Envoi d'emails** : mailer global — peut être remplacé par un fake en test
+  Example:
+  - **Payment interface**: PaymentGateway.php — can be mocked via config
+  - **Email sending**: global mailer — can be replaced with a fake in tests
 -->
 
-## Comportements Figés (Tests de Caractérisation)
+## Pinned Behaviors (Characterization Tests)
 
 <!--
-  Liste des comportements documentés par des tests de caractérisation.
-  Mis à jour par /characterize.
+  List of behaviors documented by characterization tests.
+  Updated by /characterize.
 
-  Format :
-  - [ ] [comportement] — [fichier de test] — [date]
+  Format:
+  - [ ] [behavior] — [test file] — [date]
 
-  Exemple :
-  - [x] billing calcule TVA à 20% sur produits non-exemptés — test_billing_char.php — 2024-03-15
-  - [ ] comportement si utilisateur sans email — non documenté
+  Example:
+  - [x] billing calculates 20% VAT on non-exempt products — test_billing_char.php — 2024-03-15
+  - [ ] behavior when user has no email — not documented
 -->
 
-## Zones Non Explorées
+## Unexplored Zones
 
 <!--
-  Ce qu'on sait qu'on ne sait pas.
-  Mis à jour au fil des /understand.
+  What we know we don't know.
+  Updated over the course of /understand runs.
 
-  Exemple :
-  - cron_sync.php — objectif inconnu, tourne en prod toutes les heures
-  - legacy_import/ — dossier de 40 fichiers, aucune référence trouvée depuis 2021
+  Example:
+  - cron_sync.php — unknown purpose, runs in prod every hour
+  - legacy_import/ — folder of 40 files, no reference found since 2021
 -->
 
-## Couplages Dangereux
+## Dangerous Couplings
 
 <!--
-  Dépendances circulaires, état global, variables de session magiques,
-  tout ce qui rend les changements imprévisibles.
+  Circular dependencies, global state, magic session variables,
+  anything that makes changes unpredictable.
 
-  Format :
-  - [description du couplage] — [impact] — [fichiers impliqués]
+  Format:
+  - [coupling description] — [impact] — [files involved]
 -->
 
-## Décisions Héritées
+## Inherited Decisions
 
 <!--
-  Choix techniques passés qu'on a compris (même si on ne serait pas d'accord aujourd'hui).
-  Documenter le "pourquoi" quand on le retrouve.
+  Past technical choices that we have understood (even if we would not agree today).
+  Document the "why" when you find it.
 
-  Exemple :
-  - Les prix sont stockés en centimes entiers — décision 2012 pour éviter les floats
-  - La session PHP est utilisée comme base de données temporaire — contournement MySQL lent
+  Example:
+  - Prices are stored as integer cents — 2012 decision to avoid floats
+  - The PHP session is used as a temporary database — workaround for slow MySQL
 -->

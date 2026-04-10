@@ -3,7 +3,7 @@
 ## The Problem
 
 ```typescript
-// ❌ Setup verbeux et fragile
+// ❌ Verbose and fragile setup
 const user = new User(
   new UserId('123'),
   new Email('test@test.com'),
@@ -14,13 +14,13 @@ const user = new User(
   false,
   'FR'
 );
-// → Si User ajoute un paramètre, TOUS les tests cassent
+// → If User adds a parameter, ALL tests break
 ```
 
 ## Builder Pattern
 
 ```typescript
-// UserBuilder — facilite la création d'objets de test
+// UserBuilder — simplifies the creation of test objects
 class UserBuilder {
   private props: UserProps = {
     id: new UserId('test-id-1'),
@@ -63,7 +63,7 @@ class UserBuilder {
   }
 }
 
-// Factory function (alternative plus concise)
+// Factory function (more concise alternative)
 function aUser(overrides: Partial<UserProps> = {}): User {
   return new User({
     id: new UserId('test-id-1'),
@@ -100,7 +100,7 @@ it('should reject deletion of admin by non-admin', async () => {
   await expect(userService.delete(requester, target.id)).rejects.toThrow(UnauthorizedError);
 });
 
-// Builders pour des objets complexes
+// Builders for complex objects
 class OrderBuilder {
   private items: CartItem[] = [];
   private userId = 'user-1';
@@ -143,7 +143,7 @@ it('should calculate correct total for multi-item order', () => {
 ## Shared Fixtures
 
 ```typescript
-// fixtures/users.ts — fixtures réutilisables entre tests
+// fixtures/users.ts — fixtures reusable across tests
 export const fixtures = {
   standardUser: () => aUser({ email: new Email('user@test.com') }),
   adminUser: () => aUser({ role: UserRole.ADMIN, email: new Email('admin@test.com') }),
@@ -151,7 +151,7 @@ export const fixtures = {
   unverifiedUser: () => aUser({ emailVerified: false }),
 };
 
-// Dans les tests
+// In the tests
 import { fixtures } from '../fixtures/users';
 
 it('should not allow deleted user to login', async () => {

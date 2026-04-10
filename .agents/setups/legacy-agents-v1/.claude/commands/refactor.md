@@ -1,152 +1,152 @@
 ---
 name: refactor
 description: >
-  Refactoring sécurisé avec filet de tests. refactoring-guide orchestre, dev-senior-a implémente,
-  dev-senior-b review après chaque étape. Chaque micro-incrément doit être vert avant le suivant.
-argument-hint: '[module ou cible de refactoring]'
+  Safe refactoring with a test safety net. refactoring-guide orchestrates, dev-senior-a implements,
+  dev-senior-b reviews after each step. Every micro-increment must be green before the next.
+argument-hint: '[refactoring module or target]'
 ---
 
 # /refactor
 
-Update `tasks/current_task.md` : status=REFACTOR, module=$ARGUMENTS
+Update `tasks/current_task.md`: status=REFACTOR, module=$ARGUMENTS
 
 ---
 
-## Prérequis Absolus
+## Absolute Prerequisites
 
-Vérifier avant de commencer :
+Verify before starting:
 
 ```
-[ ] /understand $ARGUMENTS fait → fiche dans legacy-map.md
-[ ] /characterize $ARGUMENTS fait → tests de caractérisation en place
-[ ] Tous les tests passent (lancer le runner maintenant)
+[ ] /understand $ARGUMENTS done → card in legacy-map.md
+[ ] /characterize $ARGUMENTS done → characterization tests in place
+[ ] All tests pass (run the runner now)
 ```
 
-Si l'un manque → arrêter. Pas de refactoring sans filet.
+If any missing → stop. No refactoring without a net.
 
 ```bash
-[runner] tests/  # DOIT être tout vert avant de commencer
+[runner] tests/  # MUST be all green before starting
 ```
 
 ---
 
-## Phase 1 — Établir le plan de refactoring
+## Phase 1 — Establish the refactoring plan
 
-Invoquer `refactoring-guide` pour établir le plan :
+Invoke `refactoring-guide` to establish the plan:
 
 ```
-Tu es refactoring-guide.
-Charge .claude/agents/refactoring-guide.md.
-Charge project-architecture.md, legacy-map.md.
-Charge refactoring-patterns, legacy-patterns, testing-patterns skills.
+You are refactoring-guide.
+Load .claude/agents/refactoring-guide.md.
+Load project-architecture.md, legacy-map.md.
+Load refactoring-patterns, legacy-patterns, testing-patterns skills.
 
-Objectif de refactoring : $ARGUMENTS
-Tests de caractérisation en place : [liste depuis legacy-map.md]
+Refactoring goal: $ARGUMENTS
+Characterization tests in place: [list from legacy-map.md]
 
-Propose un plan de refactoring en micro-étapes :
-- Chaque étape doit être atomique (< 30 min)
-- Chaque étape doit être committable en isolation
-- Chaque étape doit laisser les tests verts
-- Utiliser le catalogue Fowler (nommer chaque refactoring)
-- Ordre : du plus sûr au plus risqué
+Propose a refactoring plan in micro-steps:
+- Each step must be atomic (< 30 min)
+- Each step must be committable in isolation
+- Each step must leave tests green
+- Use the Fowler catalogue (name each refactoring)
+- Order: from safest to riskiest
 
-Préciser pour chaque étape :
-- Nom du refactoring (catalogue Fowler)
-- Changement exact à faire
-- Risque estimé
+Specify for each step:
+- Refactoring name (Fowler catalogue)
+- Exact change to make
+- Estimated risk
 ```
 
-Présenter le plan à l'utilisateur. **Gate** : _"Ce plan est-il correct ? Des étapes à modifier ?"_
+Present the plan to the user. **Gate**: _"Is this plan correct? Any steps to modify?"_
 
 ---
 
-## Phase 2 — Exécution micro-incrémentale
+## Phase 2 — Micro-incremental execution
 
-Pour chaque étape du plan :
+For each step in the plan:
 
-### 2a. dev-senior-a implémente l'étape
-
-```
-Tu es dev-senior-a. Mode refactoring legacy.
-Charge .claude/agents/dev-senior-a.md.
-Charge project-architecture.md, legacy-map.md.
-Charge refactoring-patterns, legacy-patterns skills.
-
-Étape [N] : [nom refactoring] — [description]
-Tests de caractérisation de référence : [liste]
-
-RÈGLES :
-- Ne changer QUE ce qui est décrit dans cette étape
-- Ne PAS améliorer le comportement (refactoring pur)
-- Lancer les tests après le changement
-
-Output requis :
-- Diff du changement
-- Output du runner (TOUS les tests doivent passer)
-```
-
-### 2b. dev-senior-b review l'étape
+### 2a. dev-senior-a implements the step
 
 ```
-Tu es dev-senior-b.
-Charge team--skill-review.
+You are dev-senior-a. Legacy refactoring mode.
+Load .claude/agents/dev-senior-a.md.
+Load project-architecture.md, legacy-map.md.
+Load refactoring-patterns, legacy-patterns skills.
 
-Review cette étape de refactoring :
+Step [N]: [refactoring name] — [description]
+Reference characterization tests: [list]
+
+RULES:
+- Only change what is described in this step
+- Do NOT improve behavior (pure refactoring)
+- Run the tests after the change
+
+Required output:
+- Diff of the change
+- Runner output (ALL tests must pass)
+```
+
+### 2b. dev-senior-b reviews the step
+
+```
+You are dev-senior-b.
+Load team--skill-review.
+
+Review this refactoring step:
 [diff]
 
-Vérifier :
-1. Tests de caractérisation toujours verts ?
-2. Comportement préservé (aucun changement de logique) ?
-3. Changement minimal (pas de scope creep) ?
-4. Étape réversible par git revert ?
+Verify:
+1. Characterization tests still green?
+2. Behavior preserved (no logic change)?
+3. Minimal change (no scope creep)?
+4. Step reversible via git revert?
 ```
 
-Appliquer `team--skill-refine` si nécessaire.
+Apply `team--skill-refine` if needed.
 
 ### 2c. Commit
 
 ```bash
 git add .
-git commit -m "refactor([module]): [nom refactoring Fowler]"
+git commit -m "refactor([module]): [Fowler refactoring name]"
 ```
 
 ---
 
-## Phase 3 — Review finale (tous les agents)
+## Phase 3 — Final review (all agents)
 
-Quand toutes les étapes sont faites :
+When all steps are done:
 
-Spawner TOUS les agents sur le diff complet :
+Spawn ALL agents on the full diff:
 
 ```
-Review le refactoring complet de $ARGUMENTS.
-Vérifier : comportement préservé, tests toujours verts,
-cohérence du résultat, dette réduite ou maintenue.
+Review the complete refactoring of $ARGUMENTS.
+Verify: behavior preserved, tests still green,
+consistency of the result, debt reduced or maintained.
 ```
 
-Appliquer `team--skill-refine` jusqu'à APPROVE unanime.
+Apply `team--skill-refine` until unanimous APPROVE.
 
 ---
 
-## Règle d'Urgence
+## Emergency Rule
 
-Si un test de caractérisation passe au rouge à n'importe quelle étape :
-
-```
-1. git revert HEAD  (revenir immédiatement)
-2. Analyser pourquoi (le refactoring a changé le comportement)
-3. Découper en étape plus petite
-4. Recommencer
-```
-
-Ne jamais "corriger" un test de caractérisation qui échoue. Un test de caractérisation qui échoue =
-un comportement changé = une régression.
-
-Update `tasks/current_task.md` : status=IDLE
+If a characterization test turns red at any step:
 
 ```
-✅ Refactoring terminé : $ARGUMENTS
-Étapes : [N] micro-incréments
-Tests : [N] passants (aucune régression)
-Review finale : APPROVE unanime
+1. git revert HEAD  (return immediately)
+2. Analyze why (the refactoring changed behavior)
+3. Split into a smaller step
+4. Start again
+```
+
+Never "fix" a failing characterization test. A failing characterization test = changed behavior =
+regression.
+
+Update `tasks/current_task.md`: status=IDLE
+
+```
+Refactoring complete: $ARGUMENTS
+Steps: [N] micro-increments
+Tests: [N] passing (no regression)
+Final review: unanimous APPROVE
 ```

@@ -3,115 +3,115 @@
 ## When to Use Scenario Outline + Examples
 
 ```gherkin
-# ✅ Good usage — same behaviour, different data
-Scenario Outline: Calcul du taux de remboursement selon le délai d'annulation
-  Given j'annule ma réservation de <montant_ttc>€ TTC avec <frais_service>€ de frais
-  And le départ est dans <heures_restantes> heures
-  When le calcul de remboursement est effectué
-  Then le montant remboursé est <montant_remboursement>€
+# Good usage — same behaviour, different data
+Scenario Outline: Refund rate calculation based on cancellation timing
+  Given I cancel my booking of EUR <total_incl_tax> incl. tax with EUR <service_fees> in fees
+  And departure is in <hours_remaining> hours
+  When the refund calculation runs
+  Then the refunded amount is EUR <refund_amount>
 
   Examples:
-    | montant_ttc | frais_service | heures_restantes | montant_remboursement |
-    | 120         | 5             | 72               | 115                   |
-    | 120         | 5             | 36               | 57.50                 |
-    | 120         | 5             | 12               | 0                     |
-    | 200         | 5             | 72               | 195                   |
-    | 50          | 0             | 72               | 50                    |
+    | total_incl_tax | service_fees | hours_remaining | refund_amount |
+    | 120            | 5            | 72              | 115           |
+    | 120            | 5            | 36              | 57.50         |
+    | 120            | 5            | 12              | 0             |
+    | 200            | 5            | 72              | 195           |
+    | 50             | 0            | 72              | 50            |
 
-# ❌ Bad usage — different behaviours → separate scenarios
-Scenario Outline: Gestion de la réservation
+# Bad usage — different behaviours → use separate scenarios
+Scenario Outline: Booking handling
   Given <situation>
   When <action>
-  Then <résultat>
+  Then <result>
 
   Examples:
-    | situation             | action   | résultat                  |
-    | réservation confirmée | annuler  | remboursement effectué    |
-    | réservation annulée   | consulter | afficher le remboursement |
-    | réservation en cours  | annuler  | refus de l'annulation     |
+    | situation          | action  | result                 |
+    | confirmed booking  | cancel  | refund issued          |
+    | cancelled booking  | view    | show refund details    |
+    | in-progress booking| cancel  | cancellation rejected  |
 # → 3 different behaviours = 3 separate scenarios
 ```
 
 ## Column Structure
 
 ```gherkin
-# ✅ Columns named in snake_case — readable, no spaces
+# Columns named in snake_case — readable, no spaces
 Examples:
-  | email_utilisateur    | mot_de_passe | code_erreur_attendu |
-  | invalid              | Pass1!       | INVALID_EMAIL       |
-  | user@test.com        | abc          | WEAK_PASSWORD       |
-  | taken@test.com       | Pass1!       | EMAIL_ALREADY_EXISTS|
+  | user_email       | password | expected_error_code |
+  | invalid          | Pass1!   | INVALID_EMAIL       |
+  | user@test.com    | abc      | WEAK_PASSWORD       |
+  | taken@test.com   | Pass1!   | EMAIL_ALREADY_EXISTS|
 
-# ✅ Plusieurs groupes d'exemples avec labels
-Scenario Outline: Validation du mot de passe
-  Given je tente de m'inscrire avec le mot de passe "<mot_de_passe>"
-  Then je vois l'erreur "<message_erreur>"
+# Multiple example groups with labels
+Scenario Outline: Password validation
+  Given I try to register with the password "<password>"
+  Then I see the error "<error_message>"
 
-  # Cas trop courts
-  Examples: Longueur insuffisante
-    | mot_de_passe | message_erreur                          |
-    | abc          | 8 caractères minimum requis             |
-    | 1234567      | 8 caractères minimum requis             |
+  # Cases that are too short
+  Examples: Insufficient length
+    | password | error_message                       |
+    | abc      | Minimum 8 characters required       |
+    | 1234567  | Minimum 8 characters required       |
 
-  # Cas sans caractères requis
-  Examples: Complexité insuffisante
-    | mot_de_passe | message_erreur                          |
-    | alllowercase | Une majuscule est requise               |
-    | ALLUPPERCASE | Un chiffre est requis                   |
-    | NoSpecial1   | Un caractère spécial est requis         |
+  # Cases missing required characters
+  Examples: Insufficient complexity
+    | password     | error_message                   |
+    | alllowercase | An uppercase letter is required |
+    | ALLUPPERCASE | A digit is required             |
+    | NoSpecial1   | A special character is required |
 
-  # Cas valides
-  Examples: Mots de passe acceptés
-    | mot_de_passe | message_erreur |
-    | Pass1!xy     |                |
-    | Str0ng#Pass  |                |
+  # Valid cases
+  Examples: Accepted passwords
+    | password    | error_message |
+    | Pass1!xy    |               |
+    | Str0ng#Pass |               |
 ```
 
 ## Complex Data — Doc String and DataTable
 
 ```gherkin
-# DataTable pour des listes de valeurs multiples
-Scenario: Commande avec plusieurs articles
-  Given mon panier contient les articles suivants :
-    | article          | prix_unitaire | quantité |
-    | Laptop           | 999.99        | 1        |
-    | Souris sans fil  | 49.99         | 2        |
-    | Tapis de souris  | 19.99         | 1        |
-  When je valide ma commande
-  Then le total HT est 1089.96€
-  And le total TTC est 1307.95€
+# DataTable for lists of multiple values
+Scenario: Order with several items
+  Given my cart contains the following items:
+    | item            | unit_price | quantity |
+    | Laptop          | 999.99     | 1        |
+    | Wireless mouse  | 49.99      | 2        |
+    | Mouse pad       | 19.99      | 1        |
+  When I confirm my order
+  Then the subtotal is EUR 1089.96
+  And the total incl. tax is EUR 1307.95
 
-# Doc String pour du contenu textuel long
-Scenario: Email de confirmation d'annulation
-  Given j'ai annulé ma réservation RES-2024-042
-  When l'email de confirmation est envoyé
-  Then l'email contient le texte suivant :
+# Doc String for long textual content
+Scenario: Cancellation confirmation email
+  Given I have cancelled my booking RES-2024-042
+  When the confirmation email is sent
+  Then the email contains the following text:
     """
-    Votre réservation RES-2024-042 a été annulée.
-    Montant remboursé : 115,00€
-    Délai de remboursement : 5 à 7 jours ouvrés
+    Your booking RES-2024-042 has been cancelled.
+    Amount refunded: EUR 115.00
+    Refund timeframe: 5 to 7 business days
     """
 ```
 
 ## Anti-Patterns with Tables
 
 ```gherkin
-# ❌ Too many columns — scenario unreadable
+# Too many columns — scenario is unreadable
 Examples:
   | id | email | pwd | role | country | verified | deleted | plan | trial |
   | 1  | a@b   | P1! | USER | FR      | true     | false   | FREE | false |
 
-# ✅ Limit to 3-5 columns max — others are defaults
+# Limit to 3-5 columns max — others are defaults
 
-# ❌ Production data in examples
+# Real production data in examples
 Examples:
-  | email              | carte              |
-  | jean.dupont@xxx.fr | 4111111111111111   |
-  # → données réelles = risque, utiliser des données fictives explicitement fausses
+  | email               | card               |
+  | john.doe@xxx.com    | 4111111111111111   |
+  # → real data = risk, use clearly fictional test data
 
-# ✅ Clearly fictional test data
+# Clearly fictional test data
 Examples:
-  | email                | carte_test         |
+  | email                | test_card          |
   | testuser@example.com | 4242424242424242   |
-  # 4242... = numéro de test Stripe officiel
+  # 4242... = official Stripe test number
 ```

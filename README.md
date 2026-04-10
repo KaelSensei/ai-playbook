@@ -33,6 +33,35 @@ For guidance on reducing LLM token usage (especially for shell commands and sear
 
 ---
 
+## Quick Start
+
+Works for both **vibe coders** (just want results) and **developers** (want to customize).
+
+**30-second install** — pick the setup that matches what you're building, then run one command:
+
+```bash
+git clone https://github.com/KaelSensei/ai-playbook.git .ai-playbook
+bash .ai-playbook/.agents/setups/dev-squad-v2/install.sh
+```
+
+**Which setup should I pick?**
+
+| If you are...                                         | Use                |
+| ----------------------------------------------------- | ------------------ |
+| Building a web app, SaaS, or API (TypeScript / React) | `dev-squad-v2`     |
+| Building a full-stack product with the works          | `web2-agents-v1`   |
+| Building smart contracts / DeFi / on-chain apps       | `web3-agents-v3`   |
+| Modernizing a legacy codebase                         | `legacy-agents-v1` |
+| Writing specs, user stories, or doing product work    | `pm-ba-squad-v2`   |
+
+After install, open your project in Claude Code or Cursor and type `/start`. The AI reads your
+project, picks a task, and begins. That's it — you're vibe coding with guardrails.
+
+**Next steps:** read [Getting Started](#getting-started) below for the full command list, or
+[CONCEPTS.md](CONCEPTS.md) if you want to understand how rules, commands, and skills fit together.
+
+---
+
 ## Why This Exists
 
 Copy-pasting AI rules between projects does not scale and leads to:
@@ -257,7 +286,7 @@ For installation, deployment, and next steps, see [INSTALLATION.md](INSTALLATION
 
 ### Official Documentation
 
-- **[Cursor Commands Documentation](https://cursor.com/fr/docs/context/commands)** - Official Cursor
+- **[Cursor Commands Documentation](https://cursor.com/docs/context/commands)** - Official Cursor
   documentation on creating and using custom commands
   - Learn how commands work
   - Understand command structure and syntax

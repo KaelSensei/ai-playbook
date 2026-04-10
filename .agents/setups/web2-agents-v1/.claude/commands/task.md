@@ -1,125 +1,125 @@
 ---
 name: task
 description: >
-  Point d'entrée universel. Décris ta tâche en langage naturel. L'orchestrateur analyse la
-  complexité, décide quels agents spawner et dans quel ordre, puis lance l'exécution. Une correction
-  CSS ou une nouvelle feature complète — même commande.
-argument-hint: '[description libre de la tâche]'
+  Universal entry point. Describe your task in natural language. The orchestrator analyzes the
+  complexity, decides which agents to spawn and in what order, then runs the execution. A CSS fix or
+  a full new feature — same command.
+argument-hint: '[free-form task description]'
 ---
 
 # /task
 
-Update `tasks/current_task.md` : status=ORCHESTRATING, task=$ARGUMENTS
+Update `tasks/current_task.md`: status=ORCHESTRATING, task=$ARGUMENTS
 
 ---
 
-## Étape 1 — Orchestrateur analyse la tâche
+## Step 1 — Orchestrator analyzes the task
 
 ```
-Tu es orchestrator.
-Charge .claude/agents/orchestrator.md.
-Charge project-architecture.md, data-architecture.md, constants.md.
-Charge le tableau ## Agent Team depuis CLAUDE.md.
+You are orchestrator.
+Load .claude/agents/orchestrator.md.
+Load project-architecture.md, data-architecture.md, constants.md.
+Load the ## Agent Team table from CLAUDE.md.
 
-Tâche reçue : $ARGUMENTS
+Task received: $ARGUMENTS
 
-Analyse :
-1. Quels domaines sont touchés ?
-2. Quelle est la complexité (niveau 1, 2, ou 3) ?
-3. Quels agents spawner ?
-4. Quel flow utiliser ?
+Analyze:
+1. Which domains are affected?
+2. What is the complexity (level 1, 2, or 3)?
+3. Which agents should be spawned?
+4. Which flow should be used?
 
-Produis ton plan d'exécution complet avant de spawner quoi que ce soit.
+Produce your full execution plan before spawning anything.
 ```
 
-Présenter le plan à l'utilisateur. **Gate** : _"Ce plan est-il correct ?"_ Attendre confirmation
-avant d'exécuter — sauf si tâche niveau 1 évidente.
+Present the plan to the user. **Gate**: _"Is this plan correct?"_ Wait for confirmation before
+executing — unless it's an obvious level 1 task.
 
 ---
 
-## Étape 2 — Exécution selon le niveau
+## Step 2 — Execute per the level
 
-### Niveau 1 — Direct
+### Level 1 — Direct
 
-Spawner l'agent unique identifié :
-
-```
-Tu es [AGENT].
-Charge context docs et skills selon Agent Team table.
-
-Tâche : $ARGUMENTS
-
-Implémente directement. Pas de spec formelle nécessaire.
-Lance les tests après chaque changement.
-Output : diff + tests passants.
-```
-
----
-
-### Niveau 2 — Implémentation + Review
-
-**2a. Agent propriétaire implémente :**
+Spawn the single identified agent:
 
 ```
-Tu es [AGENT_PROPRIETAIRE].
-Tâche : $ARGUMENTS
+You are [AGENT].
+Load context docs and skills per the Agent Team table.
 
-Implémente. TDD si applicable.
-Output : diff + tests.
-```
+Task: $ARGUMENTS
 
-**2b. Agent reviewer en parallèle ou juste après :**
-
-```
-Tu es [AGENT_REVIEWER].
-Charge team--skill-review.
-Review le diff de : $ARGUMENTS
-```
-
-Appliquer `team--skill-refine` si APPROVE_WITH_CHANGES.
-
----
-
-### Niveau 3 — Flow complet
-
-Rediriger vers les flows formels :
-
-```
-Complexité niveau 3 détectée.
-Lancement du flow complet :
-
-→ /spec [feature] pour produire la spec + test list
-→ /build [spec] pour l'implémentation TDD
-→ /review pour la review finale
-
-Je lance /spec maintenant.
-```
-
-Enchaîner `/spec` → `/build` → `/review` automatiquement.
-
----
-
-## Étape 3 — Complétion
-
-Update `tasks/current_task.md` : status=IDLE
-
-```
-✅ Tâche complète : $ARGUMENTS
-Niveau : [1/2/3]
-Agents utilisés : [liste]
-Flow : [direct / review / spec+build]
+Implement directly. No formal spec required.
+Run the tests after each change.
+Output: diff + passing tests.
 ```
 
 ---
 
-## Exemples de Routing Automatique
+### Level 2 — Implementation + Review
 
-| Tâche                                            | Niveau | Agents                        | Flow           |
-| ------------------------------------------------ | ------ | ----------------------------- | -------------- |
-| "fix le padding du bouton submit"                | 1      | frontend-engineer             | direct         |
-| "ajouter un champ `bio` au profil"               | 2      | dev-senior-a + data-engineer  | impl + review  |
-| "nouveau système d'authentification JWT"         | 3      | tous                          | /spec → /build |
-| "corriger le bug de calcul de TVA"               | 2      | dev-senior-a + dev-senior-b   | impl + review  |
-| "migration PostgreSQL vers UUID"                 | 3      | data-engineer + tous          | /spec → /build |
-| "mettre à jour le Dockerfile Node 18→20"         | 1      | devops-engineer               | direct         |
-| "checkout multi-wallet MetaMask + WalletConnect" | 3      | frontend + backend + security | /spec → /build |
+**2a. Owner agent implements:**
+
+```
+You are [OWNER_AGENT].
+Task: $ARGUMENTS
+
+Implement. TDD if applicable.
+Output: diff + tests.
+```
+
+**2b. Reviewer agent in parallel or right after:**
+
+```
+You are [REVIEWER_AGENT].
+Load team--skill-review.
+Review the diff for: $ARGUMENTS
+```
+
+Apply `team--skill-refine` if APPROVE_WITH_CHANGES.
+
+---
+
+### Level 3 — Full flow
+
+Redirect to the formal flows:
+
+```
+Level 3 complexity detected.
+Launching the full flow:
+
+→ /spec [feature] to produce the spec + test list
+→ /build [spec] for the TDD implementation
+→ /review for the final review
+
+Running /spec now.
+```
+
+Chain `/spec` → `/build` → `/review` automatically.
+
+---
+
+## Step 3 — Completion
+
+Update `tasks/current_task.md`: status=IDLE
+
+```
+✅ Task complete: $ARGUMENTS
+Level: [1/2/3]
+Agents used: [list]
+Flow: [direct / review / spec+build]
+```
+
+---
+
+## Examples of Automatic Routing
+
+| Task                                                  | Level | Agents                        | Flow           |
+| ----------------------------------------------------- | ----- | ----------------------------- | -------------- |
+| "fix the padding on the submit button"                | 1     | frontend-engineer             | direct         |
+| "add a `bio` field to the profile"                    | 2     | dev-senior-a + data-engineer  | impl + review  |
+| "new JWT authentication system"                       | 3     | everyone                      | /spec → /build |
+| "fix the VAT calculation bug"                         | 2     | dev-senior-a + dev-senior-b   | impl + review  |
+| "migrate PostgreSQL to UUIDs"                         | 3     | data-engineer + everyone      | /spec → /build |
+| "update the Dockerfile from Node 18→20"               | 1     | devops-engineer               | direct         |
+| "multi-wallet checkout with MetaMask + WalletConnect" | 3     | frontend + backend + security | /spec → /build |

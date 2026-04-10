@@ -1,208 +1,208 @@
 ---
 name: pr
 description: >
-  Workflow PR complet. dev-senior-a crée la PR, dev-senior-b la review sur GitHub réel, si APPROVE
-  dev-senior-a merge en auto, scribe documente. Remplace le merge manuel. Utiliser après /build ou
-  /refactor terminé.
-argument-hint: '[feature slug ou description]'
+  Full PR workflow. dev-senior-a creates the PR, dev-senior-b reviews it on real GitHub, if APPROVE
+  dev-senior-a auto-merges, scribe documents. Replaces the manual merge. Use after /build or
+  /refactor is complete.
+argument-hint: '[feature slug or description]'
 ---
 
 # /pr
 
-Update `tasks/current_task.md` : status=PR, task=$ARGUMENTS
+Update `tasks/current_task.md`: status=PR, task=$ARGUMENTS
 
 ---
 
-## Prérequis
+## Prerequisites
 
 ```bash
-# Vérifier que tout est propre
-git status          # aucun fichier non commité
-[runner]            # tous les tests passent
-gh auth status      # GitHub CLI authentifié
+# Verify everything is clean
+git status          # no uncommitted files
+[runner]            # all tests pass
+gh auth status      # GitHub CLI authenticated
 ```
 
-Si tests en échec → arrêter. Pas de PR sur du rouge.
+If tests are failing → stop. No PR on red.
 
 ---
 
-## Étape 1 — dev-senior-a crée la PR
+## Step 1 — dev-senior-a creates the PR
 
 ```
-Tu es dev-senior-a.
-Charge .claude/agents/dev-senior-a.md.
-Charge project-architecture.md.
+You are dev-senior-a.
+Load .claude/agents/dev-senior-a.md.
+Load project-architecture.md.
 
-Feature : $ARGUMENTS
+Feature: $ARGUMENTS
 
-Crée une Pull Request GitHub avec :
+Create a GitHub Pull Request with:
 
-1. Titre : [type]([scope]): [description courte]
-   Types : feat / fix / refactor / chore / docs / security
+1. Title: [type]([scope]): [short description]
+   Types: feat / fix / refactor / chore / docs / security
 
-2. Description (template ci-dessous)
+2. Description (template below)
 
-3. Labels appropriés : feature / bug / refactor / security / breaking-change
+3. Appropriate labels: feature / bug / refactor / security / breaking-change
 
-Lance :
-gh pr create --title "[titre]" --body "[description]" --label "[labels]"
+Run:
+gh pr create --title "[title]" --body "[description]" --label "[labels]"
 ```
 
-**Template de description PR :**
+**PR description template:**
 
 ````markdown
 ## Description
 
-[Ce que cette PR fait en 2-3 phrases — orienté utilisateur]
+[What this PR does in 2-3 sentences — user-oriented]
 
-## Type de changement
+## Type of change
 
-- [ ] feat: nouvelle fonctionnalité
-- [ ] fix: correction de bug
-- [ ] refactor: refactoring sans changement de comportement
-- [ ] security: correction de sécurité
-- [ ] breaking: changement cassant
+- [ ] feat: new feature
+- [ ] fix: bug fix
+- [ ] refactor: refactoring with no behavior change
+- [ ] security: security fix
+- [ ] breaking: breaking change
 
-## Changements
+## Changes
 
-- [liste des changements principaux]
+- [list of main changes]
 
 ## Tests
 
-- [ ] Tests unitaires ajoutés/mis à jour
-- [ ] Tests d'intégration si applicable
-- [ ] Coverage maintenue ou améliorée
+- [ ] Unit tests added/updated
+- [ ] Integration tests if applicable
+- [ ] Coverage maintained or improved
 
 ## Coverage
 
-Avant : [X%] → Après : [Y%]
+Before: [X%] → After: [Y%]
 
 ## Rollback
 
 ```bash
 git revert [commit hash]
-[commande migration rollback si applicable]
+[migration rollback command if applicable]
 ```
 ````
 
 ## Checklist
 
-- [ ] Tests passants
-- [ ] Linter propre
-- [ ] Doc technique mise à jour si archi change
-- [ ] Pas de secrets dans le code
+- [ ] Tests passing
+- [ ] Linter clean
+- [ ] Technical doc updated if architecture changes
+- [ ] No secrets in the code
 
 ```
 
-Output : URL de la PR créée.
+Output: URL of the created PR.
 
 ---
 
-## Étape 2 — dev-senior-b review la PR GitHub réelle
+## Step 2 — dev-senior-b reviews the real GitHub PR
 
 ```
 
-Tu es dev-senior-b. Charge .claude/agents/dev-senior-b.md. Charge context docs et skills. Charge
+You are dev-senior-b. Load .claude/agents/dev-senior-b.md. Load context docs and skills. Load
 team--skill-review.
 
-PR à reviewer : [URL ou numéro]
+PR to review: [URL or number]
 
-Récupérer le diff complet : gh pr diff [numéro]
+Fetch the full diff: gh pr diff [number]
 
-Lire aussi : gh pr view [numéro] ← description + metadata gh pr checks [numéro] ← état des CI checks
+Also read: gh pr view [number] ← description + metadata gh pr checks [number] ← CI checks status
 
-Review depuis ton angle : test d'abord, code ensuite. Vérifier que la description PR correspond au
-code. Vérifier que les CI checks sont verts.
+Review from your angle: test first, code second. Verify that the PR description matches the code.
+Verify that the CI checks are green.
 
-Soumettre la review sur GitHub : gh pr review [numéro] --approve --body "[commentaire]" ou gh pr
-review [numéro] --request-changes --body "[commentaire]"
+Submit the review on GitHub: gh pr review [number] --approve --body "[comment]" or gh pr review
+[number] --request-changes --body "[comment]"
 
 ```
 
 ---
 
-## Étape 3 — Résolution si REQUEST_CHANGES
+## Step 3 — Resolution if REQUEST_CHANGES
 
-Charger `team--skill-refine`.
+Load `team--skill-refine`.
 
-dev-senior-a adresse les changements demandés.
-Force-push sur la même branche.
-dev-senior-b re-review.
-Maximum 3 itérations avant escalade.
-
----
-
-
-## Étape 3.5 — Smoke Tests (avant merge)
-
-Spawner `qa-automation` en mode smoke :
-
-```
-
-Tu es qa-automation. Charge .claude/agents/qa-automation.md. Charge TEST_PLAN.md section Smoke
-Tests. Charge .claude/observability.md.
-
-Lance les smoke tests sur l'env de staging/preview.
-
-```
-
-Si smoke FAIL → merge bloqué. Corriger d'abord, relancer /pr.
-Si smoke PASS → continuer vers le merge.
-
----
-## Étape 4 — Merge si APPROVE
-
-```
-
-Tu es dev-senior-a.
-
-PR approuvée : [numéro] CI checks : [verts]
-
-Merger : gh pr merge [numéro] --squash --delete-branch
-
-Message de commit squash : [type]([scope]): [description]
-
-[corps optionnel si breaking change ou contexte important]
-
-```
-
-**Pourquoi squash ?**
-Un commit propre par feature dans main.
-Historique lisible. Revert simple.
+dev-senior-a addresses the requested changes.
+Force-push to the same branch.
+dev-senior-b re-reviews.
+Maximum 3 iterations before escalation.
 
 ---
 
-## Étape 5 — scribe documente post-merge
+
+## Step 3.5 — Smoke Tests (before merge)
+
+Spawn `qa-automation` in smoke mode:
 
 ```
 
-Tu es scribe. Charge .claude/agents/scribe.md. Charge project-architecture.md, CHANGELOG.md,
+You are qa-automation. Load .claude/agents/qa-automation.md. Load TEST_PLAN.md section Smoke Tests.
+Load .claude/observability.md.
+
+Run the smoke tests on the staging/preview env.
+
+```
+
+If smoke FAIL → merge blocked. Fix first, restart /pr.
+If smoke PASS → continue to merge.
+
+---
+## Step 4 — Merge if APPROVE
+
+```
+
+You are dev-senior-a.
+
+PR approved: [number] CI checks: [green]
+
+Merge: gh pr merge [number] --squash --delete-branch
+
+Squash commit message: [type]([scope]): [description]
+
+[optional body if breaking change or important context]
+
+```
+
+**Why squash?**
+One clean commit per feature on main.
+Readable history. Simple revert.
+
+---
+
+## Step 5 — scribe documents post-merge
+
+```
+
+You are scribe. Load .claude/agents/scribe.md. Load project-architecture.md, CHANGELOG.md,
 PROGRESS.md.
 
-Feature mergée : $ARGUMENTS Commit de merge : [hash]
+Merged feature: $ARGUMENTS Merge commit: [hash]
 
-Produire :
+Produce:
 
-1. Entrée CHANGELOG.md
-2. Mise à jour doc technique si archi a changé
-3. ADR si décision d'archi prise pendant cette feature
-4. Rollback plan dans docs/rollbacks/
-5. Mise à jour PROGRESS.md (déplacer de "En Cours" vers "En Production")
-6. Coverage delta si disponible
+1. CHANGELOG.md entry
+2. Technical doc update if architecture changed
+3. ADR if an architecture decision was made during this feature
+4. Rollback plan in docs/rollbacks/
+5. PROGRESS.md update (move from "In Progress" to "In Production")
+6. Coverage delta if available
 
 ```
 
 ---
 
-## Étape 6 — Complétion
+## Step 6 — Completion
 
-Update `tasks/current_task.md` : status=IDLE
+Update `tasks/current_task.md`: status=IDLE
 
 ```
 
-✅ PR mergée : $ARGUMENTS PR : #[numéro] Commit : [hash] Reviewer : dev-senior-b Merge :
-dev-senior-a (squash) Doc : CHANGELOG.md + PROGRESS.md mis à jour ADR : [créé / non nécessaire]
-Rollback : docs/rollbacks/[feature]-rollback.md
+PR merged: $ARGUMENTS PR: #[number] Commit: [hash] Reviewer: dev-senior-b Merge: dev-senior-a
+(squash) Doc: CHANGELOG.md + PROGRESS.md updated ADR: [created / not needed] Rollback:
+docs/rollbacks/[feature]-rollback.md
 
 ```
 

@@ -1,146 +1,146 @@
 ---
 name: implement
 description: >
-  Implémente une spec Web3 en TDD strict adapté aux smart contracts. Cycle RED-GREEN-BLUE sur chaque
-  item de la test list. Ordre obligatoire : unit → integration → fork → invariant. Requiert une spec
-  approuvée depuis /spec.
-argument-hint: '[slug de la spec]'
+  Implements a Web3 spec in strict TDD adapted for smart contracts. RED-GREEN-BLUE cycle on each
+  item in the test list. Mandatory order: unit → integration → fork → invariant. Requires an
+  approved spec from /spec.
+argument-hint: '[spec slug]'
 ---
 
-# /implement (Web3 — TDD Strict)
+# /implement (Web3 — Strict TDD)
 
 Update tasks/current_task.md: status=IMPLEMENT
 
 ---
 
-## Phase 1 — Charger la spec et la test list
+## Phase 1 — Load the spec and the test list
 
 ```
-Charger .claude/specs/$ARGUMENTS.md
-Extraire la test list ordonnée (4 niveaux obligatoires si valeur on-chain) :
-  1. Unit tests (domain pur, pas de fork)
-  2. Integration tests (interactions entre contrats)
-  3. Fork tests (comportement sur mainnet réel)
-  4. Invariant tests (propriétés qui doivent toujours tenir)
+Load .claude/specs/$ARGUMENTS.md
+Extract the ordered test list (4 mandatory levels if on-chain value is involved):
+  1. Unit tests (pure domain, no fork)
+  2. Integration tests (interactions between contracts)
+  3. Fork tests (behavior on real mainnet)
+  4. Invariant tests (properties that must always hold)
 ```
 
-Afficher la test list. Gate utilisateur avant de démarrer.
+Display the test list. User gate before starting.
 
 ---
 
-## Phase 2 — Boucle TDD (un item à la fois)
+## Phase 2 — TDD loop (one item at a time)
 
-### 🔴 RED — smart-contract-engineer écrit UN test
+### 🔴 RED — smart-contract-engineer writes ONE test
 
 ```
-Tu es smart-contract-engineer.
-Charge project-architecture.md SUMMARY.
-Charge solidity-patterns → section pertinente uniquement.
-Charge foundry-testing skill.
+You are smart-contract-engineer.
+Load project-architecture.md SUMMARY.
+Load solidity-patterns → the relevant section only.
+Load the foundry-testing skill.
 
-Spec : [contenu de .claude/specs/$ARGUMENTS.md]
-Item suivant : [item de la test list]
+Spec: [contents of .claude/specs/$ARGUMENTS.md]
+Next item: [item from the test list]
 
-PHASE RED :
-Écrire UN test Foundry qui échoue.
-Le test exprime le COMPORTEMENT attendu — pas l'implémentation.
-Nommage : test_[comportement]_[condition]()
-Lancer : forge test --match-test [nom] — doit être RED.
-Vérifier que c'est un échec d'assertion, pas une erreur de compilation.
+RED PHASE:
+Write ONE Foundry test that fails.
+The test expresses the expected BEHAVIOR — not the implementation.
+Naming: test_[behavior]_[condition]()
+Run: forge test --match-test [name] — it must be RED.
+Verify the failure is an assertion failure, not a compilation error.
 
-Output :
-- Code du test
-- forge test output (doit montrer FAIL)
-- Raison de l'échec (assertion, pas import error)
+Output:
+- Test code
+- forge test output (must show FAIL)
+- Reason for the failure (assertion, not import error)
 ```
 
-**Gate RED** : si le test passe → il est mauvais → recommencer.
+**RED gate**: if the test passes → it's bad → start over.
 
 ---
 
-### 🔵 Review du TEST — dev-senior-b avant le code
+### 🔵 TEST review — dev-senior-b before any production code
 
 ```
-Tu es dev-senior-b (mode Web3).
-Charge testing-patterns, solidity-patterns skills.
-Charge team--skill-review.
+You are dev-senior-b (Web3 mode).
+Load testing-patterns, solidity-patterns skills.
+Load team--skill-review.
 
-Review du TEST uniquement — pas de code de prod.
+Review the TEST only — no production code yet.
 
-Vérifier :
-- Le test exprime-t-il le comportement (pas l'implémentation) ?
-- L'assertion est-elle précise (pas juste assertTrue) ?
-- Le test est-il indépendant (setUp propre) ?
-- Les cheatcodes sont-ils appropriés (vm.prank, deal, etc.) ?
-- Pour les fonctions value : ReentrancyGuard testé ?
-- Pour les oracles : freshness et deviation testés ?
+Check:
+- Does the test express behavior (not implementation)?
+- Is the assertion precise (not just assertTrue)?
+- Is the test independent (clean setUp)?
+- Are the cheatcodes appropriate (vm.prank, deal, etc.)?
+- For value functions: is ReentrancyGuard tested?
+- For oracles: are freshness and deviation tested?
 
-Verdict : APPROVE / APPROVE_WITH_CHANGES / REQUEST_REDESIGN
+Verdict: APPROVE / APPROVE_WITH_CHANGES / REQUEST_REDESIGN
 ```
 
-Si REQUEST_REDESIGN → réécrire le test. Si APPROVE → GREEN.
+If REQUEST_REDESIGN → rewrite the test. If APPROVE → move to GREEN.
 
 ---
 
-### 🟢 GREEN — smart-contract-engineer implémente le minimum
+### 🟢 GREEN — smart-contract-engineer implements the minimum
 
 ```
-Tu es smart-contract-engineer.
-PHASE GREEN :
+You are smart-contract-engineer.
+GREEN PHASE:
 
-Écrire le MINIMUM de code Solidity pour faire passer le test.
-Règles SUPER GREEN (adapté Web3) :
-  ✅ Test passe
-  ✅ Nommage expressif (pas de a, b, x comme variables)
-  ✅ CEI enforced si transfert de valeur
-  ✅ Pas de magic numbers — utiliser des constantes nommées
-  ✅ Events émis correctement
+Write the MINIMUM Solidity code that makes the test pass.
+SUPER GREEN rules (Web3-adapted):
+  ✅ Test passes
+  ✅ Expressive naming (no a, b, x as variable names)
+  ✅ CEI enforced if value is transferred
+  ✅ No magic numbers — use named constants
+  ✅ Events emitted correctly
 
-Lancer : forge test --match-test [nom]
-TOUS les tests précédents doivent passer.
+Run: forge test --match-test [name]
+ALL previous tests must still pass.
 
-Output :
-- Code Solidity ajouté
+Output:
+- Solidity code added
 - forge test output (ALL PASS)
-- Gas: forge test --gas-report pour cette fonction
+- Gas: forge test --gas-report for this function
 ```
 
 ---
 
-### 🔵 MAYBE REFACTOR — évaluer, ne pas refactorer par principe
+### 🔵 MAYBE REFACTOR — evaluate, do not refactor on principle
 
 ```
-Tu es smart-contract-engineer.
-PHASE MAYBE REFACTOR :
+You are smart-contract-engineer.
+MAYBE REFACTOR PHASE:
 
-Évaluer :
-1. Duplication détectée ? → extraire une fonction interne
-2. Magic number ? → extraire en constante
-3. Mauvaise couche ? (logique dans le test plutôt que dans le contrat) → déplacer
-4. Gas optimisable sans changer le comportement ? → optimiser
+Evaluate:
+1. Duplication detected? → extract an internal function
+2. Magic number? → pull it out into a constant
+3. Wrong layer? (logic in the test instead of the contract) → move it
+4. Gas optimizable without changing behavior? → optimize
 
-Si tout va → SKIP. Justifier le skip.
-Jamais refactorer si ça change le comportement observable.
-Lancer forge test après chaque changement de refactoring.
+If everything is fine → SKIP. Justify the skip.
+Never refactor if it changes observable behavior.
+Run forge test after every refactoring change.
 ```
 
 ---
 
-### ✅ Commit et item suivant
+### ✅ Commit and move to next item
 
 ```bash
 git add .
-git commit -m "test([contract]): [comportement testé]"
+git commit -m "test([contract]): [behavior under test]"
 ```
 
-Cocher l'item dans tasks/current_task.md. Item suivant → retour à RED.
+Check the item off in tasks/current_task.md. Next item → back to RED.
 
 ---
 
-## Phase 3 — Verify (test list épuisée)
+## Phase 3 — Verify (test list exhausted)
 
 ```bash
-# Tous les niveaux
+# All levels
 forge test                          # unit + integration
 forge test --fork-url $MAINNET_RPC  # fork tests
 forge test --match-contract Invariant # invariant tests
@@ -148,23 +148,22 @@ forge test --match-contract Invariant # invariant tests
 # Gas snapshot
 forge snapshot
 
-# Slither si installé
+# Slither if installed
 slither . --config-file slither.config.json
 ```
 
 ---
 
-## Phase 4 — Review finale (tous les agents)
+## Phase 4 — Final review (all agents)
 
-Spawner TOUS les agents en parallèle sur le diff complet. Appliquer team--skill-refine jusqu'à
-APPROVE unanime.
+Spawn ALL agents in parallel on the full diff. Apply team--skill-refine until unanimous APPROVE.
 
 Update tasks/current_task.md: status=IDLE
 
 ```
-✅ Implémentation terminée : $ARGUMENTS
-Tests : unit [N] + integration [N] + fork [N] + invariant [N]
-Gas snapshot : sauvegardé
-Review finale : APPROVE unanime
-Prêt pour : /pr $ARGUMENTS
+✅ Implementation complete: $ARGUMENTS
+Tests: unit [N] + integration [N] + fork [N] + invariant [N]
+Gas snapshot: saved
+Final review: unanimous APPROVE
+Ready for: /pr $ARGUMENTS
 ```

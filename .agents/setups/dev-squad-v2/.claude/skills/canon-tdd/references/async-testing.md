@@ -3,23 +3,23 @@
 ## Async/Await — Basics
 
 ```typescript
-// Toujours retourner/await les promesses dans les tests
+// Always return/await promises in tests
 it('should save user asynchronously', async () => {
   const result = await userService.create(validInput);
   expect(result.id).toBeDefined();
 });
 
-// ❌ Oublier await — le test passe toujours (faux positif!)
+// ❌ Forgetting await — the test always passes (false positive!)
 it('dangerous test without await', () => {
-  userService.create(validInput); // promesse non attendue
-  // le test passe même si create() throw
+  userService.create(validInput); // promise not awaited
+  // the test passes even if create() throws
 });
 ```
 
 ## Testing Async Errors
 
 ```typescript
-// ✅ Avec rejects.toThrow
+// ✅ With rejects.toThrow
 it('should throw for duplicate email', async () => {
   await repo.save(aUser({ email: new Email('taken@test.com') }));
 
@@ -28,7 +28,7 @@ it('should throw for duplicate email', async () => {
   );
 });
 
-// ✅ Avec try/catch pour vérifier les détails de l'erreur
+// ✅ With try/catch to verify error details
 it('should include conflicting email in error', async () => {
   await repo.save(aUser({ email: new Email('taken@test.com') }));
 
@@ -45,7 +45,7 @@ it('should include conflicting email in error', async () => {
 ## Timers and Delays
 
 ```typescript
-// Utiliser jest fake timers pour les timeouts
+// Use jest fake timers for timeouts
 describe('TokenExpiry', () => {
   beforeEach(() => jest.useFakeTimers());
   afterEach(() => jest.useRealTimers());
@@ -71,7 +71,7 @@ describe('TokenExpiry', () => {
 ## Events and Observables
 
 ```typescript
-// Tester les domain events émis
+// Test emitted domain events
 it('should emit UserRegistered event after creation', async () => {
   const events: DomainEvent[] = [];
   eventBus.subscribe(UserRegistered, (e) => events.push(e));
@@ -83,7 +83,7 @@ it('should emit UserRegistered event after creation', async () => {
   expect((events[0] as UserRegistered).email).toBe('new@test.com');
 });
 
-// Tester les streams/observables avec Vitest
+// Test streams/observables with Vitest
 it('should stream progress updates', async () => {
   const updates: ProgressUpdate[] = [];
 
@@ -99,11 +99,11 @@ it('should stream progress updates', async () => {
 ## Concurrency and Race Conditions
 
 ```typescript
-// Tester que l'idempotence est respectée
+// Test that idempotency is enforced
 it('should not create duplicate on concurrent requests', async () => {
   const input = { email: 'concurrent@test.com', password: 'Pass1!' };
 
-  // Simuler deux requêtes simultanées
+  // Simulate two concurrent requests
   const [result1, result2] = await Promise.allSettled([
     userService.create(input),
     userService.create(input),
@@ -112,7 +112,7 @@ it('should not create duplicate on concurrent requests', async () => {
   const successes = [result1, result2].filter((r) => r.status === 'fulfilled');
   const failures = [result1, result2].filter((r) => r.status === 'rejected');
 
-  expect(successes).toHaveLength(1); // une seule création
+  expect(successes).toHaveLength(1); // only one creation
   expect(failures).toHaveLength(1);
   expect((failures[0] as PromiseRejectedResult).reason).toBeInstanceOf(EmailAlreadyExistsError);
 });

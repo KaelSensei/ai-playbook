@@ -1,60 +1,60 @@
 # Project Architecture
 
 <!-- last-verified: YYYY-MM-DD -->
-<!-- STALENESS RULE: si today - last-verified > 30 jours → STALE.
-     Explorer le codebase directement. Ne pas faire confiance au doc. -->
+<!-- STALENESS RULE: if today - last-verified > 30 days → STALE.
+     Explore the codebase directly. Do not trust the doc. -->
 
-## Vue d'ensemble
+## Overview
 
-<!-- Ce que fait l'application, qui l'utilise, quelle valeur elle a.
-     Inclure : âge estimé, historique des équipes si connu. -->
+<!-- What the application does, who uses it, what value it delivers.
+     Include: estimated age, team history if known. -->
 
-## État du Codebase
+## Codebase Status
 
-<!-- Évaluation honnête du codebase actuel.
-     Exemple :
-     - Coverage : ~12%
-     - Dernière refonte majeure : 2019
-     - Zones stables : [liste]
-     - Zones à éviter : [liste]
-     - Dépendances mortes : [liste]
-     - Patterns dominants : [e.g. God Classes, Spaghetti, Copier-coller] -->
+<!-- Honest assessment of the current codebase.
+     Example:
+     - Coverage: ~12%
+     - Last major rewrite: 2019
+     - Stable zones: [list]
+     - Zones to avoid: [list]
+     - Dead dependencies: [list]
+     - Dominant patterns: [e.g. God Classes, Spaghetti, Copy-paste] -->
 
-## Map des Modules
+## Module Map
 
-<!-- Modules principaux, leur responsabilité supposée, leur état.
-     Exemple :
+<!-- Main modules, their supposed responsibility, their state.
+     Example:
      src/
-     ├── UserManager.php     — auth + profil + billing + emails (GOD CLASS)
-     ├── OrderProcessor.php  — commandes + stock + PDF + envoi mail
-     ├── utils/              — 847 fonctions utilitaires non triées
-     └── legacy/             — ne pas toucher, surtout pas -->
+     ├── UserManager.php     — auth + profile + billing + emails (GOD CLASS)
+     ├── OrderProcessor.php  — orders + stock + PDF + email sending
+     ├── utils/              — 847 unsorted utility functions
+     └── legacy/             — do not touch, especially not this -->
 
-## Points d'Entrée Connus
+## Known Entry Points
 
-<!-- Comment les requêtes entrent dans le système.
-     Exemple :
-     - HTTP : index.php → router.php → controllers/
-     - Cron : cron/ → jobs/
-     - CLI : bin/ → commands/ -->
+<!-- How requests enter the system.
+     Example:
+     - HTTP: index.php → router.php → controllers/
+     - Cron: cron/ → jobs/
+     - CLI: bin/ → commands/ -->
 
-## Zones à Risque
+## Risk Zones
 
-<!-- Code qui ne doit pas être touché sans filet complet.
-     Exemple :
-     - billing/ : logique de facturation, aucun test, 4000 lignes
-     - auth/ : sessions custom, fragile
-     - imports/ : ETL qui tourne en production la nuit -->
+<!-- Code that must not be touched without a full safety net.
+     Example:
+     - billing/: billing logic, no tests, 4000 lines
+     - auth/: custom sessions, fragile
+     - imports/: ETL that runs in production at night -->
 
-## Dépendances Externes
+## External Dependencies
 
-<!-- Services, APIs, bibliothèques critiques.
-     Inclure les versions et l'état de maintenance. -->
+<!-- Critical services, APIs, libraries.
+     Include versions and maintenance status. -->
 
-## Ce qui Fonctionne
+## What Works
 
-<!-- Ce qui est stable et ne doit pas être touché sans raison. -->
+<!-- What is stable and must not be touched without reason. -->
 
-## Ce qui Est Cassé / Contourné
+## What Is Broken / Worked Around
 
-<!-- Workarounds connus, bugs connus non corrigés, comportements "normaux mais faux". -->
+<!-- Known workarounds, known uncorrected bugs, "normal but wrong" behaviors. -->

@@ -41,32 +41,36 @@
 
 ## Flows
 
-| `/qa [mode]` | Smoke / E2E / Perf / Load — couplé observabilité | | `/pr <feature>` | Créer PR,
-review, merge auto, documenter | | `/task <description>` | Point d'entrée universel — orchestrateur
-décide tout | | Command | Quand l'utiliser | |---|---| | `/story <besoin>` | Transformer un besoin
-en user stories + ACs | | `/spec <story>` | Produire une spec technique + test list | |
-`/build <spec>` | Implémenter en TDD strict, step by step | | `/review` | Review parallèle de
-n'importe quel diff | | `/check` | QA + sécurité + data sur le diff final |
+| Command               | When to use it                                              |
+| --------------------- | ----------------------------------------------------------- |
+| `/task <description>` | Universal entry point — the orchestrator decides everything |
+| `/story <need>`       | Turn a need into user stories + ACs                         |
+| `/spec <story>`       | Produce a technical spec + test list                        |
+| `/build <spec>`       | Implement in strict TDD, step by step                       |
+| `/review`             | Parallel review of any diff                                 |
+| `/check`              | QA + security + data on the final diff                      |
+| `/qa [mode]`          | Smoke / E2E / Perf / Load — coupled with observability      |
+| `/pr <feature>`       | Create PR, review, auto-merge, document                     |
 
 ---
 
-## TDD — Règle absolue
+## TDD — Absolute rule
 
 ```
-RED   → écrire UN test qui échoue
-GREEN → minimum de code pour le faire passer
-BLUE  → refactorer sans casser les tests
+RED   → write ONE failing test
+GREEN → minimum code to make it pass
+BLUE  → refactor without breaking the tests
 ```
 
-Aucun code de production sans test qui échoue d'abord. dev-senior-b review le test AVANT de review
-le code.
+No production code without a failing test first. dev-senior-b reviews the test BEFORE reviewing the
+code.
 
 ---
 
 ## Skill Resolution (three-tier, highest wins)
 
-| Priorité    | Chemin                     |
-| ----------- | -------------------------- |
-| 1 — HIGHEST | `<projet>/.claude/skills/` |
-| 2 — MEDIUM  | `.claude/skills/`          |
-| 3 — LOWEST  | `~/.claude/skills/`        |
+| Priority    | Path                        |
+| ----------- | --------------------------- |
+| 1 — HIGHEST | `<project>/.claude/skills/` |
+| 2 — MEDIUM  | `.claude/skills/`           |
+| 3 — LOWEST  | `~/.claude/skills/`         |

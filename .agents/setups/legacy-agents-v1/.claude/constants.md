@@ -6,34 +6,34 @@
 
 | Env        | URL                     | Notes                   |
 | ---------- | ----------------------- | ----------------------- |
-| Local      | http://localhost        | Config spéciale requise |
-| Staging    | https://staging.app.com | Miroir prod partiel     |
+| Local      | http://localhost        | Special config required |
+| Staging    | https://staging.app.com | Partial mirror of prod  |
 | Production | https://app.com         |                         |
 
-## Variables d'Environnement
+## Environment Variables
 
-<!-- Documenter TOUTES les vars d'env requises.
-     Dans un projet legacy elles sont souvent éparpillées dans le code. -->
+<!-- Document ALL required env vars.
+     In a legacy project they are often scattered across the code. -->
 
-## Configuration Hardcodée
+## Hardcoded Configuration
 
-<!-- Valeurs hardcodées connues dans le code.
-     Exemple :
-     - DB host dans config.php ligne 42
-     - API key Stripe dans PaymentService.php ligne 117
-     - Timeout à 30s dans 14 fichiers différents -->
+<!-- Known hardcoded values in the code.
+     Example:
+     - DB host in config.php line 42
+     - Stripe API key in PaymentService.php line 117
+     - Timeout of 30s in 14 different files -->
 
-## URLs / Endpoints Tiers
+## Third-Party URLs / Endpoints
 
-<!-- Services externes utilisés, leurs URLs, leurs états. -->
+<!-- External services used, their URLs, their status. -->
 
-## Versions Toolchain
+## Toolchain Versions
 
-<!-- Versions actuelles — souvent contraintes en legacy. -->
+<!-- Current versions — often constrained in legacy. -->
 
-## Crons en Production
+## Production Crons
 
-<!-- Jobs planifiés actifs — souvent non documentés en legacy.
-     Exemple :
-     - 0 2 * * * php bin/process_orders.php (depuis 2016, personne ne sait ce que ça fait)
+<!-- Active scheduled jobs — often undocumented in legacy.
+     Example:
+     - 0 2 * * * php bin/process_orders.php (since 2016, nobody knows what it does)
      - */5 * * * * scripts/sync_users.sh -->

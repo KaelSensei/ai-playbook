@@ -1,8 +1,8 @@
 ---
 name: clean-architecture
 description: >
-  Architecture hexagonale (Ports & Adapters) en TypeScript. Domain, Application, Infrastructure,
-  Presentation. Règle de dépendance, injection de dépendances, full examples. Loaded by tech-lead,
+  Hexagonal architecture (Ports & Adapters) in TypeScript. Domain, Application, Infrastructure,
+  Presentation. Dependency rule, dependency injection, full examples. Loaded by tech-lead,
   dev-senior-a/b.
 ---
 
@@ -17,10 +17,10 @@ Source: Robert C. Martin, _Clean Architecture_ (2017) + Alistair Cockburn, _Hexa
 
 ```
 src/
-├── domain/                     # Couche la plus interne — zéro dépendance
+├── domain/                     # Innermost layer — zero dependencies
 │   ├── entities/
 │   │   ├── User.ts
-│   │   └── User.test.ts        # Tests co-localisés avec le code
+│   │   └── User.test.ts        # Tests co-located with the code
 │   ├── value-objects/
 │   │   ├── Email.ts
 │   │   ├── Money.ts
@@ -33,21 +33,21 @@ src/
 │       ├── DomainEvent.ts
 │       └── UserRegistered.ts
 │
-├── application/                # Orchestration — dépend uniquement du domain
+├── application/                # Orchestration — depends only on domain
 │   ├── use-cases/
 │   │   ├── RegisterUser.ts
 │   │   ├── RegisterUser.test.ts
 │   │   └── DeleteUser.ts
-│   └── ports/                  # Interfaces définies par l'application
-│       ├── UserRepository.ts   # Port secondaire (sortant)
+│   └── ports/                  # Interfaces defined by the application
+│       ├── UserRepository.ts   # Secondary (outbound) port
 │       ├── PasswordHasher.ts
 │       ├── EmailService.ts
 │       └── EventBus.ts
 │
-├── infrastructure/             # Adapters — implémente les ports
+├── infrastructure/             # Adapters — implement the ports
 │   ├── persistence/
 │   │   ├── PrismaUserRepository.ts
-│   │   └── InMemoryUserRepository.ts  # Pour les tests d'intégration
+│   │   └── InMemoryUserRepository.ts  # For integration tests
 │   ├── security/
 │   │   └── BcryptPasswordHasher.ts
 │   ├── email/
@@ -55,7 +55,7 @@ src/
 │   └── events/
 │       └── InMemoryEventBus.ts
 │
-└── presentation/               # Adapters primaires — HTTP, CLI, etc.
+└── presentation/               # Primary adapters — HTTP, CLI, etc.
     ├── http/
     │   ├── controllers/
     │   │   └── UserController.ts
@@ -77,31 +77,31 @@ presentation  →  application  →  domain
        ↗                ↗
  infrastructure  ────────────────→
 
-Flèche = "dépend de"
-domain ne connaît RIEN des couches externes
-application ne connaît QUE domain
-infrastructure implémente les ports de application
-presentation appelle les use cases de application
+Arrow = "depends on"
+domain knows NOTHING about outer layers
+application knows ONLY domain
+infrastructure implements the ports from application
+presentation calls the use cases from application
 ```
 
-**Vérification pratique :**
+**Practical check:**
 
 ```typescript
-// ✅ domain/entities/User.ts — aucun import externe
+// ✅ domain/entities/User.ts — no external imports
 import { Email } from '../value-objects/Email';
 import { UserId } from '../value-objects/UserId';
 import { UserRegistered } from '../events/UserRegistered';
 
-// ❌ VIOLATION — domain qui importe infrastructure
-import { PrismaClient } from '@prisma/client'; // INTERDIT dans domain/
-import { Request } from 'express'; // INTERDIT dans domain/
+// ❌ VIOLATION — domain importing infrastructure
+import { PrismaClient } from '@prisma/client'; // FORBIDDEN in domain/
+import { Request } from 'express'; // FORBIDDEN in domain/
 ```
 
 ---
 
 ## Domain Layer — Full Examples
 
-### Value Object : Email
+### Value Object: Email
 
 ```typescript
 // domain/value-objects/Email.ts
@@ -148,7 +148,7 @@ describe('Email', () => {
 });
 ```
 
-### Entity : User
+### Entity: User
 
 ```typescript
 // domain/entities/User.ts
@@ -236,34 +236,34 @@ export class RegisterUser {
   ) {}
 
   async execute(input: RegisterUserInput): Promise<RegisterUserOutput> {
-    // 1. Vérifier unicité email
+    // 1. Check email uniqueness
     const existing = await this.userRepo.findByEmail(input.email);
     if (existing) {
       throw new EmailAlreadyExistsError(input.email);
     }
 
-    // 2. Valider et créer les value objects
+    // 2. Validate and create the value objects
     const email = Email.create(input.email);
-    const password = Password.create(input.password); // validation dans VO
+    const password = Password.create(input.password); // validation in VO
 
-    // 3. Hasher le mot de passe
+    // 3. Hash the password
     const hashedPassword = await this.passwordHasher.hash(password);
 
-    // 4. Créer l'entité
+    // 4. Create the entity
     const user = User.register({
       id: UserId.generate(),
       email,
       hashedPassword,
     });
 
-    // 5. Persister
+    // 5. Persist
     await this.userRepo.save(user);
 
-    // 6. Publier les events
+    // 6. Publish the events
     const events = user.pullEvents();
     await this.eventBus.publishAll(events);
 
-    // 7. Retourner le résultat (sans le password hash)
+    // 7. Return the result (without the password hash)
     return {
       id: user.id.value,
       email: user.email.value,
@@ -368,7 +368,7 @@ export class PrismaUserRepository implements UserRepository {
 
   private toDomain(record: PrismaUser): User {
     return User.reconstitute({
-      // factory method sans events
+      // factory method without events
       id: new UserId(record.id),
       email: Email.create(record.email),
       hashedPassword: new HashedPassword(record.passwordHash),
@@ -392,7 +392,7 @@ export class PrismaUserRepository implements UserRepository {
 }
 
 // infrastructure/persistence/InMemoryUserRepository.ts
-// Utilisé pour les tests — comportement identique à Prisma
+// Used for tests — behaviour identical to Prisma
 export class InMemoryUserRepository implements UserRepository {
   private store: Map<string, User> = new Map();
 
@@ -414,7 +414,7 @@ export class InMemoryUserRepository implements UserRepository {
     this.store.delete(id.value);
   }
 
-  // Helpers pour assertions
+  // Helpers for assertions
   all(): User[] {
     return Array.from(this.store.values());
   }
@@ -426,6 +426,6 @@ export class InMemoryUserRepository implements UserRepository {
 
 ## Available References
 
-- `references/dependency-injection.md` — DI avec tsyringe/inversify/manuel
-- `references/error-handling.md` — hiérarchie d'erreurs, error boundaries
-- `references/domain-events.md` — events synchrones et asynchrones
+- `references/dependency-injection.md` — DI with tsyringe/inversify/manual
+- `references/error-handling.md` — error hierarchy, error boundaries
+- `references/domain-events.md` — synchronous and asynchronous events

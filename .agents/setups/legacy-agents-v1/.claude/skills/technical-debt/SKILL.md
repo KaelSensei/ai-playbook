@@ -1,44 +1,43 @@
 ---
 name: technical-debt
 description: >
-  Taxonomie de la dette technique, métriques, priorisation, communication avec le business.
-  Auto-chargé par debt-tracker, tech-lead, legacy-analyst. Invoke pour auditer, quantifier ou
-  prioriser la dette.
+  Technical debt taxonomy, metrics, prioritization, business communication. Auto-loaded by
+  debt-tracker, tech-lead, legacy-analyst. Invoke to audit, quantify, or prioritize debt.
 ---
 
 # Technical Debt Reference
 
-## Taxonomie (Ward Cunningham + Martin Fowler)
+## Taxonomy (Ward Cunningham + Martin Fowler)
 
 ```
-                    DÉLIBÉRÉ          ACCIDENTEL
-PRUDENT    │ "On sait qu'on fait │ "On comprend       │
-           │  un compromis pour  │  maintenant qu'on   │
-           │  livrer vite"       │  aurait dû mieux    │
-           │                     │  faire"             │
+                    DELIBERATE         ACCIDENTAL
+PRUDENT    │ "We know we are    │ "We now understand │
+           │  making a trade-   │  we should have    │
+           │  off to ship       │  done it better"   │
+           │  fast"             │                    │
 ───────────┼─────────────────────┼─────────────────────┤
-IMPRUDENT  │ "On n'a pas le      │ "On ne savait même  │
-           │  temps de bien      │  pas qu'on faisait  │
-           │  faire"             │  mal"               │
+RECKLESS   │ "We don't have     │ "We didn't even    │
+           │  time to do it     │  know we were      │
+           │  properly"         │  doing it wrong"   │
 ```
 
-**Délibéré + Prudent** : acceptable si documenté et prévu de rembourser **Délibéré + Imprudent** :
-dangereux, s'accumule sans plan **Accidentel + Prudent** : normal, apprentissage de l'équipe
-**Accidentel + Imprudent** : le plus dangereux, invisible
+**Deliberate + Prudent**: acceptable if documented and planned for repayment. **Deliberate +
+Reckless**: dangerous, accumulates without a plan. **Accidental + Prudent**: normal, team learning.
+**Accidental + Reckless**: the most dangerous, invisible.
 
-## Métriques Concrètes
+## Concrete Metrics
 
 ### Hotspot Analysis (Adam Tornhill)
 
 ```bash
-# Fichiers les plus modifiés = dette probable
+# Most-modified files = likely debt
 git log --name-only --format="" | grep -v "^$" | sort | uniq -c | sort -rn | head -20
 
-# Combiné avec complexité = priorité de refactoring
-# Fichier souvent modifié ET complexe = rembourser en premier
+# Combined with complexity = refactoring priority
+# Frequently modified AND complex file = pay back first
 ```
 
-### Complexité Cyclomatique
+### Cyclomatic Complexity
 
 ```bash
 # PHP
@@ -50,11 +49,11 @@ radon cc src/ -a
 # JavaScript
 npx complexity-report src/
 
-# Seuils :
+# Thresholds:
 # 1-10   : simple
-# 11-20  : modéré (surveiller)
-# 21-50  : complexe (tester rigoureusement)
-# > 50   : danger (rembourser en priorité)
+# 11-20  : moderate (watch)
+# 21-50  : complex (test rigorously)
+# > 50   : danger (pay back in priority)
 ```
 
 ### Duplication
@@ -69,70 +68,70 @@ pylint --disable=all --enable=duplicate-code src/
 # JavaScript
 jscpd src/
 
-# > 20% duplication = dette significative
+# > 20% duplication = significant debt
 ```
 
-## Coût de la Dette
+## Cost of Debt
 
 ```
-Coût principal = Interest (intérêt)
-La dette ne coûte pas à l'instant T.
-Elle coûte à chaque fois qu'on touche à ce code ensuite.
+Main cost = Interest
+Debt does not cost at time T.
+It costs every time you touch that code afterwards.
 
-Principal = effort de remboursement
-Interest = effort supplémentaire à chaque feature à cause de la dette
+Principal = effort to repay
+Interest = extra effort per feature because of the debt
 
-Si interest > 0 pour chaque feature → rembourser maintenant
-Si interest ≈ 0 (code rarement touché) → accepter
+If interest > 0 for each feature → pay back now
+If interest ≈ 0 (code rarely touched) → accept
 ```
 
-## Priorisation
+## Prioritization
 
 ```
 Score = Impact / Effort
 
-Impact (1-5) :
-  5 = bloque les déploiements ou cause des bugs prod
-  4 = ralentit significativement chaque feature
-  3 = source fréquente de confusion et d'erreurs
-  2 = irritant mais gérable
-  1 = cosmétique
+Impact (1-5):
+  5 = blocks deployments or causes prod bugs
+  4 = significantly slows each feature
+  3 = frequent source of confusion and errors
+  2 = annoying but manageable
+  1 = cosmetic
 
-Effort (1-5) :
-  1 = < 1h (renommage, extraction simple)
-  2 = 1 journée (refactoring module)
-  3 = 1 semaine (refactoring composant)
-  4 = 1 mois (découpage module)
-  5 = > 1 mois (réécriture partielle)
+Effort (1-5):
+  1 = < 1h (rename, simple extraction)
+  2 = 1 day (module refactoring)
+  3 = 1 week (component refactoring)
+  4 = 1 month (module split)
+  5 = > 1 month (partial rewrite)
 
-Matrice :
-Impact ↑ / Effort ↓ = rembourser maintenant
-Impact ↑ / Effort ↑ = planifier (Strangler Fig)
-Impact ↓ / Effort ↓ = Boy Scout Rule (au passage)
-Impact ↓ / Effort ↑ = accepter et documenter
+Matrix:
+Impact high / Effort low  = pay back now
+Impact high / Effort high = plan (Strangler Fig)
+Impact low  / Effort low  = Boy Scout Rule (in passing)
+Impact low  / Effort high = accept and document
 ```
 
-## Communication avec le Business
+## Business Communication
 
 ```
-❌ Ne pas dire : "On a de la dette technique à rembourser"
-✅ Dire : "Chaque nouvelle feature dans ce module prend 3x plus longtemps
-           qu'ailleurs. Si on investit 2 semaines maintenant, les 12
-           prochaines features iront 3x plus vite."
+Don't say: "We have technical debt to pay back"
+Do say: "Each new feature in this module takes 3x longer than
+        elsewhere. If we invest 2 weeks now, the next 12 features
+        will go 3x faster."
 
-❌ Ne pas dire : "Le code est sale"
-✅ Dire : "3 bugs en prod ce mois viennent de ce même module.
-           Rembourser cette dette réduirait les incidents de ~50%."
+Don't say: "The code is dirty"
+Do say: "3 prod bugs this month came from the same module.
+        Paying back this debt would reduce incidents by ~50%."
 
-Traduire toujours en : temps gagné, bugs évités, features débloquées.
+Always translate into: time saved, bugs avoided, features unblocked.
 ```
 
 ## Boy Scout Rule
 
 ```
-Laisser le code un peu mieux qu'on l'a trouvé.
-Pas de grand refactoring non demandé.
-Juste : renommer une variable obscure, extraire une fonction de 5 lignes,
-supprimer un commentaire obsolète.
-Cumulé sur des mois, ça change tout.
+Leave the code a little better than you found it.
+No unsolicited grand refactoring.
+Just: rename an obscure variable, extract a 5-line function,
+remove an obsolete comment.
+Accumulated over months, it changes everything.
 ```

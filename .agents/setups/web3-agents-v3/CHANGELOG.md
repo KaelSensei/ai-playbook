@@ -1,15 +1,15 @@
 # Changelog
 
-Toutes les modifications notables sont documentées ici.
+All notable changes to this project are documented here.
 
-Format : [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/) Versioning :
-[Semantic Versioning](https://semver.org/lang/fr/)
+Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) Versioning:
+[Semantic Versioning](https://semver.org/)
 
 ---
 
 ## [Unreleased]
 
-<!-- Les features en cours vont ici jusqu'au prochain release -->
+<!-- Features in progress go here until the next release -->
 
 ---
 
@@ -17,31 +17,31 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/) Versioning :
 
 ### Added
 
-- Initialisation du projet
+- Project initialization
 
 ---
 
-<!-- Format de référence :
+<!-- Reference format:
 
 ## [X.Y.Z] - YYYY-MM-DD
 
 ### Added
-- Nouvelle fonctionnalité orientée utilisateur
+- New user-facing feature
 
 ### Changed
-- Modification d'un comportement existant
+- Change to existing behavior
 
 ### Deprecated
-- Fonctionnalité qui sera supprimée
+- Feature scheduled for removal
 
 ### Removed
-- Fonctionnalité supprimée
+- Removed feature
 
 ### Fixed
-- Correction de bug (décrire le comportement corrigé)
+- Bug fix (describe the corrected behavior)
 
 ### Security
-- Correction de vulnérabilité
+- Vulnerability fix
 
 ### Tests
 - Coverage X% → Y% (+Z%)

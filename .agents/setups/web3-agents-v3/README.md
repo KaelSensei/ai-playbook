@@ -10,19 +10,19 @@ other.
 
 ## What it is
 
-Au lieu d'un seul agent qui fait tout, tu as une équipe :
+Instead of a single agent that does everything, you get a team:
 
-- `smart-contract-engineer` — sécurité Solidity, reentrancy, flash loans, DeFi
+- `smart-contract-engineer` — Solidity security, reentrancy, flash loans, DeFi
 - `infra-engineer` — K8s, Docker, health checks, monitoring
 - `devops-engineer` — CI/CD, forge scripts, migrations, Safe multisig
 - `frontend-engineer` — wagmi v2, viem, tx state machine, WebSocket cleanup
 - `backend-engineer` — subgraphs, indexers, keeper bots, reorg handling
-- `architect` — design système, blast radius, upgrade paths
-- `spec-writer` — specs techniques EIP-style avant tout code
+- `architect` — system design, blast radius, upgrade paths
+- `spec-writer` — EIP-style technical specs before any code
 - `rust-reviewer` — Solana/Anchor, Arbitrum Stylus, Rust correctness
 
-Chaque agent a sa checklist, son domaine, son style de verdict. Ils tournent en parallèle. Ils se
-review mutuellement. Rien ne passe sans accord unanime.
+Each agent has its own checklist, domain, and verdict style. They run in parallel. They review each
+other. Nothing ships without unanimous agreement.
 
 ---
 
@@ -67,14 +67,14 @@ your-project/
 
 ---
 
-## Étape obligatoire : remplir les 3 docs fondation
+## Mandatory step: fill in the 3 foundation docs
 
-Ces 3 fichiers sont la mémoire partagée de tous tes agents. **Sans eux les agents bossent à
-l'aveugle.** Tu les remplis une seule fois (~1h), puis tu les mets à jour au fil du projet.
+These 3 files are the shared memory of all your agents. **Without them, the agents work blind.**
+Fill them in once (~1h), then keep them up to date as the project evolves.
 
 ### `.claude/project-architecture.md` (~30 min)
 
-Décris ton système. Exemple minimal :
+Describe your system. Minimal example:
 
 ```markdown
 # Project Architecture
@@ -83,170 +83,169 @@ Décris ton système. Exemple minimal :
 
 ## System Overview
 
-Un vault ERC-4626 sur Base qui accepte de l'USDC et le déploie dans Aave pour générer du yield.
+An ERC-4626 vault on Base that accepts USDC and deploys it into Aave to generate yield.
 
 ## Trust Model
 
-- Owner : multisig 3/5 — peut upgrade et pause
-- Users : non trusted — tous les inputs validés on-chain
+- Owner: 3/5 multisig — can upgrade and pause
+- Users: untrusted — all inputs validated on-chain
 
 ## Key Invariants
 
-- Sum des balances == totalAssets
-- Share price ne décroît jamais
+- Sum of balances == totalAssets
+- Share price never decreases
 ```
 
-Ce fichier doit contenir :
+This file must contain:
 
-- Ce que fait le protocole
-- Qui peut faire quoi (trust model)
-- Ce qui doit toujours être vrai (invariants)
-- Les dépendances externes (oracles, protocoles)
-- Les adresses de déploiement
+- What the protocol does
+- Who can do what (trust model)
+- What must always be true (invariants)
+- External dependencies (oracles, protocols)
+- Deployment addresses
 
 ### `.claude/data-architecture.md` (~20 min)
 
-Tes events Solidity, ton storage layout, ton schema GraphQL/Ponder si t'en as un, le flow de données
-de la chain vers le frontend.
+Your Solidity events, storage layout, GraphQL/Ponder schema if you have one, and the data flow from
+chain to frontend.
 
 ### `.claude/constants.md` (~10 min)
 
-Tes adresses de contrats par chain, tes chain IDs, tes variables d'environnement, tes versions de
-toolchain.
+Your contract addresses per chain, chain IDs, environment variables, and toolchain versions.
 
-> **Règle de fraîcheur** : chaque doc a une ligne `last-verified: YYYY-MM-DD`. Les agents vérifient
-> cette date. Si > 30 jours → ils explorent le codebase plutôt que de faire confiance au doc.
+> **Freshness rule**: every doc has a `last-verified: YYYY-MM-DD` line. Agents check this date. If
+> it's > 30 days old, they explore the codebase instead of trusting the doc.
 
 ---
 
-## Utilisation
+## Usage
 
-Lance Claude Code dans ton projet :
+Start Claude Code in your project:
 
 ```bash
-cd ton-projet-web3
+cd your-web3-project
 claude
 ```
 
-Puis tape une des 4 commandes.
+Then run one of the 4 commands.
 
 ---
 
-### `/research <sujet>`
+### `/research <topic>`
 
-Avant de coder quoi que ce soit d'inconnu.
+Before writing any code on something unfamiliar.
 
 ```
-/research comment implémenter un fee switch sur un vault ERC-4626
+/research how to implement a fee switch on an ERC-4626 vault
 ```
 
-**Ce qui se passe :** 2 agents tournent en parallèle avec accès web. Chacun creuse son angle
-(sécurité, architecture). Les findings sont mergés.
+**What happens:** 2 agents run in parallel with web access. Each digs into their angle (security,
+architecture). Findings are merged.
 
 ---
 
 ### `/spec <feature>`
 
-Avant d'écrire la moindre ligne de code.
+Before writing a single line of code.
 
 ```
-/spec ajouter un système de fees sur les withdrawals
+/spec add a withdrawal fee system
 ```
 
-**Ce qui se passe automatiquement :**
+**What happens automatically:**
 
 ```
-1. spec-writer explore le codebase
-2. spec-writer produit un draft
-3. Tu valides le draft
-4. Tous les agents reviewent en parallèle :
-     smart-contract-engineer → sécurité
-     devops-engineer         → déploiement
+1. spec-writer explores the codebase
+2. spec-writer produces a draft
+3. You validate the draft
+4. All agents review in parallel:
+     smart-contract-engineer → security
+     devops-engineer         → deployment
      architect               → design
-     frontend-engineer       → impact frontend
-     backend-engineer        → impact indexer
+     frontend-engineer       → frontend impact
+     backend-engineer        → indexer impact
      ...
-5. Chacun retourne APPROVE / APPROVE_WITH_CHANGES / REQUEST_REDESIGN
-6. Si pas unanime → itération, re-review, jusqu'à accord
-7. Spec sauvegardée dans .claude/specs/
+5. Each returns APPROVE / APPROVE_WITH_CHANGES / REQUEST_REDESIGN
+6. If not unanimous → iterate, re-review, until agreement
+7. Spec saved to .claude/specs/
 ```
 
-Tu ne lances rien manuellement. Claude orchestre tout.
+You don't run anything manually. Claude orchestrates everything.
 
 ---
 
 ### `/implement <spec>`
 
-Après avoir un spec approuvé.
+After a spec has been approved.
 
 ```
 /implement fee-switch
 ```
 
-**Ce qui se passe automatiquement :**
+**What happens automatically:**
 
 ```
-1. Plan établi depuis le spec (étapes ordonnées)
-2. Pour chaque étape :
-   a. L'agent propriétaire écrit le code (TDD)
-   b. Tous les agents reviewent en parallèle
-   c. Si findings → l'agent propriétaire corrige → re-review
-   d. Si unanime APPROVE → commit → étape suivante
+1. Plan built from the spec (ordered steps)
+2. For each step:
+   a. The owning agent writes the code (TDD)
+   b. All agents review in parallel
+   c. If findings → the owning agent fixes → re-review
+   d. If unanimous APPROVE → commit → next step
 3. forge test + forge snapshot + slither
-4. Review finale sur le diff complet
+4. Final review on the full diff
 ```
 
 ---
 
 ### `/review`
 
-Sur n'importe quel diff avant de merger ou déployer.
+On any diff before merging or deploying.
 
 ```
 /review
 ```
 
-**Ce qui se passe :** tous les agents reviewent en parallèle. Verdict mergé avec 🔴 Blockers / 🟡
-Improvements / 🔵 Nits.
+**What happens:** all agents review in parallel. Verdict merged with 🔴 Blockers / 🟡 Improvements /
+🔵 Nits.
 
-Tu peux aussi préciser :
+You can also specify:
 
 ```
-/review 42          ← PR numéro 42
+/review 42          ← PR number 42
 /review src/Vault.sol
-/review staged      ← ce qui est en git staging
+/review staged      ← what is in git staging
 ```
 
 ---
 
-## Comment les agents se parlent
+## How the agents talk to each other
 
-Tu ne gères pas ça. Claude Code s'en occupe.
+You don't manage this. Claude Code handles it.
 
 ```
-Tu tapes /spec ou /implement
+You type /spec or /implement
     ↓
-Claude lit CLAUDE.md → connaît la liste des agents actifs
+Claude reads CLAUDE.md → knows the list of active agents
     ↓
-Claude spawn les agents en parallèle (Task tool natif de Claude Code)
+Claude spawns the agents in parallel (Claude Code's native Task tool)
     ↓
-Chaque agent lit son fichier .md → sait qui il est et quoi vérifier
+Each agent reads its .md file → knows who it is and what to check
     ↓
-Chaque agent lit les 3 foundation docs → connaît ton projet
+Each agent reads the 3 foundation docs → knows your project
     ↓
-Ils retournent leurs verdicts à l'orchestrateur
+They return their verdicts to the orchestrator
     ↓
-L'orchestrateur merge, itère si besoin, présente le résultat
+The orchestrator merges, iterates if needed, and presents the result
 ```
 
 ---
 
-## Personnaliser les agents actifs
+## Customizing the active agents
 
-Dans `CLAUDE.md`, la section `## Agent Team` liste les agents actifs. Retire les lignes des agents
-non pertinents pour ce projet.
+In `CLAUDE.md`, the `## Agent Team` section lists the active agents. Remove the rows for agents that
+aren't relevant to this project.
 
-Exemple pour un projet contracts-only sans frontend :
+Example for a contracts-only project without a frontend:
 
 ```markdown
 ## Agent Team
@@ -261,9 +260,9 @@ Exemple pour un projet contracts-only sans frontend :
 
 ---
 
-## Permissions Claude Code (optionnel)
+## Claude Code permissions (optional)
 
-Pour éviter les confirmations à chaque commande `forge` ou `git`, crée `.claude/settings.json` :
+To avoid confirmations on every `forge` or `git` command, create `.claude/settings.json`:
 
 ```json
 {
@@ -285,16 +284,16 @@ Pour éviter les confirmations à chaque commande `forge` ou `git`, crée `.clau
 
 ---
 
-## Résolution des skills (priorité)
+## Skill resolution (priority)
 
-Un projet peut surcharger n'importe quel skill global en plaçant un `SKILL.md` du même nom dans
-`.claude/skills/` local.
+A project can override any global skill by placing a same-named `SKILL.md` in its local
+`.claude/skills/` directory.
 
-| Priorité    | Chemin                     | Scope                |
-| ----------- | -------------------------- | -------------------- |
-| 1 — HIGHEST | `<projet>/.claude/skills/` | Ce projet uniquement |
-| 2 — MEDIUM  | `.claude/skills/`          | Workspace            |
-| 3 — LOWEST  | `~/.claude/skills/`        | Global               |
+| Priority    | Path                        | Scope             |
+| ----------- | --------------------------- | ----------------- |
+| 1 — HIGHEST | `<project>/.claude/skills/` | This project only |
+| 2 — MEDIUM  | `.claude/skills/`           | Workspace         |
+| 3 — LOWEST  | `~/.claude/skills/`         | Global            |
 
 ---
 

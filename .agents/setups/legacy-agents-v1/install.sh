@@ -1,6 +1,6 @@
 #!/bin/bash
-# legacy-agents v1 — installer dans ton projet legacy
-# Lancer depuis la racine du projet : bash /path/to/legacy-agents-v1/install.sh
+# legacy-agents v1 — install into your legacy project
+# Run from the project root: bash /path/to/legacy-agents-v1/install.sh
 
 set -e
 
@@ -49,44 +49,44 @@ for agent in \
 do
   cp "$SOURCE/.claude/agents/$agent.md" "$TARGET/agents/$agent.md"
 done
-echo "✓  11 agents"
+echo "  11 agents"
 
-# ── Skills legacy-spécifiques ─────────────────────────────────────────────
+# ── Legacy-specific skills ────────────────────────────────────────────────
 
 for skill in legacy-patterns refactoring-patterns strangler-fig technical-debt; do
   cp "$SOURCE/.claude/skills/$skill/SKILL.md" "$TARGET/skills/$skill/SKILL.md"
 done
-echo "✓  4 skills legacy-spécifiques"
+echo "  4 legacy-specific skills"
 
-# ── Skills partagés ───────────────────────────────────────────────────────
+# ── Shared skills ─────────────────────────────────────────────────────────
 
 for skill in testing-patterns clean-code security-web2 database-patterns; do
   cp "$SOURCE/.claude/skills/$skill/SKILL.md" "$TARGET/skills/$skill/SKILL.md"
 done
-echo "✓  4 skills partagés"
+echo "  4 shared skills"
 
 # ── Team skills ───────────────────────────────────────────────────────────
 
 for skill in team--skill-review team--skill-refine team--skill-lookup observability; do
   cp "$SOURCE/.claude/skills/$skill/SKILL.md" "$TARGET/skills/$skill/SKILL.md"
 done
-echo "✓  3 team skills"
+echo "  3 team skills"
 
 # ── Commands ──────────────────────────────────────────────────────────────
 
 for cmd in understand characterize refactor strangler debt review pr; do
   cp "$SOURCE/.claude/commands/$cmd.md" "$TARGET/commands/$cmd.md"
 done
-echo "✓  6 commandes"
+echo "  6 commands"
 
 # ── Foundation docs ───────────────────────────────────────────────────────
 
 for doc in project-architecture.md legacy-map.md constants.md; do
   if [ ! -f "$TARGET/$doc" ]; then
     cp "$SOURCE/.claude/$doc" "$TARGET/$doc"
-    echo "✓  Créé $TARGET/$doc  ← à remplir"
+    echo "  Created $TARGET/$doc  ← to fill in"
   else
-    echo "⚠  Ignoré $TARGET/$doc  (existe déjà)"
+    echo "  Skipped $TARGET/$doc  (already exists)"
   fi
 done
 
@@ -94,16 +94,16 @@ done
 
 if [ ! -f "CLAUDE.md" ]; then
   cp "$SOURCE/CLAUDE.md" "CLAUDE.md"
-  echo "✓  Créé CLAUDE.md  ← mettre à jour Stack"
+  echo "  Created CLAUDE.md  ← update the Stack section"
 else
-  echo "⚠  Ignoré CLAUDE.md  (existe déjà)"
+  echo "  Skipped CLAUDE.md  (already exists)"
 fi
 
 # ── Task tracker ──────────────────────────────────────────────────────────
 
 if [ ! -f "tasks/current_task.md" ]; then
   cp "$SOURCE/tasks/current_task.md" "tasks/current_task.md"
-  echo "✓  Créé tasks/current_task.md"
+  echo "  Created tasks/current_task.md"
 fi
 
 # ── Permissions ───────────────────────────────────────────────────────────
@@ -127,7 +127,7 @@ if [ ! -f "$TARGET/settings.json" ]; then
   }
 }
 EOF
-  echo "✓  Créé $TARGET/settings.json"
+  echo "  Created $TARGET/settings.json"
 fi
 
 
@@ -137,30 +137,30 @@ mkdir -p "docs/adr" "docs/rollbacks"
 
 if [ ! -f "TEST_PLAN.md" ]; then
   cp "$SOURCE/TEST_PLAN.md" "TEST_PLAN.md"
-  echo "✓  Créé TEST_PLAN.md  ← configurer les flows et seuils"
+  echo "  Created TEST_PLAN.md  ← configure flows and thresholds"
 fi
 
 if [ ! -f "$TARGET/observability.md" ]; then
   cp "$SOURCE/.claude/observability.md" "$TARGET/observability.md"
-  echo "✓  Créé $TARGET/observability.md  ← configurer ton stack observabilité"
+  echo "  Created $TARGET/observability.md  ← configure your observability stack"
 fi
 
 if [ ! -f "CHANGELOG.md" ]; then
   cp "$SOURCE/CHANGELOG.md" "CHANGELOG.md"
-  echo "✓  Créé CHANGELOG.md"
+  echo "  Created CHANGELOG.md"
 fi
 
 if [ ! -f "PROGRESS.md" ]; then
   cp "$SOURCE/PROGRESS.md" "PROGRESS.md"
-  echo "✓  Créé PROGRESS.md"
+  echo "  Created PROGRESS.md"
 fi
 
 if [ ! -f "docs/adr/README.md" ]; then
   cp "$SOURCE/docs/adr/README.md" "docs/adr/README.md"
-  echo "✓  Créé docs/adr/README.md"
+  echo "  Created docs/adr/README.md"
 fi
 
-# ── Résumé ────────────────────────────────────────────────────────────────
+# ── Summary ───────────────────────────────────────────────────────────────
 
 echo ""
 echo "─────────────────────────────────────────────"

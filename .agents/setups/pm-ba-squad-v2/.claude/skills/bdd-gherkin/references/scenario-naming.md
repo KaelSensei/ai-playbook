@@ -2,27 +2,27 @@
 
 ## Principle
 
-Le nom d'un scénario = "[résultat] dans [contexte]" ou "[résultat] quand [condition]" Il doit être
-lisible sans lire les steps.
+A scenario name follows "[result] in [context]" or "[result] when [condition]". It must be readable
+without reading the steps.
 
 ## Pattern: Result + Condition
 
 ```gherkin
-# ✅ Result → Condition
-"Remboursement total si annulation plus de 48h avant le départ"
-"Remboursement 50% si annulation entre 24h et 48h"
-"Refus d'inscription si email déjà utilisé"
-"Redirection vers dashboard après connexion réussie"
-"Affichage d'erreur si mot de passe invalide"
+# Good — Result → Condition
+"Full refund if cancellation more than 48h before departure"
+"50% refund if cancellation between 24h and 48h"
+"Registration rejected if email already used"
+"Redirect to dashboard after successful login"
+"Error displayed if password is invalid"
 
-# ❌ Too vague — does not describe the result
-"Annulation de réservation"
-"Test du formulaire de connexion"
-"Vérification du mot de passe"
+# Too vague — does not describe the result
+"Booking cancellation"
+"Login form test"
+"Password check"
 
-# ❌ Describes steps, not behaviour
-"L'utilisateur clique sur annuler et voit un message"
-"Saisie email puis clic sur soumettre"
+# Describes steps, not behaviour
+"User clicks cancel and sees a message"
+"Enter email then click submit"
 ```
 
 ## By Scenario Type
@@ -30,56 +30,56 @@ lisible sans lire les steps.
 ### Happy path
 
 ```gherkin
-"Inscription réussie avec un email valide et mot de passe fort"
-"Connexion réussie avec identifiants corrects"
-"Remboursement total pour annulation anticipée"
-"Calcul correct du prix TTC pour produit standard"
+"Successful registration with a valid email and strong password"
+"Successful login with correct credentials"
+"Full refund for early cancellation"
+"Correct total price calculation for a standard product"
 ```
 
 ### Validation / Rejection
 
 ```gherkin
-"Refus d'inscription pour email avec format invalide"
-"Refus d'inscription pour mot de passe sans chiffre"
-"Refus d'annulation pour réservation déjà annulée"
-"Message d'erreur explicite pour champ obligatoire manquant"
+"Registration rejected for invalid email format"
+"Registration rejected for password without a digit"
+"Cancellation rejected for already-cancelled booking"
+"Explicit error message for missing required field"
 ```
 
 ### Boundary case
 
 ```gherkin
-"Remboursement total pour annulation exactement à 48h (borne incluse)"
-"Remboursement partiel pour annulation à 48h moins une seconde"
-"Panier vide après suppression du dernier article"
-"Pagination : dernière page avec moins d'items que pageSize"
+"Full refund for cancellation exactly at 48h (inclusive boundary)"
+"Partial refund for cancellation at 48h minus one second"
+"Empty cart after removing the last item"
+"Pagination: last page with fewer items than pageSize"
 ```
 
 ### Authorisation
 
 ```gherkin
-"Refus d'accès à la liste des utilisateurs sans rôle admin"
-"Admin peut voir les réservations de tous les voyageurs"
-"Voyageur ne peut annuler que ses propres réservations"
+"Access denied to the user list without the admin role"
+"Admin can see all travellers' bookings"
+"Traveller can only cancel their own bookings"
 ```
 
 ### Technical error / degradation
 
 ```gherkin
-"Message d'erreur générique si le service de paiement est indisponible"
-"Données du formulaire conservées après erreur serveur"
-"Retry automatique si la notification email échoue"
+"Generic error message when the payment service is unavailable"
+"Form data preserved after server error"
+"Automatic retry when the notification email fails"
 ```
 
 ## Consistency within a Feature
 
 ```gherkin
-Feature: Politique de remboursement
+Feature: Refund policy
 
-# Consistent naming : "[Taux de remboursement] si [condition temporelle]"
-Scenario: Remboursement 100% si annulation plus de 48h avant
-Scenario: Remboursement 50% si annulation entre 24h et 48h
-Scenario: Remboursement 0% si annulation moins de 24h avant
-Scenario: Remboursement 100% si annulation exactement à 48h (borne incluse)
-Scenario: Remboursement 100% si annulation imputable au prestataire
-Scenario: Refus d'annulation si réservation en cours
+# Consistent naming: "[Refund rate] if [time condition]"
+Scenario: 100% refund if cancellation more than 48h before
+Scenario: 50% refund if cancellation between 24h and 48h
+Scenario: 0% refund if cancellation less than 24h before
+Scenario: 100% refund if cancellation exactly at 48h (inclusive boundary)
+Scenario: 100% refund if cancellation caused by the provider
+Scenario: Cancellation refused if booking is in progress
 ```

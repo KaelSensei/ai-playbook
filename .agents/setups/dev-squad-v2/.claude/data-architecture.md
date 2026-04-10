@@ -4,41 +4,41 @@
 
 ## SUMMARY
 
-[Base de données]: [PostgreSQL | MySQL | MongoDB | ...] [ORM/Query builder]: [Prisma | Drizzle |
-TypeORM | ...] [Migrations]: [Prisma migrate | Flyway | ...]
+[Database]: [PostgreSQL | MySQL | MongoDB | ...] [ORM/Query builder]: [Prisma | Drizzle | TypeORM |
+...] [Migrations]: [Prisma migrate | Flyway | ...]
 
 ---
 
 ## Main Schema
 
 ```
-<!-- Copier le schéma Prisma ou les tables principales ici -->
+<!-- Copy the Prisma schema or main tables here -->
 ```
 
 ---
 
 ## Conventions
 
-- Nommage tables : snake_case pluriel (users, bookings, ...)
-- IDs : UUID v4 (pas auto-increment)
-- Soft delete : colonne deleted_at nullable
-- Timestamps : created_at, updated_at sur toutes les tables
+- Table naming: snake_case plural (users, bookings, ...)
+- IDs: UUID v4 (no auto-increment)
+- Soft delete: nullable deleted_at column
+- Timestamps: created_at, updated_at on every table
 
 ---
 
-## Index Importants
+## Important Indexes
 
-| Table    | Colonnes indexées | Raison                     |
-| -------- | ----------------- | -------------------------- |
-| users    | email             | Lookup par email fréquent  |
-| bookings | user_id, status   | Filtres combinés fréquents |
+| Table    | Indexed columns | Reason                    |
+| -------- | --------------- | ------------------------- |
+| users    | email           | Frequent lookup by email  |
+| bookings | user_id, status | Frequent combined filters |
 
 ---
 
 ## Migrations
 
-<!-- Règles pour écrire les migrations sans downtime -->
+<!-- Rules for writing zero-downtime migrations -->
 
-- Toujours backward compatible (add column nullable first)
-- Jamais DROP COLUMN sans migration en 2 étapes
-- Jamais renommer une colonne directement
+- Always backward compatible (add nullable column first)
+- Never DROP COLUMN without a two-step migration
+- Never rename a column directly

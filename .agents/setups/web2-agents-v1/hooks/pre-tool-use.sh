@@ -1,6 +1,6 @@
 #!/bin/bash
-# pre-tool-use.sh — Déclenché avant chaque outil Bash
-# Rôle : gardrails — bloquer les actions dangereuses, logger
+# pre-tool-use.sh — Triggered before every Bash tool call
+# Role: guardrails — block dangerous actions, log them
 
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 LOG_DIR="$PROJECT_DIR/logs"
@@ -13,37 +13,37 @@ log() {
 
 INPUT="${CLAUDE_TOOL_INPUT:-}"
 
-# ── Bloquer les commandes dangereuses ────────────────────────────
+# ── Block dangerous commands ─────────────────────────────────────
 
-# Pas de rm -rf sur le projet
+# No rm -rf on the project
 if echo "$INPUT" | grep -qE "rm -rf (\.|\/)"; then
-    log "BLOQUÉ : rm -rf détecté"
-    echo "HOOK_BLOCK: rm -rf non autorisé sans confirmation manuelle" >&2
+    log "BLOCKED: rm -rf detected"
+    echo "HOOK_BLOCK: rm -rf is not allowed without manual confirmation" >&2
     exit 1
 fi
 
-# Pas de git push --force sans PR
+# No git push --force without a PR
 if echo "$INPUT" | grep -q "git push --force\|git push -f"; then
-    log "BLOQUÉ : git push --force détecté"
-    echo "HOOK_BLOCK: git push --force non autorisé — utiliser /pr" >&2
+    log "BLOCKED: git push --force detected"
+    echo "HOOK_BLOCK: git push --force is not allowed — use /pr" >&2
     exit 1
 fi
 
-# ── Contexte legacy : vérifier le filet avant tout changement ────
+# ── Legacy context: check the safety net before any change ───────
 
 SETUP=$(grep -l "legacy-analyst" "$PROJECT_DIR/.claude/agents/" 2>/dev/null | head -1)
 if [ -n "$SETUP" ]; then
-    # Si c'est un setup legacy et que la commande modifie un fichier
+    # If this is a legacy setup and the command modifies a file
     if echo "$INPUT" | grep -qE "(sed -i|awk.*>|patch )"; then
-        # Vérifier que des tests de caractérisation existent
+        # Check that characterization tests exist
         CHAR_TESTS=$(find "$PROJECT_DIR" -name "*char*" -o -name "*characteriz*" 2>/dev/null | head -1)
         if [ -z "$CHAR_TESTS" ]; then
-            log "WARN : Modification legacy sans tests de caractérisation détectés"
-            # On warn mais on ne bloque pas — le guardian s'en charge
+            log "WARN: legacy modification without detected characterization tests"
+            # Warn but do not block — the guardian handles that
         fi
     fi
 fi
 
-log "Commande autorisée : $(echo "$INPUT" | head -c 80)"
+log "Command allowed: $(echo "$INPUT" | head -c 80)"
 
 exit 0

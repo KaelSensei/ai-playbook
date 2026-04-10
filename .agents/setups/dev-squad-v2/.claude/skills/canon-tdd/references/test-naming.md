@@ -1,15 +1,15 @@
 # Test Naming Patterns — TypeScript
 
-## Pattern Principal : [Comportement attendu] dans [Contexte]
+## Main Pattern: [Expected behaviour] in [Context]
 
 ```typescript
-// Format : should [résultat] when [condition]
+// Format: should [result] when [condition]
 it('should return 100% refund when cancelled more than 48h before departure');
 it('should throw EmailAlreadyExistsError when email is already taken');
 it('should assign USER role by default when no role is specified');
 it('should not allow cancellation of already cancelled booking');
 
-// Format : [entité/use case] [comportement]
+// Format: [entity/use case] [behaviour]
 it('CancellationPolicy: applies 50% refund between 24h and 48h');
 it('User.register: emits UserRegistered event');
 it('RegisterUser: hashes password before saving');
@@ -18,27 +18,27 @@ it('RegisterUser: hashes password before saving');
 ## Anti-patterns to avoid
 
 ```typescript
-// ❌ Trop vague
+// ❌ Too vague
 it('should work');
 it('test user creation');
 it('cancellation test');
 
-// ❌ Teste l'implémentation
+// ❌ Tests the implementation
 it('should call calculateRefund method');
 it('should set status to CANCELLED');
 it('should invoke emailService.send');
 
-// ❌ Plusieurs comportements dans un test
+// ❌ Multiple behaviours in one test
 it('should create user, hash password, send email and return result');
 
-// ✅ Un comportement = un test
+// ✅ One behaviour = one test
 it('should create user with provided email');
 it('should hash password before saving');
 it('should send welcome email after creation');
 it('should return created user without password hash');
 ```
 
-## Nommage par Type de Test
+## Naming by Test Type
 
 ```typescript
 // Value Object

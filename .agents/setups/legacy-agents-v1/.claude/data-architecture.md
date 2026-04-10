@@ -2,49 +2,49 @@
 
 <!-- last-verified: YYYY-MM-DD -->
 
-## État de la Base de Données
+## Database Status
 
-<!-- Évaluation honnête.
-     Exemple :
-     - 287 tables, dont ~40 utilisées activement
-     - Pas de FK en production (désactivées pour "performance")
-     - Colonnes type TEXT pour tout (int, date, json stockés en TEXT)
-     - Pas de migrations formelles : ALTER TABLE directs en prod -->
+<!-- Honest assessment.
+     Example:
+     - 287 tables, of which ~40 actively used
+     - No FKs in production (disabled for "performance")
+     - TEXT columns for everything (int, date, json stored as TEXT)
+     - No formal migrations: direct ALTER TABLE in prod -->
 
-## Tables Principales
+## Main Tables
 
-<!-- Tables critiques, leur rôle réel, leur état.
-     Exemple :
-     users        — comptes, mais aussi config, préférences, flags divers
-     orders       — commandes + historique + logs + temp data
-     settings     — table clé/valeur qui remplace la config (156 entrées)
-     temp_*       — tables temporaires jamais supprimées -->
+<!-- Critical tables, their actual role, their state.
+     Example:
+     users        — accounts, but also config, preferences, various flags
+     orders       — orders + history + logs + temp data
+     settings     — key/value table that replaces config (156 entries)
+     temp_*       — temporary tables that were never deleted -->
 
-## Conventions Existantes (ou absences de conventions)
+## Existing Conventions (or absence of conventions)
 
-<!-- Ce qui a été fait, même si c'est mauvais.
-     Connaître les conventions existantes évite de les casser accidentellement.
-     Exemple :
-     - Pas de soft delete : DELETE direct partout
-     - IDs : AUTO_INCREMENT int (pas UUID)
-     - Dates : DATETIME sans timezone (tout en UTC supposé)
-     - Passwords : MD5 (oui, vraiment) -->
+<!-- What has been done, even if it's bad.
+     Knowing existing conventions avoids breaking them accidentally.
+     Example:
+     - No soft delete: direct DELETE everywhere
+     - IDs: AUTO_INCREMENT int (not UUID)
+     - Dates: DATETIME without timezone (everything assumed UTC)
+     - Passwords: MD5 (yes, really) -->
 
 ## Migrations
 
-<!-- Comment les changements BDD ont été faits jusqu'ici.
-     Exemple :
-     - Pas de système de migration
-     - Scripts SQL dans /scripts/db/ (pas tous documentés)
-     - Certains changements faits directement en prod et jamais documentés -->
+<!-- How DB changes have been made so far.
+     Example:
+     - No migration system
+     - SQL scripts in /scripts/db/ (not all documented)
+     - Some changes made directly in prod and never documented -->
 
-## Données Sensibles
+## Sensitive Data
 
-<!-- Où sont les données sensibles, comment elles sont (mal) protégées. -->
+<!-- Where the sensitive data lives, how it is (poorly) protected. -->
 
-## Requêtes Critiques / Connues
+## Critical / Known Queries
 
-<!-- Requêtes importantes ou dangereuses à connaître.
-     Exemple :
-     - La requête du dashboard charge 50k rows sans pagination
-     - Le rapport mensuel tourne 45 min et locke des tables -->
+<!-- Important or dangerous queries to be aware of.
+     Example:
+     - The dashboard query loads 50k rows without pagination
+     - The monthly report runs 45 min and locks tables -->

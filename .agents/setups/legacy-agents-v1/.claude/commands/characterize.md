@@ -1,131 +1,131 @@
 ---
 name: characterize
 description: >
-  Écrire des tests de caractérisation pour figer le comportement existant. Obligatoire avant
-  /refactor. characterization-tester orchestre, dev-senior-b review. Produit un filet de tests qui
-  protège contre les régressions.
-argument-hint: '[module à caractériser]'
+  Write characterization tests to pin down existing behavior. Mandatory before /refactor.
+  characterization-tester orchestrates, dev-senior-b reviews. Produces a test net that protects
+  against regressions.
+argument-hint: '[module to characterize]'
 ---
 
 # /characterize
 
-Update `tasks/current_task.md` : status=CHARACTERIZE, module=$ARGUMENTS
+Update `tasks/current_task.md`: status=CHARACTERIZE, module=$ARGUMENTS
 
-**Prérequis** : `/understand $ARGUMENTS` doit avoir été fait. Si pas de cartographie dans
-`legacy-map.md` → lancer `/understand` d'abord.
-
----
-
-## Phase 1 — Vérifier les prérequis
-
-Lire `legacy-map.md` pour `$ARGUMENTS`. Vérifier que la fiche module existe et contient :
-
-- Les seams disponibles
-- Le niveau de risque
-
-Si absent → arrêter. Demander de lancer `/understand $ARGUMENTS` d'abord.
+**Prerequisite**: `/understand $ARGUMENTS` must have been run. If no mapping in `legacy-map.md` →
+run `/understand` first.
 
 ---
 
-## Phase 2 — Plan de caractérisation
+## Phase 1 — Verify prerequisites
 
-Invoquer `characterization-tester` pour établir un plan :
+Read `legacy-map.md` for `$ARGUMENTS`. Verify that the module card exists and contains:
 
-```
-Tu es characterization-tester.
-Charge .claude/agents/characterization-tester.md.
-Charge project-architecture.md, legacy-map.md.
-Charge testing-patterns, legacy-patterns skills.
+- Available seams
+- Risk level
 
-Module à caractériser : $ARGUMENTS
-Seams disponibles : [depuis legacy-map.md]
-
-Établis un plan de caractérisation :
-1. Quels comportements sont les plus importants à figer ?
-   (priorité : chemins les plus utilisés, plus risqués)
-2. Dans quel ordre les aborder ?
-3. Quels seams utiliser pour chaque comportement ?
-4. Quelles données de test utiliser ? (réelles si possible)
-
-Produire : liste ordonnée des comportements à caractériser
-```
-
-Présenter le plan à l'utilisateur. **Gate** : _"Ce plan couvre-t-il les comportements critiques ?"_
+If missing → stop. Ask to run `/understand $ARGUMENTS` first.
 
 ---
 
-## Phase 3 — Écrire les tests (un comportement à la fois)
+## Phase 2 — Characterization plan
 
-Pour chaque comportement du plan :
-
-### 3a. characterization-tester écrit le test intentionnellement faux
+Invoke `characterization-tester` to establish a plan:
 
 ```
-Tu es characterization-tester.
+You are characterization-tester.
+Load .claude/agents/characterization-tester.md.
+Load project-architecture.md, legacy-map.md.
+Load testing-patterns, legacy-patterns skills.
 
-Comportement à caractériser : [comportement]
-Seam à utiliser : [seam]
+Module to characterize: $ARGUMENTS
+Available seams: [from legacy-map.md]
 
-Étape 1 : écrire un test avec assert == "???"
-Étape 2 : lancer le test
-Étape 3 : noter le résultat RÉEL
-Étape 4 : mettre à jour le test avec la valeur réelle
-Étape 5 : ajouter un commentaire expliquant ce comportement
+Establish a characterization plan:
+1. Which behaviors are most important to pin?
+   (priority: most-used paths, most risky)
+2. In what order should they be tackled?
+3. Which seams should be used for each behavior?
+4. What test data should be used? (real data if possible)
+
+Produce: ordered list of behaviors to characterize
 ```
 
-### 3b. dev-senior-b review le test de caractérisation
+Present the plan to the user. **Gate**: _"Does this plan cover the critical behaviors?"_
+
+---
+
+## Phase 3 — Write the tests (one behavior at a time)
+
+For each behavior in the plan:
+
+### 3a. characterization-tester writes the intentionally wrong test
 
 ```
-Tu es dev-senior-b.
-Charge legacy-patterns, testing-patterns, team--skill-review.
+You are characterization-tester.
 
-Review ce test de caractérisation :
+Behavior to characterize: [behavior]
+Seam to use: [seam]
+
+Step 1: write a test with assert == "???"
+Step 2: run the test
+Step 3: record the REAL result
+Step 4: update the test with the real value
+Step 5: add a comment explaining this behavior
+```
+
+### 3b. dev-senior-b reviews the characterization test
+
+```
+You are dev-senior-b.
+Load legacy-patterns, testing-patterns, team--skill-review.
+
+Review this characterization test:
 [test]
 
-Vérifier :
-- Le test documente-t-il le comportement réel (pas supposé) ?
-- L'assertion est-elle précise ?
-- Le test est-il indépendant (pas d'état global) ?
-- Le commentaire explique-t-il clairement ce qui est documenté ?
-- Le test échouerait-il si le comportement changeait ?
+Verify:
+- Does the test document the real behavior (not the assumed one)?
+- Is the assertion precise?
+- Is the test independent (no global state)?
+- Does the comment clearly explain what is documented?
+- Would the test fail if the behavior changed?
 ```
 
-Appliquer `team--skill-refine` si nécessaire.
+Apply `team--skill-refine` if needed.
 
 ---
 
-## Phase 4 — Validation du filet
+## Phase 4 — Net validation
 
-Quand tous les comportements du plan sont couverts :
+When all behaviors in the plan are covered:
 
 ```bash
-# Lancer tous les tests de caractérisation
+# Run all characterization tests
 [runner] tests/characterization/
 
-# Tous doivent passer — c'est la baseline
+# All must pass — this is the baseline
 ```
 
 ---
 
-## Phase 5 — Mise à jour legacy-map.md
+## Phase 5 — Update legacy-map.md
 
-Ajouter dans la section "Comportements Figés" de `legacy-map.md` :
+Add to the "Pinned Behaviors" section of `legacy-map.md`:
 
 ```markdown
-- [x] [description comportement] — [fichier_test:ligne] — [date]
+- [x] [behavior description] — [test_file:line] — [date]
 ```
 
-Update `tasks/current_task.md` :
+Update `tasks/current_task.md`:
 
-- Tests de Caractérisation en place : [liste]
+- Characterization Tests in place: [list]
 - status=IDLE
 
 ```
-✅ Caractérisation terminée : $ARGUMENTS
-Comportements figés : [N]
-Tests passants : [N/N]
+Characterization complete: $ARGUMENTS
+Pinned behaviors: [N]
+Passing tests: [N/N]
 
-Filet en place. Prêt pour :
-→ /refactor $ARGUMENTS   (si objectif = refactoring)
-→ /strangler $ARGUMENTS  (si objectif = envelopper avec nouveau code)
+Net in place. Ready for:
+→ /refactor $ARGUMENTS   (if goal = refactoring)
+→ /strangler $ARGUMENTS  (if goal = wrap with new code)
 ```

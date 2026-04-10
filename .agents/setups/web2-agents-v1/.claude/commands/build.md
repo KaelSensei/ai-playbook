@@ -1,203 +1,202 @@
 ---
 name: build
 description: >
-  Implémenter en TDD strict. dev-senior-a code (RED→GREEN→BLUE), dev-senior-b review le test EN
-  PREMIER puis le code, tous les agents reviewent en parallèle à chaque étape. Requiert une spec
-  approuvée.
-argument-hint: '[slug de la spec]'
+  Implement in strict TDD. dev-senior-a codes (RED→GREEN→BLUE), dev-senior-b reviews the test FIRST
+  then the code, all agents review in parallel at each step. Requires an approved spec.
+argument-hint: '[spec slug]'
 ---
 
 # /build
 
-Update `tasks/current_task.md` : status=BUILD, Active Spec: .claude/specs/$ARGUMENTS.md
+Update `tasks/current_task.md`: status=BUILD, Active Spec: .claude/specs/$ARGUMENTS.md
 
 ---
 
-## Phase 1 — CHARGER LA TEST LIST
+## Phase 1 — LOAD THE TEST LIST
 
-Charger `.claude/specs/$ARGUMENTS.md`. Extraire la test list ordonnée. L'afficher à l'utilisateur.
-Confirmer avant de démarrer.
+Load `.claude/specs/$ARGUMENTS.md`. Extract the ordered test list. Show it to the user. Confirm
+before starting.
 
-Update `tasks/current_task.md` : Test List en cours = [liste complète]
-
----
-
-## Phase 2 — BOUCLE TDD (un item à la fois)
-
-Répéter pour chaque item de la test list dans l'ordre.
-
-### 2a. RED — dev-senior-a écrit UN test
-
-```
-Tu es dev-senior-a.
-Charge .claude/agents/dev-senior-a.md.
-Charge context docs et skills selon Agent Team table.
-Charge la spec : [contenu de .claude/specs/$ARGUMENTS.md]
-
-Test list restante : [items non cochés]
-Prochain item : [item suivant]
-
-PHASE RED uniquement.
-
-Écris UN test pour ce comportement.
-Lance le test runner. Le test DOIT échouer.
-Vérifie que c'est un échec d'assertion (pas une erreur de compilation).
-
-Output requis :
-- Code du test
-- Output du runner (must be FAIL)
-- Raison de l'échec (doit être l'assertion, pas l'import)
-```
-
-**Gate automatique** : si le test passe → le test est mauvais → recommencer.
+Update `tasks/current_task.md`: Active Test List = [full list]
 
 ---
 
-### 2b. REVIEW DU TEST — dev-senior-b en premier
+## Phase 2 — TDD LOOP (one item at a time)
+
+Repeat for each item in the test list, in order.
+
+### 2a. RED — dev-senior-a writes ONE test
 
 ```
-Tu es dev-senior-b.
-Charge .claude/agents/dev-senior-b.md.
-Charge context docs et skills selon Agent Team table.
-Charge team--skill-review.
+You are dev-senior-a.
+Load .claude/agents/dev-senior-a.md.
+Load context docs and skills per the Agent Team table.
+Load the spec: [contents of .claude/specs/$ARGUMENTS.md]
 
-REVIEW DU TEST UNIQUEMENT — pas du code de prod (il n'existe pas encore).
+Remaining test list: [unchecked items]
+Next item: [next item]
 
-Test à reviewer : [test écrit par dev-senior-a]
+RED phase only.
 
-Questions :
-- Ce test teste-t-il le bon comportement ?
-- L'assertion est-elle précise ?
-- Le test est-il indépendant ?
-- Le test échouerait-il si le code était supprimé ?
-- Le nom décrit-il clairement le comportement ?
+Write ONE test for this behavior.
+Run the test runner. The test MUST fail.
+Verify it's an assertion failure (not a compilation error).
 
-Verdict : APPROVE | APPROVE_WITH_CHANGES | REQUEST_REDESIGN
+Required output:
+- Test code
+- Runner output (must be FAIL)
+- Failure reason (must be the assertion, not an import)
 ```
 
-Si `REQUEST_REDESIGN` → dev-senior-a réécrit le test. Si `APPROVE_WITH_CHANGES` → corrections,
-re-review. Si `APPROVE` → passer à GREEN.
+**Automatic gate**: if the test passes → the test is wrong → redo.
 
 ---
 
-### 2c. GREEN — dev-senior-a écrit le minimum de code
+### 2b. TEST REVIEW — dev-senior-b first
 
 ```
-Tu es dev-senior-a.
-PHASE GREEN uniquement.
+You are dev-senior-b.
+Load .claude/agents/dev-senior-b.md.
+Load context docs and skills per the Agent Team table.
+Load team--skill-review.
 
-Test approuvé : [test]
-Tous les tests existants : [liste]
+REVIEW THE TEST ONLY — not the production code (it doesn't exist yet).
 
-Écris le MINIMUM de code pour faire passer le test.
-Hard-code si nécessaire. Duplication permise.
-Lance le runner : TOUS les tests doivent passer.
+Test to review: [test written by dev-senior-a]
 
-Output requis :
-- Code ajouté/modifié
-- Output du runner (must be ALL PASS)
-- "Sins committed" : shortcuts, hardcode, duplication
+Questions:
+- Does this test cover the right behavior?
+- Is the assertion precise?
+- Is the test independent?
+- Would the test fail if the code were removed?
+- Does the name clearly describe the behavior?
+
+Verdict: APPROVE | APPROVE_WITH_CHANGES | REQUEST_REDESIGN
 ```
 
-**Gate automatique** : si un test regression → corriger avant de continuer.
+If `REQUEST_REDESIGN` → dev-senior-a rewrites the test. If `APPROVE_WITH_CHANGES` → fixes,
+re-review. If `APPROVE` → move on to GREEN.
 
 ---
 
-### 2d. PAIR REVIEW — tous les agents en parallèle
-
-Charger `team--skill-review` pour tous les agents. Spawner TOUS les agents du tableau
-`## Agent Team` simultanément :
+### 2c. GREEN — dev-senior-a writes the minimum code
 
 ```
-Tu es [AGENT_PERSONA]. Mode review — pas d'écriture de code.
-Charge context docs et skills.
-Charge team--skill-review.
+You are dev-senior-a.
+GREEN phase only.
 
-Review cette étape TDD depuis ton angle disciplinaire.
-Diff de l'étape : [test + code GREEN]
-Spec : [spec complète]
+Approved test: [test]
+All existing tests: [list]
 
-Note : le code est en phase GREEN — duplication et hardcode sont normaux.
-Review la correctness et les problèmes structurels, pas la propreté.
+Write the MINIMUM code to make the test pass.
+Hard-code if necessary. Duplication allowed.
+Run the runner: ALL tests must pass.
+
+Required output:
+- Code added/modified
+- Runner output (must be ALL PASS)
+- "Sins committed": shortcuts, hardcode, duplication
 ```
 
-Collecter verdicts. Appliquer `team--skill-refine` si nécessaire.
+**Automatic gate**: if a test regresses → fix before continuing.
 
 ---
 
-### 2e. BLUE — dev-senior-a refactore
+### 2d. PAIR REVIEW — all agents in parallel
+
+Load `team--skill-review` for all agents. Spawn EVERY agent from the `## Agent Team` table
+simultaneously:
 
 ```
-Tu es dev-senior-a.
-PHASE BLUE uniquement.
+You are [AGENT_PERSONA]. Review mode — no code writing.
+Load context docs and skills.
+Load team--skill-review.
 
-Sins listés en GREEN : [liste]
-Code actuel : [code]
+Review this TDD step from your disciplinary angle.
+Step diff: [test + GREEN code]
+Spec: [full spec]
 
-Élimine la duplication. Améliore le nommage.
-PAS de nouvelle fonctionnalité.
-Lance le runner à chaque étape de refactoring.
-Tous les tests doivent rester verts.
+Note: the code is in GREEN phase — duplication and hardcode are normal.
+Review correctness and structural issues, not cleanliness.
+```
+
+Collect verdicts. Apply `team--skill-refine` if needed.
+
+---
+
+### 2e. BLUE — dev-senior-a refactors
+
+```
+You are dev-senior-a.
+BLUE phase only.
+
+Sins listed in GREEN: [list]
+Current code: [code]
+
+Eliminate duplication. Improve naming.
+NO new functionality.
+Run the runner at each step of the refactoring.
+All tests must stay green.
 ```
 
 ---
 
-### 2f. COMMIT et item suivant
+### 2f. COMMIT and next item
 
 ```bash
 git add .
-git commit -m "test([scope]): [item de la test list]"
+git commit -m "test([scope]): [test list item]"
 ```
 
-Cocher l'item dans `tasks/current_task.md`. Passer à l'item suivant. Retourner à 2a.
+Check off the item in `tasks/current_task.md`. Move to the next item. Go back to 2a.
 
 ---
 
-## Phase 3 — VERIFY (quand test list épuisée)
+## Phase 3 — VERIFY (once the test list is exhausted)
 
 ```bash
-[runner] --coverage    # coverage ne doit pas régresser
+[runner] --coverage    # coverage must not regress
 [linter]               # zero warnings
 ```
 
 ---
 
-## Phase 4 — REVIEW FINALE (diff complet)
+## Phase 4 — FINAL REVIEW (full diff)
 
-Spawner TOUS les agents sur le diff complet :
-
-```
-Review COMPLÈTE de l'implémentation de $ARGUMENTS.
-Regarder les effets d'interaction entre étapes.
-L'implémentation correspond-elle à la spec ?
-La test list est-elle entièrement couverte ?
-```
-
-Boucle avec `team--skill-refine` jusqu'à `APPROVE` unanime.
-
-## Phase 5 — scribe documente
-
-Spawner `scribe` en parallèle avec la review finale :
+Spawn ALL agents on the full diff:
 
 ```
-Tu es scribe.
-Feature terminée :
-Commit range : [premier commit du build..HEAD]
-
-Produire :
-1. Entrée CHANGELOG.md
-2. Mise à jour doc technique si archi a changé
-3. ADR si décision d'archi prise pendant ce build
-4. Rollback plan dans docs/rollbacks/
-5. Mise à jour PROGRESS.md
+FULL review of the $ARGUMENTS implementation.
+Look at interaction effects between steps.
+Does the implementation match the spec?
+Is the test list fully covered?
 ```
 
-Update `tasks/current_task.md` : status=IDLE
+Loop with `team--skill-refine` until unanimous `APPROVE`.
+
+## Phase 5 — scribe documents
+
+Spawn `scribe` in parallel with the final review:
 
 ```
-✅ Build complet
-  Feature : $ARGUMENTS
-  Tests : [N] passants
-  Test list : [N/N] items couverts
-  Review finale : APPROVE unanime
+You are scribe.
+Feature completed:
+Commit range: [first build commit..HEAD]
+
+Produce:
+1. CHANGELOG.md entry
+2. Update technical docs if architecture changed
+3. ADR if an architectural decision was made during this build
+4. Rollback plan in docs/rollbacks/
+5. Update PROGRESS.md
+```
+
+Update `tasks/current_task.md`: status=IDLE
+
+```
+✅ Build complete
+  Feature: $ARGUMENTS
+  Tests: [N] passing
+  Test list: [N/N] items covered
+  Final review: unanimous APPROVE
 ```

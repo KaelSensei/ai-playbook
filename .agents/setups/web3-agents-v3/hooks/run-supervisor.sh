@@ -1,7 +1,7 @@
 #!/bin/bash
-# run-supervisor.sh v2 — Boucle principale du supervisor
-# Utilise les hooks natifs Claude Code (.claude/hooks/)
-# Tournée par startup.sh en background
+# run-supervisor.sh v2 — Main supervisor loop
+# Uses Claude Code's native hooks (.claude/hooks/)
+# Run in the background by startup.sh
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
@@ -20,27 +20,27 @@ log() {
     echo "$msg" >> "$LOG_DIR/supervisor.log"
 }
 
-# ── Extraire la prochaine tâche ───────────────────────────────────
+# ── Extract the next task ────────────────────────────────────────
 
 get_next_task() {
-    # Priorité 1 : fichier next_task.pending créé par le hook on-stop
+    # Priority 1: next_task.pending file created by the on-stop hook
     if [ -f "$PROJECT_DIR/tasks/next_task.pending" ]; then
         TASK=$(cat "$PROJECT_DIR/tasks/next_task.pending")
         rm "$PROJECT_DIR/tasks/next_task.pending"
         echo "$TASK"
         return
     fi
-    # Priorité 2 : première tâche "À faire" dans QUEUE.md
+    # Priority 2: first "To do" task in QUEUE.md
     grep -m1 "^- \[ \]" "$QUEUE_FILE" 2>/dev/null \
         | sed 's/^- \[ \] //' \
-        | sed 's/ _(démarrée.*)//'
+        | sed 's/ _(started.*)//'
 }
 
 count_todo() {
     grep -c "^- \[ \]" "$QUEUE_FILE" 2>/dev/null || echo 0
 }
 
-# ── Déplacer une tâche dans QUEUE.md ─────────────────────────────
+# ── Move a task within QUEUE.md ──────────────────────────────────
 
 update_queue() {
     local action="$1"  # in_progress | done | paused
@@ -61,31 +61,31 @@ extra = """$extra"""
 
 if action == "in_progress":
     old = f"- [ ] {task}"
-    new = f"- [ ] {task} _(démarrée le {timestamp})_"
+    new = f"- [ ] {task} _(started on {timestamp})_"
     content = content.replace(old, new, 1)
 
 elif action == "done":
     content = re.sub(rf'- \[ \] {re.escape(task)}.*\n', '', content)
-    done_line = f"- [x] {task} _(terminée le {timestamp} — {extra})_\n"
-    content = content.replace('## Terminé\n', f'## Terminé\n{done_line}')
+    done_line = f"- [x] {task} _(completed on {timestamp} — {extra})_\n"
+    content = content.replace('## Done\n', f'## Done\n{done_line}')
 
 elif action == "paused":
     content = re.sub(rf'- \[ \] {re.escape(task)}.*\n', '', content)
-    pause_line = f"- [!] {task} _(en pause depuis {timestamp} — 3 tentatives)_\n      Erreur : {extra}\n"
-    content = content.replace('## En pause (erreur)\n', f'## En pause (erreur)\n{pause_line}')
+    pause_line = f"- [!] {task} _(paused since {timestamp} — 3 attempts)_\n      Error: {extra}\n"
+    content = content.replace('## Paused (error)\n', f'## Paused (error)\n{pause_line}')
 
 with open('$QUEUE_FILE', 'w') as f:
     f.write(content)
 PYEOF
 }
 
-# ── Exécuter une tâche via Claude Code (mode non-interactif) ─────
+# ── Run a task via Claude Code (non-interactive mode) ────────────
 
 run_task() {
     local task="$1"
     log "EXEC    | $task"
 
-    # Mettre à jour current_task.md avant de lancer
+    # Update current_task.md before launching
     cat > "$PROJECT_DIR/tasks/current_task.md" << TASKEOF
 # Current Task
 ## Status
@@ -99,26 +99,26 @@ $(date '+%Y-%m-%d %H:%M:%S')
 |---|---|---|
 TASKEOF
 
-    # Construire le prompt pour l'orchestrateur
-    local prompt="Tu es orchestrator puis supervisor.
+    # Build the prompt for the orchestrator
+    local prompt="You are orchestrator, then supervisor.
 
-Charge CLAUDE.md.
-Charge project-architecture.md SUMMARY.
-Charge tasks/current_task.md.
+Load CLAUDE.md.
+Load project-architecture.md SUMMARY.
+Load tasks/current_task.md.
 
-TÂCHE : $task
+TASK: $task
 
-Instructions :
-1. Analyser la complexité (niveau 1/2/3)
-2. Sélectionner les agents MINIMUM nécessaires
-3. Exécuter le pipeline COMPLET jusqu'au bout sans s'arrêter
-4. Inclure /pr automatiquement si du code a été produit
-5. Mettre à jour tasks/current_task.md avec status=IDLE en fin de tâche
+Instructions:
+1. Analyze the complexity (level 1/2/3)
+2. Select the MINIMUM agents required
+3. Run the FULL pipeline end-to-end without stopping
+4. Automatically include /pr if code was produced
+5. Update tasks/current_task.md with status=IDLE at the end of the task
 
-Ne pas demander de confirmation. Exécuter jusqu'au bout."
+Do not ask for confirmation. Run it all the way through."
 
-    # Lancer Claude Code avec timeout 2h
-    # --dangerously-skip-permissions pour le mode non-interactif
+    # Launch Claude Code with a 2h timeout
+    # --dangerously-skip-permissions for non-interactive mode
     timeout 7200 claude \
         --print "$prompt" \
         --dangerously-skip-permissions \
@@ -127,25 +127,25 @@ Ne pas demander de confirmation. Exécuter jusqu'au bout."
     return $?
 }
 
-# ── Boucle principale ─────────────────────────────────────────────
+# ── Main loop ────────────────────────────────────────────────────
 
-log "INIT    | Supervisor v2 démarré"
-log "INIT    | Projet : $PROJECT_DIR"
-log "INIT    | Hooks Claude Code : .claude/hooks/ actifs"
+log "INIT    | Supervisor v2 started"
+log "INIT    | Project: $PROJECT_DIR"
+log "INIT    | Claude Code hooks: .claude/hooks/ active"
 
 while true; do
 
-    # Vérifier si le hook on-stop a déposé une prochaine tâche
+    # Check whether the on-stop hook dropped in a next task
     TASK=$(get_next_task)
 
     if [ -z "$TASK" ]; then
         TODO=$(count_todo)
         if [ "$TODO" -eq 0 ]; then
-            log "IDLE    | Queue vide — attente ${SLEEP_EMPTY_QUEUE}s"
+            log "IDLE    | Queue empty — waiting ${SLEEP_EMPTY_QUEUE}s"
             sleep $SLEEP_EMPTY_QUEUE
             continue
         fi
-        # Re-lire la queue directement
+        # Re-read the queue directly
         TASK=$(grep -m1 "^- \[ \]" "$QUEUE_FILE" 2>/dev/null | sed 's/^- \[ \] //')
         if [ -z "$TASK" ]; then
             sleep $SLEEP_EMPTY_QUEUE
@@ -160,18 +160,18 @@ while true; do
     SUCCESS=false
 
     for attempt in 1 2 3; do
-        log "TRY     | Tentative $attempt/$MAX_RETRIES"
+        log "TRY     | Attempt $attempt/$MAX_RETRIES"
 
         if run_task "$TASK"; then
             SUCCESS=true
-            log "OK      | Tentative $attempt réussie"
+            log "OK      | Attempt $attempt succeeded"
             break
         else
             EXIT_CODE=$?
-            log "FAIL    | Tentative $attempt échouée (exit $EXIT_CODE)"
+            log "FAIL    | Attempt $attempt failed (exit $EXIT_CODE)"
             if [ $attempt -lt $MAX_RETRIES ]; then
                 DELAY=${RETRY_DELAYS[$((attempt-1))]}
-                log "WAIT    | Retry dans ${DELAY}s"
+                log "WAIT    | Retrying in ${DELAY}s"
                 sleep $DELAY
             fi
         fi
@@ -185,8 +185,8 @@ while true; do
         update_queue "done" "$TASK" "$DURATION"
         bash "$SCRIPT_DIR/post-task.sh" "$TASK" "success" 2>/dev/null || true
     else
-        log "PAUSE   | $TASK → 3 tentatives épuisées"
-        update_queue "paused" "$TASK" "Voir logs/errors.log"
+        log "PAUSE   | $TASK → 3 attempts exhausted"
+        update_queue "paused" "$TASK" "See logs/errors.log"
         bash "$SCRIPT_DIR/notify.sh" "$TASK" "PAUSE" 2>/dev/null || true
         bash "$SCRIPT_DIR/post-task.sh" "$TASK" "failure" 2>/dev/null || true
     fi

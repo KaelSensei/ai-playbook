@@ -2,50 +2,50 @@
 name: legacy-patterns
 description: >
   Michael Feathers (Working Effectively with Legacy Code), seams, dependency breaking,
-  characterization tests. Auto-chargé par legacy-analyst, archaeologist, characterization-tester,
+  characterization tests. Auto-loaded by legacy-analyst, archaeologist, characterization-tester,
   refactoring-guide.
 ---
 
 # Legacy Patterns Reference
 
-Source : Michael Feathers — _Working Effectively with Legacy Code_ (2004)
+Source: Michael Feathers — _Working Effectively with Legacy Code_ (2004)
 
-## Définition
+## Definition
 
 > "Legacy code is code without tests." — Michael Feathers
 
 ## Seams
 
-Un seam = endroit où on peut modifier le comportement sans modifier le code.
+A seam = a place where you can modify behavior without modifying the code.
 
-### Seam d'objet (le plus courant)
+### Object seam (most common)
 
 ```php
-// ❌ Pas de seam — dépendance directe
+// Bad — no seam, direct dependency
 class OrderService {
     function process() {
-        $mailer = new Mailer();  // impossible à remplacer en test
+        $mailer = new Mailer();  // impossible to replace in tests
     }
 }
 
-// ✅ Seam via injection
+// Good — seam via injection
 class OrderService {
     function __construct($mailer) {
-        $this->mailer = $mailer;  // remplaçable par un fake
+        $this->mailer = $mailer;  // replaceable by a fake
     }
 }
 ```
 
-### Seam de paramètre (le plus simple à créer)
+### Parameter seam (simplest to create)
 
 ```php
-// Avant : impossible à tester
+// Before: impossible to test
 function sendWelcomeEmail($userId) {
     $user = DB::find($userId);
     mail($user->email, 'Welcome', '...');
 }
 
-// Après : seam via paramètre optionnel
+// After: seam via optional parameter
 function sendWelcomeEmail($userId, $db = null, $mailer = null) {
     $db = $db ?? DB::getInstance();
     $mailer = $mailer ?? new Mailer();
@@ -59,7 +59,7 @@ function sendWelcomeEmail($userId, $db = null, $mailer = null) {
 ### Extract and Override
 
 ```php
-// Extraire la dépendance dans une méthode overridable
+// Extract the dependency into an overridable method
 class ReportGenerator {
     function generate() {
         $data = $this->fetchData();  // overridable
@@ -69,7 +69,7 @@ class ReportGenerator {
     }
 }
 
-// En test : sous-classe avec données figées
+// In tests: subclass with fixed data
 class TestableReportGenerator extends ReportGenerator {
     protected function fetchData() {
         return [['id' => 1]];
@@ -77,14 +77,14 @@ class TestableReportGenerator extends ReportGenerator {
 }
 ```
 
-### Sprout Method (ajouter sans toucher l'existant)
+### Sprout Method (add without touching the existing code)
 
 ```php
 function processOrder($orderId) {
-    // 200 lignes legacy — NE PAS TOUCHER
+    // 200 legacy lines — DO NOT TOUCH
     // ...
-    $this->applyDiscount($order);  // ← nouveau, développé en TDD
-    // suite legacy...
+    $this->applyDiscount($order);  // new, developed with TDD
+    // legacy continues...
 }
 ```
 
@@ -92,40 +92,40 @@ function processOrder($orderId) {
 
 ```php
 function save($data) {
-    $this->logBefore($data);      // nouveau
-    $this->originalSave($data);   // code extrait original
-    $this->logAfter($data);       // nouveau
+    $this->logBefore($data);      // new
+    $this->originalSave($data);   // original extracted code
+    $this->logAfter($data);       // new
 }
 ```
 
-## Tests de Caractérisation
+## Characterization Tests
 
 ```
-1. Écrire un test avec assertion intentionnellement fausse
-2. Lancer → noter ce que le code retourne RÉELLEMENT
-3. Mettre à jour le test avec la valeur réelle
-4. Commenter : "comportement réel documenté le [date]"
-5. Ce test devient le filet avant tout changement
+1. Write a test with an intentionally wrong assertion
+2. Run it → note what the code ACTUALLY returns
+3. Update the test with the real value
+4. Comment: "actual behavior documented on [date]"
+5. This test becomes the safety net before any change
 ```
 
-## Algorithme : Toucher du Code Legacy
+## Algorithm: Touching Legacy Code
 
 ```
-1. Identifier le changement
-2. Trouver les seams disponibles
-3. Écrire les tests de caractérisation
-4. Vérifier qu'ils passent (baseline)
-5. Changer en micro-incréments
-6. Vérifier après chaque incrément
-7. Si test rouge → git revert immédiat
+1. Identify the change
+2. Find the available seams
+3. Write characterization tests
+4. Verify they pass (baseline)
+5. Change in micro-increments
+6. Verify after each increment
+7. If a test is red → immediate git revert
 ```
 
-## Signaux d'Alarme
+## Warning Signals
 
-| Signal                      | Problème                        |
-| --------------------------- | ------------------------------- |
-| Fonction > 200 lignes       | God function                    |
-| `global $var` partout       | État non contrôlable            |
-| `new Classe()` dans méthode | Dépendance directe, pas de seam |
-| `$_SESSION` accédé partout  | État global magique             |
-| Commentaires `// HACK 2018` | Dette connue non remboursée     |
+| Signal                          | Problem                    |
+| ------------------------------- | -------------------------- |
+| Function > 200 lines            | God function               |
+| `global $var` everywhere        | Uncontrollable state       |
+| `new Class()` inside a method   | Direct dependency, no seam |
+| `$_SESSION` accessed everywhere | Magic global state         |
+| `// HACK 2018` comments         | Known unpaid debt          |

@@ -1,49 +1,49 @@
-# Progression du Projet
+# Project Progress
 
-<!-- Mis à jour automatiquement par scribe après chaque merge -->
-<!-- Mis à jour manuellement pour le backlog -->
+<!-- Updated automatically by the scribe after each merge -->
+<!-- Updated manually for the backlog -->
 
-## En Production
+## In Production
 
 | Feature | Date | PR  | Commit | ADR |
 | ------- | ---- | --- | ------ | --- |
 
-<!-- Alimenté par scribe après chaque merge -->
+<!-- Populated by the scribe after each merge -->
 
 ---
 
-## En Cours
+## In Progress
 
-| Feature | Status | Agent | Depuis |
-| ------- | ------ | ----- | ------ |
+| Feature | Status | Agent | Since |
+| ------- | ------ | ----- | ----- |
 
-<!-- Alimenté par l'orchestrateur au démarrage d'un /build -->
+<!-- Populated by the orchestrator at the start of a /build -->
 
 ---
 
 ## Backlog
 
-<!-- Features identifiées, pas encore started -->
-<!-- Format : - [ ] [description] — [priorité : high/medium/low] -->
+<!-- Features identified, not yet started -->
+<!-- Format: - [ ] [description] — [priority: high/medium/low] -->
 
 ---
 
-## Décisions Techniques
+## Technical Decisions
 
-<!-- Liens vers les ADR créés -->
+<!-- Links to ADRs that have been created -->
 
-| ADR | Décision | Date |
+| ADR | Decision | Date |
 | --- | -------- | ---- |
 
-<!-- Alimenté par scribe quand un ADR est créé -->
+<!-- Populated by the scribe when an ADR is created -->
 
 ---
 
-## Métriques
+## Metrics
 
-<!-- Mis à jour par scribe après chaque merge -->
+<!-- Updated by the scribe after each merge -->
 
-| Métrique             | Valeur |
-| -------------------- | ------ |
-| Test coverage        | —      |
-| Dernière mise à jour | —      |
+| Metric        | Value |
+| ------------- | ----- |
+| Test coverage | —     |
+| Last updated  | —     |

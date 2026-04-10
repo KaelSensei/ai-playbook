@@ -1,23 +1,23 @@
 # Error Types Hierarchy — TypeScript
 
-## Structure de Base
+## Base Structure
 
 ```typescript
-// Base error — toutes les erreurs du domaine héritent de ça
+// Base error — all domain errors inherit from this
 export abstract class DomainError extends Error {
   abstract readonly code: string;
 
   constructor(message: string) {
     super(message);
     this.name = this.constructor.name;
-    // Fix stack trace en TypeScript
+    // Fix stack trace in TypeScript
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
     }
   }
 }
 
-// Base error pour les erreurs d'application (use cases)
+// Base error for application errors (use cases)
 export abstract class ApplicationError extends Error {
   abstract readonly code: string;
   abstract readonly httpStatus: number;
@@ -29,10 +29,10 @@ export abstract class ApplicationError extends Error {
 }
 ```
 
-## Erreurs Domaine (domain/errors/)
+## Domain Errors (domain/errors/)
 
 ```typescript
-// Erreur de validation — input invalide
+// Validation error — invalid input
 export class InvalidEmailError extends DomainError {
   readonly code = 'INVALID_EMAIL';
 
@@ -41,7 +41,7 @@ export class InvalidEmailError extends DomainError {
   }
 }
 
-// Erreur métier — règle de gestion violée
+// Business error — business rule violated
 export class InsufficientStockError extends DomainError {
   readonly code = 'INSUFFICIENT_STOCK';
 
@@ -54,7 +54,7 @@ export class InsufficientStockError extends DomainError {
   }
 }
 
-// Erreur d'état — transition d'état invalide
+// State error — invalid state transition
 export class AlreadyCancelledError extends DomainError {
   readonly code = 'ALREADY_CANCELLED';
 
@@ -64,10 +64,10 @@ export class AlreadyCancelledError extends DomainError {
 }
 ```
 
-## Erreurs Application (application/errors/)
+## Application Errors (application/errors/)
 
 ```typescript
-// Erreur "not found" — ressource inexistante
+// "Not found" error — missing resource
 export class BookingNotFoundError extends ApplicationError {
   readonly code = 'BOOKING_NOT_FOUND';
   readonly httpStatus = 404;
@@ -77,7 +77,7 @@ export class BookingNotFoundError extends ApplicationError {
   }
 }
 
-// Erreur "conflict" — contrainte d'unicité
+// "Conflict" error — uniqueness constraint
 export class EmailAlreadyExistsError extends ApplicationError {
   readonly code = 'EMAIL_ALREADY_EXISTS';
   readonly httpStatus = 409;
@@ -87,7 +87,7 @@ export class EmailAlreadyExistsError extends ApplicationError {
   }
 }
 
-// Erreur "unauthorized"
+// "Unauthorized" error
 export class UnauthorizedError extends ApplicationError {
   readonly code = 'UNAUTHORIZED';
   readonly httpStatus = 403;
@@ -98,7 +98,7 @@ export class UnauthorizedError extends ApplicationError {
 }
 ```
 
-## Mapping HTTP dans le Controller
+## HTTP Mapping in the Controller
 
 ```typescript
 // presentation/http/errorHandler.ts
@@ -117,7 +117,7 @@ export function toHttpError(error: unknown): { status: number; body: object } {
     }
   }
 
-  // Erreur inattendue — ne pas exposer les détails en prod
+  // Unexpected error — do not expose details in production
   console.error('Unexpected error:', error)
   return {
     status: 500,
@@ -125,7 +125,7 @@ export function toHttpError(error: unknown): { status: number; body: object } {
   }
 }
 
-// Dans le controller
+// In the controller
 async register(req: Request, res: Response) {
   try {
     const result = await this.registerUser.execute(req.body)
