@@ -22,6 +22,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `https://cursor.com/fr/docs/context/commands` → `https://cursor.com/docs/context/commands`
 - Translated every `description:` field in SKILL.md frontmatter across all setups so skill
   auto-loading metadata is consistent.
+- `CHANGELOG.md` `[0.2.0]` placeholder date `2026-03-XX` replaced with `2026-04-10`, matching the
+  real date of the MIT license merge (commit `86ba1b3`), which is the last commit before the
+  translation / CI / docs / CLI work began.
 
 ### Added
 
@@ -52,6 +55,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `cli/package.json` automatically builds the CLI before tests run.
 - `engines.node` bumped from `>=16.0.0` to `>=18.0.0` in both `package.json` files because the
   `node --test` runner is only stable from Node 18 onward.
+- `RELEASE.md` — documents the two-tier versioning model (playbook via git tags, CLI via npm),
+  semver rubric (MAJOR / MINOR / PATCH / pre-1.0.0 rules), full release process with commands,
+  rollback policy, and what does _not_ trigger a release.
+- `.github/workflows/release.yml` — GitHub Actions workflow that fires on `v*` tag pushes, extracts
+  the matching section from `CHANGELOG.md`, and creates a GitHub Release automatically. Uses
+  `softprops/action-gh-release@v2` with `contents: write` permission scoped to the job.
+- README `Versioning` section rewritten to reflect the real policy: semver via git tags, links to
+  CHANGELOG + RELEASE + CLI publish, and the pre-1.0.0 breaking-change caveat.
 
 ### Fixed
 
@@ -81,7 +92,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [0.2.0] — 2026-03-XX
+## [0.2.0] — 2026-04-10
 
 ### Added
 
