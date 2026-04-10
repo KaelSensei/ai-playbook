@@ -61,7 +61,7 @@ touch .cursor/mcp.json
 - `mcp.json` is automatically excluded from installation (contains sensitive tokens)
 - Already in `.gitignore` - will never be committed
 - Each developer can have their own `mcp.json` with personal tokens
-- See `.cursor/mcp.json.example` in the playbook for a template
+- See `.agents/mcp.json.example` in the playbook for a template
 
 ## Installation Types
 

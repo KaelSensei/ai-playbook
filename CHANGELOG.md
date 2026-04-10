@@ -43,6 +43,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `package.json` prettier globs and `lint-staged` config still referenced `.cursor/` after the
   `.cursor` → `.agents` rename in commit `ee1399d`, causing every prettier run to error out on
   missing paths.
+- `ai-playbook-cli` was broken since the same `.cursor` → `.agents` rename: the build script copied
+  a non-existent directory, and every source-path lookup in `cli/src/index.ts` pointed at
+  `.cursor/`. Migrated the CLI source-side references: `cli/src/index.ts`,
+  `cli/scripts/copy-cursor.js` (renamed to `copy-agents.js`), `cli/package.json` (`copy-cursor`
+  script → `copy-agents`), `cli/README.md`, and `cli/PUBLISH.md`. The CLI now builds cleanly
+  (`npm run build --prefix cli`) and `install --type copy` populates a fresh project's `.cursor/`
+  from the playbook's `.agents/`. Verified end-to-end with a smoke test. The CLI still writes into a
+  `.cursor/` directory in the target project (Cursor-native layout); adding a `--target` flag so
+  Claude Code users can pick `.claude/` is tracked as a follow-up.
+- `cli/package.json` placeholder `YOUR_USERNAME` GitHub URLs replaced with the real
+  `KaelSensei/ai-playbook` repository.
 
 ### Notes
 

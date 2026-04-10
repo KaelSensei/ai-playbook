@@ -18,7 +18,7 @@
    ```
 
    This will:
-   - Copy `.cursor` files to `templates/.cursor`
+   - Copy `.agents` files to `templates/.agents`
    - Compile TypeScript to `dist/`
 
 3. **Test locally:**
