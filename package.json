@@ -4,8 +4,8 @@
   "description": "Shared AI playbook for standardizing AI assistant behavior across projects",
   "private": true,
   "scripts": {
-    "format": "prettier --write \"**/*.{md,json,yml,yaml}\" \".cursor/**/*.md\" \".cursor/rules/*.mdc\" \"cli/src/**/*.{ts,js}\" \"cli/scripts/**/*.{ts,js}\"",
-    "format:check": "prettier --check \"**/*.{md,json,yml,yaml}\" \".cursor/**/*.md\" \".cursor/rules/*.mdc\" \"cli/src/**/*.{ts,js}\" \"cli/scripts/**/*.{ts,js}\"",
+    "format": "prettier --write \"**/*.{md,json,yml,yaml}\" \".agents/**/*.md\" \".agents/rules/*.mdc\" \"cli/src/**/*.{ts,js}\" \"cli/scripts/**/*.{ts,js}\"",
+    "format:check": "prettier --check \"**/*.{md,json,yml,yaml}\" \".agents/**/*.md\" \".agents/rules/*.mdc\" \"cli/src/**/*.{ts,js}\" \"cli/scripts/**/*.{ts,js}\"",
     "lint": "npm run lint --prefix cli",
     "lint:fix": "npm run lint:fix --prefix cli",
     "check": "npm run format:check && npm run lint"
@@ -22,7 +22,7 @@
     "*.{md,json,yml,yaml}": [
       "prettier --write"
     ],
-    ".cursor/**/*.{md,mdc}": [
+    ".agents/**/*.{md,mdc}": [
       "prettier --write"
     ],
     "cli/src/**/*.ts": [
