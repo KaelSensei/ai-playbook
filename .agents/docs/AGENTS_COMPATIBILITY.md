@@ -1,81 +1,165 @@
-## Agents Compatibility – Claude Code, Cursor & Others
+# Tool Compatibility
 
-This playbook is **tool-agnostic**. Its concepts (rules, commands, skills, MCP) work with any AI
-agent that can read markdown: **Claude Code**, **Cursor**, or custom MCP clients.
+This document is the **honest** answer to "does this playbook work with my AI tool?"
+
+The short version:
+
+- **Base playbook** (`.agents/rules/`, `.agents/commands/`, `.agents/skills/`) — works with Claude
+  Code and Cursor. Tool-agnostic content.
+- **Multi-agent setups** (`.agents/setups/*`) — **Claude Code is primary**. Cursor is partial. Other
+  tools can read the markdown but lose the "agent team" concept and any shell hooks.
+
+Read on for per-feature and per-setup detail.
 
 ---
 
-### 1. How different tools consume the playbook
+## 1. What each tool actually supports
 
-| Tool         | Config directory | Rules                   | Commands             | Skills            | MCP                |
-| ------------ | ---------------- | ----------------------- | -------------------- | ----------------- | ------------------ |
-| Claude Code  | `.claude/`       | Read as project context | Slash commands       | `.claude/skills/` | `.claude/mcp.json` |
-| Cursor       | `.cursor/`       | `.cursor/rules/*.mdc`   | `.cursor/commands/`  | `.cursor/skills/` | `.cursor/mcp.json` |
-| Other agents | Any              | Read as markdown        | Follow as checklists | Read as knowledge | Standard MCP       |
+Not every tool has every concept. This table is the physical reality, not a marketing promise.
 
-### 2. Installing for your tool
+| Concept                                      | Claude Code                                           | Cursor                                      | Other MCP clients           |
+| -------------------------------------------- | ----------------------------------------------------- | ------------------------------------------- | --------------------------- |
+| **Rules** (persistent context)               | `.claude/` markdown loaded as context                 | `.cursor/rules/*.mdc` with YAML frontmatter | Read as plain markdown      |
+| **Slash commands**                           | `/command` reads `.claude/commands/*.md`              | `/command` reads `.cursor/commands/*.md`    | Manually invoked as scripts |
+| **Skills** (on-demand domain knowledge)      | Auto-loaded by agent when matching task is detected   | Loaded as reference context                 | Read on request             |
+| **Sub-agents** (multiple specialized agents) | Native — `.claude/agents/*.md` define personas        | **Not supported** — no sub-agent concept    | **Not supported**           |
+| **Hooks** (run shell on tool-use events)     | Native — `hooks/{pre,post}-tool-use.sh`, `on-stop.sh` | **Not supported**                           | **Not supported**           |
+| **MCP servers**                              | `.claude/mcp.json`                                    | `.cursor/mcp.json`                          | Standard `mcp.json`         |
+| **Model switching / session control**        | Native                                                | Native                                      | Varies                      |
 
-Each multi-agent setup includes an `install.sh` that accepts a target directory:
+**Takeaway:** rules, commands, and skills are markdown and portable. **Agents and hooks are Claude
+Code features with no Cursor equivalent** — they degrade gracefully (the content is still readable)
+but the automation around them does not run.
+
+---
+
+## 2. Per-setup compatibility
+
+Each `.agents/setups/*` bundles its own `.claude/` layout, agent personas, and optional hooks. Here
+is what actually works where.
+
+| Setup                  | Agents | Hooks | Claude Code | Cursor                    | Notes                                                                  |
+| ---------------------- | ------ | ----- | ----------- | ------------------------- | ---------------------------------------------------------------------- |
+| **`dev-squad-v2`**     | 3      | No    | ✅ Full     | ⚠️ Commands + skills only | No hooks; agent personas become reference docs in Cursor.              |
+| **`pm-ba-squad-v2`**   | 3      | No    | ✅ Full     | ⚠️ Commands + skills only | No hooks; spec-writing workflows translate cleanly to Cursor prompts.  |
+| **`legacy-agents-v1`** | 14     | Yes   | ✅ Full     | ⚠️ Commands only          | Hooks enforce legacy safety rails — **Cursor loses those guardrails**. |
+| **`web2-agents-v1`**   | 13     | Yes   | ✅ Full     | ⚠️ Commands only          | Hooks enforce security rails — **Cursor loses those guardrails**.      |
+| **`web3-agents-v3`**   | 10     | Yes   | ✅ Full     | ⚠️ Commands only          | Hooks enforce smart-contract safety checks — **Cursor loses them**.    |
+
+Legend:
+
+- ✅ **Full** — every feature works as designed.
+- ⚠️ **Partial** — the content installs and is readable, but some automation does not run.
+
+**What "⚠️ Partial" means concretely for Cursor:**
+
+- The `.claude/agents/*.md` persona files install into the target directory. Cursor does not invoke
+  them as distinct agents, so the multi-agent workflow collapses into "one AI reading everything".
+  For `dev-squad-v2` this means the pair-review pattern (Dev A writes, Dev B reviews) is lost.
+- Shell hooks (`hooks/*.sh`) are never triggered because Cursor has no `pre-tool-use` /
+  `post-tool-use` event hooks. Any guardrails the hooks enforce — like blocking `rm -rf`,
+  `git push --force`, or risky SQL — are **silently disabled**.
+- Commands (`.claude/commands/*.md`) mostly still work as `/command` slash invocations in Cursor if
+  you install to `.cursor/commands/`, because Cursor supports slash commands that read markdown
+  files.
+- Skills (`.claude/skills/*/SKILL.md`) install to the target directory and can be loaded as
+  reference knowledge, but Cursor does not auto-load them — you reference them manually.
+
+---
+
+## 3. Installing for your tool
+
+Every setup ships an `install.sh` that defaults to `.claude/` and accepts any target directory as
+its first argument.
+
+### Claude Code (default)
 
 ```bash
-# For Claude Code (default)
-bash install.sh
-
-# For Cursor
-bash install.sh .cursor
-
-# For any other tool
-bash install.sh .your-tool
+bash .agents/setups/dev-squad-v2/install.sh
+# → installs into ./.claude/
 ```
 
-The installer copies agents, commands, skills, and foundation docs into your chosen directory.
+### Cursor
+
+```bash
+bash .agents/setups/dev-squad-v2/install.sh .cursor
+# → installs into ./.cursor/
+```
+
+After installing into `.cursor/`, you need to do one extra step for the rules to load as Cursor
+project context: copy or symlink the base playbook's `.mdc` rules into `.cursor/rules/`:
+
+```bash
+mkdir -p .cursor/rules
+cp .ai-playbook/.agents/rules/*.mdc .cursor/rules/
+# or symlink if the playbook is a submodule:
+ln -s ../.ai-playbook/.agents/rules .cursor/rules
+```
+
+This is needed because the multi-agent setups do **not** ship `.mdc` rule files — the base playbook
+does.
+
+### Other MCP clients
+
+```bash
+bash .agents/setups/dev-squad-v2/install.sh .your-tool
+# → installs into ./.your-tool/
+```
+
+The installer just copies files. Your tool needs to know how to read markdown and (optionally)
+handle `mcp.json`.
 
 ---
 
-### 3. What is tool-agnostic?
+## 4. Decision guide
 
-The **content itself** is tool-agnostic:
+**"Which setup should I use if I'm on Cursor?"**
 
-- Rules (`.mdc`) are just markdown files that describe constraints and policies.
-- Commands (`.md`) are just **procedures**: numbered steps for how an AI should work.
-- Skills (`SKILL.md`) are just **knowledge modules**: checklists and instructions for specific
-  tasks.
-- MCP config (`mcp.json`) is a standard MCP configuration file used by any MCP-capable client.
+Prefer **`dev-squad-v2`** or **`pm-ba-squad-v2`** — they have no hooks, so nothing is silently
+disabled. You lose the multi-agent pair-review workflow (Cursor runs one AI) but get the full
+benefit of the commands, skills, and templates.
 
-Any AI agent that can read markdown can:
+Avoid **`legacy-agents-v1`**, **`web2-agents-v1`**, and **`web3-agents-v3`** on Cursor unless you
+are comfortable losing the shell-hook guardrails. These setups were designed with Claude Code's hook
+system as part of their safety model.
 
-- Load rules as "global constraints".
-- Treat commands as playbook checklists.
-- Load skills as reference knowledge.
+**"Can I use the base playbook (rules/commands/skills) on any tool?"**
+
+Yes. The base playbook in `.agents/rules/`, `.agents/commands/`, and `.agents/skills/` is pure
+markdown with no shell dependencies. Install via:
+
+```bash
+npx ai-playbook-cli@latest install          # current: installs into .cursor/
+# or manually:
+ln -s ../.ai-playbook/.agents/rules .claude/rules
+ln -s ../.ai-playbook/.agents/commands .claude/commands
+ln -s ../.ai-playbook/.agents/skills .claude/skills
+```
+
+See [INSTALLATION.md](../../INSTALLATION.md) for the full setup options.
+
+**"I'm building a custom MCP client. Can I consume this playbook?"**
+
+Yes, as long as your client can read markdown files and (optionally) parse YAML frontmatter for
+`.mdc` rule metadata. The playbook deliberately avoids tool-specific formats beyond `.mdc` — see
+section 5 below.
 
 ---
 
-### 4. Multi-agent setups
+## 5. Reliability invariants
 
-The `.agents/setups/` directory contains pre-configured teams:
+These properties are maintained intentionally so the playbook stays portable:
 
-| Setup              | Purpose                          | Agent count |
-| ------------------ | -------------------------------- | ----------- |
-| `dev-squad-v2`     | TypeScript/React TDD development | 3           |
-| `pm-ba-squad-v2`   | Product specs, BDD stories       | 3           |
-| `legacy-agents-v1` | Legacy codebase modernization    | 14          |
-| `web2-agents-v1`   | Full-stack SaaS development      | 13          |
-| `web3-agents-v3`   | Smart contracts, DeFi            | 10          |
+- **All content is plain markdown or JSON.** No proprietary formats.
+- **Rules are `.mdc`** — markdown with YAML frontmatter. Cursor consumes this natively; any other
+  tool can read it as markdown and ignore the frontmatter.
+- **Commands describe _what_ to do as numbered steps**, not _how_ the tool should execute them. Any
+  AI agent can follow them as a checklist.
+- **Skills are knowledge modules** with clear "when to use" triggers. Tools with auto-loading can
+  use the triggers; tools without can load skills manually.
+- **Hooks are opt-in.** Setups that use hooks are clearly marked (see the matrix above), and the
+  hook files are plain bash scripts — they fail cleanly on tools that do not invoke them.
+- **`install.sh` accepts any target directory.** No setup hard-codes `.claude/` or `.cursor/`.
 
-Each setup is self-contained with its own agents, skills, commands, and documentation templates.
-
----
-
-### 5. Reliability goals
-
-To keep the playbook reliable across tools:
-
-- All files are **plain markdown or JSON**, no custom formats.
-- Rules and skills avoid tool-specific instructions and focus on:
-  - Behavior constraints (rules).
-  - Knowledge and checklists (skills).
-- Commands clearly describe **what** to do in each step, so any agent can follow them as a script.
-- Install scripts accept a configurable target directory.
-
-This keeps `.agents/` as the **single source of truth** for AI behavior, while allowing multiple
-tools (Claude Code, Cursor, custom MCP clients) to consume it.
+This keeps `.agents/` as the **single source of truth** for AI behavior, while accepting that
+different tools support different subsets of the feature set.

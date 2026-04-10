@@ -82,7 +82,9 @@ Each project can pin a specific version of the playbook and upgrade intentionall
 **This repo is:**
 
 - A reusable AI behavior baseline
-- Tool-agnostic (Cursor, Claude, future agents)
+- Tool-agnostic base playbook (rules, commands, skills work with Claude Code and Cursor).
+  Multi-agent setups target Claude Code primarily — see
+  [`.agents/docs/AGENTS_COMPATIBILITY.md`](.agents/docs/AGENTS_COMPATIBILITY.md)
 - Security-focused and production-oriented
 
 **This repo is NOT:**
@@ -112,13 +114,20 @@ bash .ai-playbook/.agents/setups/dev-squad-v2/install.sh .cursor
 
 Available setups:
 
-| Setup              | Agents                   | Best for              |
-| ------------------ | ------------------------ | --------------------- |
-| `dev-squad-v2`     | 3 (tech-lead, 2 seniors) | TypeScript/React TDD  |
-| `pm-ba-squad-v2`   | 3 (PO, BA, reviewer)     | Specs, stories, BDD   |
-| `legacy-agents-v1` | 14 (full team)           | Legacy modernization  |
-| `web2-agents-v1`   | 13 (full team)           | Full-stack SaaS       |
-| `web3-agents-v3`   | 10 (full team)           | Smart contracts, DeFi |
+| Setup              | Agents                   | Best for              | Claude Code | Cursor     |
+| ------------------ | ------------------------ | --------------------- | ----------- | ---------- |
+| `dev-squad-v2`     | 3 (tech-lead, 2 seniors) | TypeScript/React TDD  | ✅ Full     | ⚠️ Partial |
+| `pm-ba-squad-v2`   | 3 (PO, BA, reviewer)     | Specs, stories, BDD   | ✅ Full     | ⚠️ Partial |
+| `legacy-agents-v1` | 14 (full team)           | Legacy modernization  | ✅ Full     | ⚠️ Partial |
+| `web2-agents-v1`   | 13 (full team)           | Full-stack SaaS       | ✅ Full     | ⚠️ Partial |
+| `web3-agents-v3`   | 10 (full team)           | Smart contracts, DeFi | ✅ Full     | ⚠️ Partial |
+
+**Tool compatibility:** Multi-agent setups target Claude Code as their primary tool. On Cursor, the
+commands and skills still work, but the sub-agent personas collapse into one and any shell hooks
+(guardrails in `legacy-agents-v1`, `web2-agents-v1`, `web3-agents-v3`) are silently disabled because
+Cursor has no hook system. Read
+[`.agents/docs/AGENTS_COMPATIBILITY.md`](.agents/docs/AGENTS_COMPATIBILITY.md) for the honest
+per-feature breakdown before picking a setup.
 
 See each setup's README in `.agents/setups/` for details.
 
