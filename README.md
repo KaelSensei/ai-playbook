@@ -329,6 +329,16 @@ For the agent skills bundled with this playbook, see:
 
 ---
 
+## Contributing
+
+Contributions are welcome — new rules, commands, skills, setups, bug fixes, and docs improvements.
+
+Start with [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow, branch conventions, and quality bar.
+If you're reporting a security issue, use the private channel described in
+[SECURITY.md](SECURITY.md) — do not open a public issue.
+
+---
+
 ## License
 
 This project is free to use and reuse for any purpose, including commercial use.  

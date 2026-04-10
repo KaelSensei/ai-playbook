@@ -26,6 +26,23 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Root `CHANGELOG.md` following the Keep a Changelog format.
+- `CONTRIBUTING.md` — onboarding guide covering ground rules, extension points (rules / commands /
+  skills / setups), branch naming, conventional commits, and the quality bar every PR must meet.
+- `SECURITY.md` — private vulnerability reporting via GitHub Security Advisories, scope, dual-use
+  policy, and coordinated disclosure timeline.
+- `.github/PULL_REQUEST_TEMPLATE.md` — structured PR template with scope checkboxes, test plan, and
+  pre-merge checklist.
+- `.github/ISSUE_TEMPLATE/bug_report.yml` and `feature_request.yml` — structured forms replacing
+  blank issues, with a `config.yml` that routes security reports to the private advisory flow and
+  questions to Discussions.
+- `.github/workflows/ci.yml` — GitHub Actions CI running prettier format check and eslint on every
+  push and PR to `main`.
+
+### Fixed
+
+- `package.json` prettier globs and `lint-staged` config still referenced `.cursor/` after the
+  `.cursor` → `.agents` rename in commit `ee1399d`, causing every prettier run to error out on
+  missing paths.
 
 ### Notes
 
