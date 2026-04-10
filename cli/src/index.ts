@@ -12,26 +12,26 @@ const __dirname = path.dirname(__filename);
 // Get playbook root - try multiple locations
 async function getPlaybookRoot(): Promise<string | null> {
   // Try 1: CLI package templates (when installed via npm)
-  // Files are at: node_modules/ai-playbook-cli/templates/.cursor
+  // Files are at: node_modules/ai-playbook-cli/templates/.agents
   const cliRoot = path.resolve(__dirname, '..');
-  const playbookCursor1 = path.join(cliRoot, 'templates', '.cursor');
+  const playbookAgents1 = path.join(cliRoot, 'templates', '.agents');
 
   // Try 2: Parent of CLI (when in repo: cli/dist -> cli -> repo root)
   const repoRoot = path.resolve(__dirname, '../../..');
-  const playbookCursor2 = path.join(repoRoot, '.cursor');
+  const playbookAgents2 = path.join(repoRoot, '.agents');
 
   // Try 3: Current working directory (when run from repo root)
   const cwdRoot = process.cwd();
-  const playbookCursor3 = path.join(cwdRoot, '.cursor');
+  const playbookAgents3 = path.join(cwdRoot, '.agents');
 
-  // Check which location has the .cursor directory
-  if (await fs.pathExists(playbookCursor1)) {
+  // Check which location has the .agents directory
+  if (await fs.pathExists(playbookAgents1)) {
     return path.join(cliRoot, 'templates');
   }
-  if (await fs.pathExists(playbookCursor2)) {
+  if (await fs.pathExists(playbookAgents2)) {
     return repoRoot;
   }
-  if ((await fs.pathExists(playbookCursor3)) && cwdRoot.includes('ai-playbook')) {
+  if ((await fs.pathExists(playbookAgents3)) && cwdRoot.includes('ai-playbook')) {
     return cwdRoot;
   }
 
@@ -55,7 +55,7 @@ program
     if (!playbookRoot) {
       console.log(chalk.red('❌ Error: Could not find AI Playbook files'));
       console.log(chalk.yellow('\n   Make sure the CLI package was built correctly.'));
-      console.log(chalk.yellow('   If running from source, ensure .cursor directory exists.\n'));
+      console.log(chalk.yellow('   If running from source, ensure .agents directory exists.\n'));
       console.log(chalk.cyan('   Alternative: Clone the repository and run:'));
       console.log(chalk.gray('   cd ai-playbook/cli'));
       console.log(chalk.gray('   npm install'));
@@ -64,7 +64,7 @@ program
       process.exit(1);
     }
 
-    const playbookCursorDir = path.join(playbookRoot, '.cursor');
+    const playbookAgentsDir = path.join(playbookRoot, '.agents');
 
     console.log(chalk.blue('🚀 AI Playbook Installer\n'));
 
@@ -75,10 +75,10 @@ program
       process.exit(1);
     }
 
-    // Verify playbook .cursor directory exists
-    if (!(await fs.pathExists(playbookCursorDir))) {
+    // Verify playbook .agents directory exists
+    if (!(await fs.pathExists(playbookAgentsDir))) {
       console.log(
-        chalk.red(`❌ Error: AI Playbook .cursor directory not found at ${playbookCursorDir}`)
+        chalk.red(`❌ Error: AI Playbook .agents directory not found at ${playbookAgentsDir}`)
       );
       console.log(chalk.red('   Make sure you are running from the ai-playbook repository\n'));
       process.exit(1);
@@ -98,9 +98,9 @@ program
         await fs.ensureDir(commandsDir);
         await fs.ensureDir(docsDir);
 
-        const playbookRulesDir = path.join(playbookCursorDir, 'rules');
-        const playbookCommandsDir = path.join(playbookCursorDir, 'commands');
-        const playbookDocsDir = path.join(playbookCursorDir, 'docs');
+        const playbookRulesDir = path.join(playbookAgentsDir, 'rules');
+        const playbookCommandsDir = path.join(playbookAgentsDir, 'commands');
+        const playbookDocsDir = path.join(playbookAgentsDir, 'docs');
 
         // Remove existing symlinks/directories if they exist
         if (await fs.pathExists(rulesDir)) {
@@ -133,7 +133,7 @@ program
         console.log(chalk.gray(`   ${docsDir} -> ${playbookDocsDir}\n`));
       } else if (options.type === 'copy') {
         // Copy files
-        await fs.copy(playbookCursorDir, cursorDir, {
+        await fs.copy(playbookAgentsDir, cursorDir, {
           overwrite: true,
           filter: (src) => {
             // Don't copy mcp.json if it exists (contains sensitive data)
@@ -147,12 +147,12 @@ program
         console.log(chalk.cyan('   Run these commands in your project:\n'));
         console.log(
           chalk.gray(
-            '   git submodule add https://github.com/YOUR_USERNAME/ai-playbook.git .ai-playbook'
+            '   git submodule add https://github.com/KaelSensei/ai-playbook.git .ai-playbook'
           )
         );
-        console.log(chalk.gray('   ln -s .ai-playbook/.cursor/rules .cursor/rules'));
-        console.log(chalk.gray('   ln -s .ai-playbook/.cursor/commands .cursor/commands'));
-        console.log(chalk.gray('   ln -s .ai-playbook/.cursor/docs .cursor/docs\n'));
+        console.log(chalk.gray('   ln -s .ai-playbook/.agents/rules .cursor/rules'));
+        console.log(chalk.gray('   ln -s .ai-playbook/.agents/commands .cursor/commands'));
+        console.log(chalk.gray('   ln -s .ai-playbook/.agents/docs .cursor/docs\n'));
         return;
       }
 

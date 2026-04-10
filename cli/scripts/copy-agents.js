@@ -8,16 +8,16 @@ const __dirname = dirname(__filename);
 
 const repoRoot = path.resolve(__dirname, '../..');
 const cliRoot = path.resolve(__dirname, '..');
-const sourceCursor = path.join(repoRoot, '.cursor');
-const destCursor = path.join(cliRoot, 'templates', '.cursor');
+const sourceAgents = path.join(repoRoot, '.agents');
+const destAgents = path.join(cliRoot, 'templates', '.agents');
 
-async function copyCursorFiles() {
+async function copyAgentsFiles() {
   try {
     // Create templates directory
     await fs.ensureDir(path.join(cliRoot, 'templates'));
 
-    // Copy .cursor directory
-    await fs.copy(sourceCursor, destCursor, {
+    // Copy .agents directory
+    await fs.copy(sourceAgents, destAgents, {
       overwrite: true,
       filter: (src) => {
         // Don't copy mcp.json (contains sensitive data)
@@ -25,11 +25,11 @@ async function copyCursorFiles() {
       },
     });
 
-    console.log('✅ Copied .cursor files to templates/');
+    console.log('✅ Copied .agents files to templates/');
   } catch (error) {
-    console.error('❌ Error copying .cursor files:', error);
+    console.error('❌ Error copying .agents files:', error);
     process.exit(1);
   }
 }
 
-copyCursorFiles();
+copyAgentsFiles();
