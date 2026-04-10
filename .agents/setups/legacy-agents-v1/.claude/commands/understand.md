@@ -1,118 +1,117 @@
 ---
 name: understand
 description: >
-  Cartographier un module legacy avant tout changement. legacy-analyst + archaeologist en parallèle.
-  Mise à jour de legacy-map.md. Obligatoire avant /characterize, /refactor ou /strangler sur un
-  module inconnu.
-argument-hint: '[module ou fichier à cartographier]'
+  Map a legacy module before any change. legacy-analyst + archaeologist in parallel. Updates
+  legacy-map.md. Mandatory before /characterize, /refactor, or /strangler on an unknown module.
+argument-hint: '[module or file to map]'
 ---
 
 # /understand
 
-Update `tasks/current_task.md` : status=UNDERSTAND, module=$ARGUMENTS
+Update `tasks/current_task.md`: status=UNDERSTAND, module=$ARGUMENTS
 
-**Règle d'or** : on ne touche pas ce qu'on n'a pas cartographié.
-
----
-
-## Phase 1 — Spawner legacy-analyst et archaeologist en parallèle
-
-Les deux agents bossent simultanément sur des angles différents.
-
-**legacy-analyst prompt :**
-
-```
-Tu es legacy-analyst.
-Charge .claude/agents/legacy-analyst.md.
-Charge project-architecture.md, legacy-map.md.
-Charge legacy-patterns, technical-debt skills.
-
-Cartographie ce module : $ARGUMENTS
-
-Explorer dans cet ordre :
-1. git blame — qui a touché ça, quand, combien de fois
-2. Taille et structure du fichier
-3. Toutes les dépendances entrantes (qui appelle ce module)
-4. Toutes les dépendances sortantes (ce module appelle quoi)
-5. Tests existants (oui/non/partiels)
-6. Identifier les seams disponibles
-7. Estimer le niveau de risque
-
-Produire une fiche module complète au format legacy-map.md.
-Identifier les couplages dangereux et les zones à risque.
-```
-
-**archaeologist prompt :**
-
-```
-Tu es archaeologist.
-Charge .claude/agents/archaeologist.md.
-Charge project-architecture.md, legacy-map.md.
-Charge legacy-patterns, team--skill-lookup skills.
-
-Comprends l'histoire de ce module : $ARGUMENTS
-
-Explorer :
-1. git log --follow -p — évolution dans le temps
-2. git log --grep="fix\|hotfix\|hack\|quick" — patchs d'urgence
-3. Commentaires et TODO dans le code — décisions héritées
-4. Règles métier implicites dans le code
-5. Contournements identifiables (hacks devenus permanents)
-6. Décisions bizarres avec raison probable
-
-Produire le rapport d'archéologie au format archaeologist.
-```
+**Golden rule**: we do not touch what we have not mapped.
 
 ---
 
-## Phase 2 — Synthèse
+## Phase 1 — Spawn legacy-analyst and archaeologist in parallel
 
-Collecter les deux rapports. Construire une vue unifiée :
+The two agents work simultaneously on different angles.
+
+**legacy-analyst prompt:**
+
+```
+You are legacy-analyst.
+Load .claude/agents/legacy-analyst.md.
+Load project-architecture.md, legacy-map.md.
+Load legacy-patterns, technical-debt skills.
+
+Map this module: $ARGUMENTS
+
+Explore in this order:
+1. git blame — who touched it, when, how many times
+2. File size and structure
+3. All incoming dependencies (who calls this module)
+4. All outgoing dependencies (what this module calls)
+5. Existing tests (yes/no/partial)
+6. Identify available seams
+7. Estimate the risk level
+
+Produce a complete module card in legacy-map.md format.
+Identify dangerous couplings and risk zones.
+```
+
+**archaeologist prompt:**
+
+```
+You are archaeologist.
+Load .claude/agents/archaeologist.md.
+Load project-architecture.md, legacy-map.md.
+Load legacy-patterns, team--skill-lookup skills.
+
+Understand the history of this module: $ARGUMENTS
+
+Explore:
+1. git log --follow -p — evolution over time
+2. git log --grep="fix\|hotfix\|hack\|quick" — emergency patches
+3. Comments and TODO in the code — inherited decisions
+4. Implicit business rules in the code
+5. Identifiable workarounds (hacks that became permanent)
+6. Odd decisions with probable reason
+
+Produce the archaeology report in archaeologist format.
+```
+
+---
+
+## Phase 2 — Synthesis
+
+Collect both reports. Build a unified view:
 
 ```markdown
-# Cartographie : $ARGUMENTS
+# Mapping: $ARGUMENTS
 
-## Résumé Exécutif
+## Executive Summary
 
-[3-5 phrases : ce que fait le module, son état, risque global]
+[3-5 sentences: what the module does, its state, overall risk]
 
-## Fiche Module (pour legacy-map.md)
+## Module Card (for legacy-map.md)
 
-[fiche complète au format legacy-map.md]
+[complete card in legacy-map.md format]
 
-## Histoire (Archéologie)
+## History (Archaeology)
 
-[findings de l'archaeologist]
+[archaeologist findings]
 
-## Zones à Risque
+## Risk Zones
 
-🔴 [description] — [pourquoi dangereux] 🟡 [description] — [attention]
+Red [description] — [why dangerous] Yellow [description] — [caution]
 
-## Seams Disponibles
+## Available Seams
 
-- [seam 1] : [comment l'exploiter]
-- [seam 2] : [comment l'exploiter]
+- [seam 1]: [how to exploit it]
+- [seam 2]: [how to exploit it]
 
-## Recommandation
+## Recommendation
 
-- [ ] Prêt pour /characterize (seams disponibles)
-- [ ] Seams à créer d'abord (Sprout/Wrap method)
-- [ ] Trop risqué — discuter avec tech-lead avant de toucher
+- [ ] Ready for /characterize (seams available)
+- [ ] Seams to create first (Sprout/Wrap method)
+- [ ] Too risky — discuss with tech-lead before touching
 ```
 
 ---
 
-## Phase 3 — Mise à jour legacy-map.md
+## Phase 3 — Update legacy-map.md
 
-Ajouter la fiche module dans `.claude/legacy-map.md`. Mettre à jour la section "Zones Non Explorées"
-(retirer ce module). Mettre à jour `last-verified` de `legacy-map.md`.
+Add the module card to `.claude/legacy-map.md`. Update the "Unexplored Zones" section (remove this
+module). Update `last-verified` in `legacy-map.md`.
 
-Update `tasks/current_task.md` : status=IDLE
+Update `tasks/current_task.md`: status=IDLE
 
 ```
-✅ Cartographie terminée : $ARGUMENTS
-Niveau de risque : 🟢 / 🟡 / 🔴
-Seams disponibles : [N]
-Tests existants : oui/non/partiels
-Prêt pour : /characterize $ARGUMENTS
+Mapping complete: $ARGUMENTS
+Risk level: green / yellow / red
+Available seams: [N]
+Existing tests: yes/no/partial
+Ready for: /characterize $ARGUMENTS
 ```

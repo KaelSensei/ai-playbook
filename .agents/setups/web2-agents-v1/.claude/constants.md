@@ -2,19 +2,19 @@
 
 <!-- last-verified: YYYY-MM-DD -->
 <!--
-  Mettre à jour quand :
-  - Une URL de service change
-  - Des variables d'env sont ajoutées / retirées
-  - Des versions de dépendances clés changent
+  Update when:
+  - A service URL changes
+  - Env vars are added / removed
+  - Key dependency versions change
 -->
 
 ## Environments
 
-| Env        | URL                          | Notes       |
-| ---------- | ---------------------------- | ----------- |
-| Local      | `http://localhost:3000`      |             |
-| Staging    | `https://staging.monapp.com` | branch main |
-| Production | `https://monapp.com`         | tag release |
+| Env        | URL                         | Notes       |
+| ---------- | --------------------------- | ----------- |
+| Local      | `http://localhost:3000`     |             |
+| Staging    | `https://staging.myapp.com` | branch main |
+| Production | `https://myapp.com`         | tag release |
 
 ## Environment Variables
 
@@ -31,17 +31,17 @@ DATABASE_POOL_MAX=10
 
 # Auth
 JWT_SECRET=             # min 32 chars, random
-JWT_ACCESS_TTL=900      # 15 min en secondes
-JWT_REFRESH_TTL=604800  # 7 jours en secondes
+JWT_ACCESS_TTL=900      # 15 min in seconds
+JWT_REFRESH_TTL=604800  # 7 days in seconds
 
 # Cache
 REDIS_URL=              # redis://localhost:6379
 
 # Email
 SENDGRID_API_KEY=
-EMAIL_FROM=noreply@monapp.com
+EMAIL_FROM=noreply@myapp.com
 
-# Paiements
+# Payments
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 STRIPE_PRICE_PRO=
@@ -54,7 +54,7 @@ SENTRY_DSN=
 LOG_LEVEL=              # debug | info | warn | error
 ```
 
-## Service URLs (internes)
+## Service URLs (internal)
 
 ```
 API_BASE_URL=/api/v1
@@ -67,24 +67,24 @@ USERS_SERVICE=/api/v1/users
 ```
 node:       20.x LTS
 typescript: 5.x
-[framework]: x.x.x  ← à remplir
-[orm]:       x.x.x  ← à remplir
-[test runner]: x.x.x ← à remplir
+[framework]: x.x.x  ← to fill in
+[orm]:       x.x.x  ← to fill in
+[test runner]: x.x.x ← to fill in
 docker:     24.x
 ```
 
 ## Rate Limits
 
-| Endpoint                  | Limite   | Fenêtre |
-| ------------------------- | -------- | ------- |
-| POST /auth/login          | 5 req    | 15 min  |
-| POST /auth/register       | 3 req    | 1h      |
-| /api/\*\* (authenticated) | 1000 req | 1h      |
-| /api/\*\* (anonymous)     | 100 req  | 1h      |
+| Endpoint                  | Limit    | Window |
+| ------------------------- | -------- | ------ |
+| POST /auth/login          | 5 req    | 15 min |
+| POST /auth/register       | 3 req    | 1h     |
+| /api/\*\* (authenticated) | 1000 req | 1h     |
+| /api/\*\* (anonymous)     | 100 req  | 1h     |
 
 ## Feature Flags
 
 <!--
-  Flags actifs en production.
-  Format : NOM_FLAG — description — actif en (prod/staging/dev)
+  Flags active in production.
+  Format: FLAG_NAME — description — active in (prod/staging/dev)
 -->

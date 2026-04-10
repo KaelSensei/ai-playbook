@@ -1,6 +1,6 @@
 # Auth Middleware — JWT + RBAC TypeScript
 
-## JWT Middleware Complet
+## Full JWT Middleware
 
 ```typescript
 // middlewares/authenticate.ts
@@ -35,7 +35,7 @@ export const authenticate = (req: Request, res: Response, next: NextFunction): v
   }
 };
 
-// Optionnel — n'échoue pas si absent
+// Optional — does not fail if missing
 export const optionalAuthenticate = (req: Request, res: Response, next: NextFunction): void => {
   const header = req.headers.authorization;
   if (!header?.startsWith('Bearer ')) {
@@ -65,7 +65,7 @@ export const authorize =
     next();
   };
 
-// Middleware de propriété — vérifier que l'utilisateur accède à SES données
+// Ownership middleware — verifies the user accesses THEIR own data
 export const authorizeOwnerOrAdmin =
   (getResourceOwnerId: (req: Request) => string) =>
   (req: Request, res: Response, next: NextFunction): void => {
@@ -79,7 +79,7 @@ export const authorizeOwnerOrAdmin =
     respond.error(res, 403, 'FORBIDDEN', 'You can only access your own resources');
   };
 
-// Routes avec auth
+// Routes with auth
 router.get('/users', authenticate, authorize([UserRole.ADMIN]), userController.list);
 
 router.patch(
@@ -117,7 +117,7 @@ export class TokenService {
   }
 }
 
-// Route de refresh
+// Refresh route
 router.post('/auth/refresh', async (req, res, next) => {
   const { refreshToken } = req.body;
   try {

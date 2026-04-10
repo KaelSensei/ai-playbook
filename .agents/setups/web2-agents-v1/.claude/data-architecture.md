@@ -2,15 +2,15 @@
 
 <!-- last-verified: YYYY-MM-DD -->
 <!--
-  STALENESS RULE : si today - last-verified > 30 jours → STALE.
-  Vérifier contre le schéma réel avant de raisonner depuis ce doc.
+  STALENESS RULE: if today - last-verified > 30 days → STALE.
+  Check against the real schema before reasoning from this doc.
 -->
 
 ## Database Schema
 
 <!--
-  Tables principales, colonnes, contraintes, relations.
-  Exemple :
+  Main tables, columns, constraints, relations.
+  Example:
 
   users
   ├── id          UUID PK
@@ -32,8 +32,8 @@
 ## Relations
 
 <!--
-  Diagramme ou liste des relations importantes.
-  Exemple :
+  Diagram or list of the important relations.
+  Example:
   users 1──* subscriptions
   users 1──* audit_logs
   users *──* teams (via team_members)
@@ -42,59 +42,59 @@
 ## Indexes
 
 <!--
-  Index existants et leur justification.
-  Exemple :
+  Existing indexes and their rationale.
+  Example:
   - users(email) UNIQUE — login lookup
-  - subscriptions(user_id) — jointure fréquente
-  - audit_logs(created_at DESC) — pagination chronologique
+  - subscriptions(user_id) — frequent join
+  - audit_logs(created_at DESC) — chronological pagination
 -->
 
 ## Migrations Strategy
 
 <!--
-  Comment les migrations sont gérées.
-  Exemple :
-  - Prisma Migrate en dev, prisma migrate deploy en prod
-  - Zero-downtime : colonnes ajoutées nullable d'abord
-  - Jamais de DROP COLUMN sans migration de données au préalable
-  - Les migrations sont squashées tous les 3 mois
+  How migrations are managed.
+  Example:
+  - Prisma Migrate in dev, prisma migrate deploy in prod
+  - Zero-downtime: new columns added as nullable first
+  - Never DROP COLUMN without a prior data migration
+  - Migrations are squashed every 3 months
 -->
 
 ## Soft Delete Convention
 
 <!--
-  Comment les suppressions sont gérées.
-  Exemple :
-  - Toutes les entités utilisateurs ont deleted_at TIMESTAMPTZ NULL
-  - Les queries filtrent WHERE deleted_at IS NULL par défaut
-  - Hard delete uniquement sur demande explicite RGPD
+  How deletions are handled.
+  Example:
+  - All user-facing entities have deleted_at TIMESTAMPTZ NULL
+  - Queries filter WHERE deleted_at IS NULL by default
+  - Hard delete only on explicit GDPR request
 -->
 
 ## Sensitive Data
 
 <!--
-  Quelles données sont sensibles et comment elles sont protégées.
-  Exemple :
-  - Passwords : bcrypt cost 12, jamais loggés
-  - Tokens : hachés en base (SHA-256), valeur brute jamais stockée
-  - PII (email, nom) : chiffrés at-rest sur les colonnes marquées
+  Which data is sensitive and how it is protected.
+  Example:
+  - Passwords: bcrypt cost 12, never logged
+  - Tokens: hashed in the database (SHA-256), raw value never stored
+  - PII (email, name): encrypted at-rest on flagged columns
 -->
 
 ## Caching Strategy
 
 <!--
-  Ce qui est mis en cache, durée, invalidation.
-  Exemple :
-  - Session : Redis, TTL 15min (access) / 7j (refresh)
-  - User profile : Redis, TTL 5min, invalidé sur update
-  - Plan features : in-memory, rechargé au démarrage
+  What is cached, duration, invalidation.
+  Example:
+  - Session: Redis, TTL 15min (access) / 7d (refresh)
+  - User profile: Redis, TTL 5min, invalidated on update
+  - Plan features: in-memory, reloaded on startup
 -->
 
 ## Query Patterns
 
 <!--
-  Requêtes fréquentes ou critiques à documenter.
-  Exemple :
-  - Dashboard : agrégation sur 30j, index sur created_at obligatoire
-  - Search : ILIKE sur name, préférer full-text search si > 100k rows
+  Frequent or critical queries to document.
+  Example:
+  - Dashboard: 30-day aggregation, index on created_at required
+  - Search: ILIKE on name, prefer full-text search if > 100k rows
 -->

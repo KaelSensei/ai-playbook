@@ -1,6 +1,6 @@
 #!/bin/bash
-# web2-agents v1 — installer dans ton projet
-# Lancer depuis la racine du projet : bash /path/to/web2-agents-v1/install.sh
+# web2-agents v1 — install into your project
+# Run from the project root: bash /path/to/web2-agents-v1/install.sh
 
 set -e
 
@@ -69,16 +69,16 @@ echo "✓  3 team skills"
 for cmd in story spec build review check pr; do
   cp "$SOURCE/.claude/commands/$cmd.md" "$TARGET/commands/$cmd.md"
 done
-echo "✓  5 commandes"
+echo "✓  5 commands"
 
 # ── Foundation docs ─────────────────────────────────────────────────────────
 
 for doc in project-architecture.md data-architecture.md constants.md; do
   if [ ! -f "$TARGET/$doc" ]; then
     cp "$SOURCE/.claude/$doc" "$TARGET/$doc"
-    echo "✓  Créé $TARGET/$doc  ← à remplir"
+    echo "✓  Created $TARGET/$doc  ← fill in"
   else
-    echo "⚠  Ignoré $TARGET/$doc  (existe déjà)"
+    echo "⚠  Skipped $TARGET/$doc  (already exists)"
   fi
 done
 
@@ -86,16 +86,16 @@ done
 
 if [ ! -f "CLAUDE.md" ]; then
   cp "$SOURCE/CLAUDE.md" "CLAUDE.md"
-  echo "✓  Créé CLAUDE.md  ← mettre à jour Stack + retirer agents inutiles"
+  echo "✓  Created CLAUDE.md  ← update Stack + remove unused agents"
 else
-  echo "⚠  Ignoré CLAUDE.md  (existe déjà — merger Agent Team table manuellement)"
+  echo "⚠  Skipped CLAUDE.md  (already exists — merge the Agent Team table manually)"
 fi
 
 # ── Task tracker ────────────────────────────────────────────────────────────
 
 if [ ! -f "tasks/current_task.md" ]; then
   cp "$SOURCE/tasks/current_task.md" "tasks/current_task.md"
-  echo "✓  Créé tasks/current_task.md"
+  echo "✓  Created tasks/current_task.md"
 fi
 
 # ── Permissions Claude Code ─────────────────────────────────────────────────
@@ -120,7 +120,7 @@ if [ ! -f "$TARGET/settings.json" ]; then
   }
 }
 EOF
-  echo "✓  Créé $TARGET/settings.json  (permissions Bash)"
+  echo "✓  Created $TARGET/settings.json  (Bash permissions)"
 fi
 
 
@@ -130,30 +130,30 @@ mkdir -p "docs/adr" "docs/rollbacks"
 
 if [ ! -f "TEST_PLAN.md" ]; then
   cp "$SOURCE/TEST_PLAN.md" "TEST_PLAN.md"
-  echo "✓  Créé TEST_PLAN.md  ← configurer les flows et seuils"
+  echo "✓  Created TEST_PLAN.md  ← configure flows and thresholds"
 fi
 
 if [ ! -f "$TARGET/observability.md" ]; then
   cp "$SOURCE/.claude/observability.md" "$TARGET/observability.md"
-  echo "✓  Créé $TARGET/observability.md  ← configurer ton stack observabilité"
+  echo "✓  Created $TARGET/observability.md  ← configure your observability stack"
 fi
 
 if [ ! -f "CHANGELOG.md" ]; then
   cp "$SOURCE/CHANGELOG.md" "CHANGELOG.md"
-  echo "✓  Créé CHANGELOG.md"
+  echo "✓  Created CHANGELOG.md"
 fi
 
 if [ ! -f "PROGRESS.md" ]; then
   cp "$SOURCE/PROGRESS.md" "PROGRESS.md"
-  echo "✓  Créé PROGRESS.md"
+  echo "✓  Created PROGRESS.md"
 fi
 
 if [ ! -f "docs/adr/README.md" ]; then
   cp "$SOURCE/docs/adr/README.md" "docs/adr/README.md"
-  echo "✓  Créé docs/adr/README.md"
+  echo "✓  Created docs/adr/README.md"
 fi
 
-# ── Résumé ──────────────────────────────────────────────────────────────────
+# ── Summary ─────────────────────────────────────────────────────────────────
 
 echo ""
 echo "──────────────────────────────────────────"

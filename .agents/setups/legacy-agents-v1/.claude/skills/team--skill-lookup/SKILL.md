@@ -1,59 +1,58 @@
 ---
 name: team--skill-lookup
 description: >
-  Protocole d'exploration du codebase et de lookup de contexte. Chargé pendant /story, /spec et la
-  phase EXPLORE. Définit comment vérifier la fraîcheur des docs, explorer le codebase
-  systématiquement, et utiliser la recherche web efficacement.
+  Codebase exploration and context lookup protocol. Loaded during /story, /spec, and the EXPLORE
+  phase. Defines how to check doc freshness, explore the codebase systematically, and use web search
+  effectively.
 ---
 
 # Team Lookup Protocol
 
-## Vérification de Fraîcheur des Docs
+## Doc Freshness Verification
 
-Chaque agent DOIT vérifier `last-verified` avant de raisonner depuis un doc.
-
-```
-aujourd'hui - last-verified <= 30 jours → FRESH → faire confiance au doc
-aujourd'hui - last-verified >  30 jours → STALE → explorer le codebase
-```
-
-Si un doc est stale :
-
-1. Le signaler explicitement : _"project-architecture.md est STALE (last-verified: [date])"_
-2. Explorer le codebase directement pour les parties concernées
-3. Signaler les divergences entre doc et réalité à l'orchestrateur
-4. Ne PAS mettre à jour le doc silencieusement — signaler, ne pas corriger mid-tâche
-
-## Ordre d'Exploration du Codebase
-
-Pour un projet web2 classique, explorer dans cet ordre :
+Every agent MUST check `last-verified` before reasoning from a doc.
 
 ```
-1. package.json / pyproject.toml   → stack, dépendances, versions
-2. src/ ou app/                    → structure des modules
-3. test/ ou __tests__/             → comprendre le comportement attendu depuis les tests
-4. .env.example                    → variables d'env requises
-5. migrations/ ou prisma/schema    → état du schéma BDD
-6. CI config (.github/workflows/)  → pipeline de qualité
-7. README.md                       → conventions spécifiques au projet
+today - last-verified <= 30 days → FRESH → trust the doc
+today - last-verified >  30 days → STALE → explore the codebase
 ```
 
-**Règle** : lire les tests avant le code. Les tests expriment l'intention ; l'implémentation exprime
-le mécanisme.
+If a doc is stale:
 
-## Recherche Web
+1. Flag it explicitly: _"project-architecture.md is STALE (last-verified: [date])"_
+2. Explore the codebase directly for the affected parts
+3. Report divergences between doc and reality to the orchestrator
+4. Do NOT update the doc silently — report, do not correct mid-task
 
-Utiliser la recherche web pour la connaissance externe non couverte par les skills :
+## Codebase Exploration Order
 
-**Bons usages :**
+For a classic web2 project, explore in this order:
 
-- Documentation de frameworks (Next.js, NestJS, FastAPI, Rails)
-- RFC et standards (RFC 7519 JWT, RFC 6749 OAuth2)
-- CVE et advisories de sécurité
-- Changelogs de dépendances
-- Patterns connus pour un problème spécifique
+```
+1. package.json / pyproject.toml   → stack, dependencies, versions
+2. src/ or app/                    → module structure
+3. test/ or __tests__/             → understand expected behavior from the tests
+4. .env.example                    → required env vars
+5. migrations/ or prisma/schema    → DB schema state
+6. CI config (.github/workflows/)  → quality pipeline
+7. README.md                       → project-specific conventions
+```
 
-**Patterns de recherche efficaces :**
+**Rule**: read tests before code. Tests express intent; implementation expresses the mechanism.
+
+## Web Search
+
+Use web search for external knowledge not covered by the skills:
+
+**Good uses:**
+
+- Framework documentation (Next.js, NestJS, FastAPI, Rails)
+- RFCs and standards (RFC 7519 JWT, RFC 6749 OAuth2)
+- CVEs and security advisories
+- Dependency changelogs
+- Known patterns for a specific problem
+
+**Effective search patterns:**
 
 ```
 "[framework] [feature] documentation"
@@ -62,47 +61,47 @@ Utiliser la recherche web pour la connaissance externe non couverte par les skil
 "[pattern] best practices [year]"
 ```
 
-**Ne PAS utiliser la recherche web pour :**
+**Do NOT use web search for:**
 
-- Ce qui est couvert par les skills chargés
-- Les détails d'implémentation visibles dans le codebase
-- Les questions auxquelles les docs frais répondent déjà
+- Anything covered by loaded skills
+- Implementation details visible in the codebase
+- Questions that fresh docs already answer
 
-## Format de Sortie après Exploration
+## Output Format After Exploration
 
 ```markdown
-# Exploration : [sujet ou feature]
+# Exploration: [topic or feature]
 
-## Statut des Docs
+## Doc Status
 
-- project-architecture.md : FRESH (last-verified: YYYY-MM-DD) / STALE
-- data-architecture.md : FRESH / STALE
-- constants.md : FRESH / STALE
+- project-architecture.md: FRESH (last-verified: YYYY-MM-DD) / STALE
+- data-architecture.md: FRESH / STALE
+- constants.md: FRESH / STALE
 
-## Findings Codebase
+## Codebase Findings
 
-[fichiers clés explorés, patterns observés, conventions identifiées]
+[key files explored, patterns observed, conventions identified]
 
-## Recherche Externe
+## External Research
 
-[URLs consultées, faits clés extraits — paraphrasés]
+[URLs consulted, key facts extracted — paraphrased]
 
-## Divergences Trouvées
+## Divergences Found
 
-[ce qui ne correspond pas aux docs, avec fichier + ligne]
+[what doesn't match the docs, with file + line]
 
-## Réponse à la Tâche d'Exploration
+## Answer to the Exploration Task
 
-[réponse directe et structurée à ce qui était cherché]
+[direct, structured answer to what was sought]
 
-## Questions Ouvertes
+## Open Questions
 
-[ce qui ne peut pas être déterminé — besoin clarification utilisateur]
+[what cannot be determined — needs user clarification]
 ```
 
-## Règles d'Efficacité
+## Efficiency Rules
 
-- Lire le fichier de test d'un module avant le module lui-même
-- S'arrêter d'explorer dès qu'on a assez pour répondre à la question
-- Une recherche web par concept externe distinct — pas de répétition
-- Si un doc est frais et répond directement → lui faire confiance, s'arrêter
+- Read a module's test file before the module itself
+- Stop exploring as soon as you have enough to answer the question
+- One web search per distinct external concept — no repetition
+- If a doc is fresh and answers directly → trust it, stop

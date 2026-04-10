@@ -7,22 +7,21 @@
 
 #### Response time
 
-| Opération             | p50     | p95     | p99    |
-| --------------------- | ------- | ------- | ------ |
-| Chargement page liste | < 500ms | < 1s    | < 2s   |
-| Soumission formulaire | < 300ms | < 800ms | < 1.5s |
-| Recherche             | < 200ms | < 500ms | < 1s   |
+| Operation       | p50     | p95     | p99    |
+| --------------- | ------- | ------- | ------ |
+| List page load  | < 500ms | < 1s    | < 2s   |
+| Form submission | < 300ms | < 800ms | < 1.5s |
+| Search          | < 200ms | < 500ms | < 1s   |
 
-Conditions : mesurées avec 100 utilisateurs simultanés, données de production simulées (10 000
-réservations).
+Conditions: measured with 100 concurrent users, simulated production data (10,000 bookings).
 
-#### Charge
+#### Load
 
-| Scénario     | Utilisateurs simultanés | Comportement attendu                                      |
-| ------------ | ----------------------- | --------------------------------------------------------- |
-| Nominal      | 50                      | Temps de réponse dans les limites ci-dessus               |
-| Pic          | 200                     | Dégradation acceptable : p95 × 2 max                      |
-| Exceptionnel | 500                     | Pas de crash. File d'attente ou message d'erreur dégradé. |
+| Scenario    | Concurrent users | Expected behaviour                                  |
+| ----------- | ---------------- | --------------------------------------------------- |
+| Nominal     | 50               | Response times within the limits above              |
+| Peak        | 200              | Acceptable degradation: p95 × 2 max                 |
+| Exceptional | 500              | No crash. Queue or graceful degraded error message. |
 ```
 
 ## Accessibility
@@ -30,17 +29,17 @@ réservations).
 ```markdown
 ### Accessibility Criteria
 
-Standard minimum : WCAG 2.1 niveau AA
+Minimum standard: WCAG 2.1 level AA
 
-Obligatoire :
+Mandatory:
 
-- Tous les éléments interactifs accessibles au clavier (Tab, Shift+Tab, Enter, Space)
-- Focus visible sur tous les éléments interactifs
-- Ratio de contraste ≥ 4.5:1 pour le texte (normal), ≥ 3:1 pour les grands textes
-- Labels associés à tous les champs de formulaire
-- Messages d'erreur annoncés aux lecteurs d'écran (aria-live ou focus)
-- Images informatives ont un alt text. Images décoratives alt=""
-- Pas d'information transmise uniquement par la couleur
+- All interactive elements keyboard-accessible (Tab, Shift+Tab, Enter, Space)
+- Visible focus on all interactive elements
+- Contrast ratio >= 4.5:1 for text (normal), >= 3:1 for large text
+- Labels associated with every form field
+- Error messages announced to screen readers (aria-live or focus)
+- Informative images have alt text. Decorative images use alt=""
+- No information conveyed by colour alone
 ```
 
 ## Security
@@ -48,20 +47,18 @@ Obligatoire :
 ```markdown
 ### Security Criteria — [Feature]
 
-Authentification et Autorisation :
+Authentication and Authorisation:
 
-- [RG-SEC-01] Seul le propriétaire peut annuler sa réservation Exception : les admins peuvent
-  annuler n'importe quelle réservation
-- [RG-SEC-02] Un utilisateur non connecté est redirigé vers la page de connexion
+- [BR-SEC-01] Only the owner can cancel their booking. Exception: admins can cancel any booking.
+- [BR-SEC-02] An unauthenticated user is redirected to the login page
 
-Données :
+Data:
 
-- [RG-SEC-03] Aucune donnée sensible dans les URLs (pas de token, email, etc.)
-- [RG-SEC-04] Les confirmations d'annulation ne contiennent que les infos nécessaires (pas de
-  données de carte bancaire, même partielles)
+- [BR-SEC-03] No sensitive data in URLs (no tokens, emails, etc.)
+- [BR-SEC-04] Cancellation confirmations only include necessary information (no payment card data,
+  even partial)
 
-Validation :
+Validation:
 
-- [RG-SEC-05] Toutes les entrées utilisateur sont validées côté serveur (même si validées côté
-  client)
+- [BR-SEC-05] All user input is validated server-side (even if already validated client-side)
 ```

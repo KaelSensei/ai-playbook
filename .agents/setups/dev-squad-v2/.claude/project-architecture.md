@@ -4,44 +4,44 @@
 
 ## SUMMARY (fill in — loaded by all agents)
 
-[Application]: [description en 1 ligne] [Domaine]: [domaine métier principal] [Stack]: TypeScript /
-Node.js / React [Auth]: [JWT | sessions | OAuth] [Invariant principal]: [règle métier la plus
-importante du système] [Point d'attention]: [ce qu'il faut savoir avant de toucher au code]
+[Application]: [one-line description] [Domain]: [main business domain] [Stack]: TypeScript / Node.js
+/ React [Auth]: [JWT | sessions | OAuth] [Core invariant]: [the most important business rule in the
+system] [Watch out for]: [what you need to know before touching the code]
 
 ---
 
 ## Architecture
 
-### Couches
+### Layers
 
 ```
 src/
-├── domain/        # Entités, Value Objects, Events, Erreurs domaine
+├── domain/        # Entities, Value Objects, Events, Domain errors
 ├── application/   # Use Cases, Ports (interfaces)
 ├── infrastructure/ # Adapters (Prisma, SMTP, S3, etc.)
-└── presentation/  # Controllers HTTP, DTOs, Middlewares
+└── presentation/  # HTTP Controllers, DTOs, Middlewares
 ```
 
 ### Bounded Contexts
 
-<!-- Lister les contextes métier si applicable -->
+<!-- List business contexts if applicable -->
 
 ### API Contracts
 
-<!-- Routes principales et leurs use cases associés -->
+<!-- Main routes and their associated use cases -->
 
 ### Architecture Rules
 
-1. domain/ ne dépend de rien d'externe
-2. application/ ne dépend que de domain/
-3. Les use cases reçoivent leurs dépendances en injection
-4. Les composants React délèguent la logique aux hooks/use cases
-5. Pas de logique métier dans les controllers
+1. domain/ has no external dependencies
+2. application/ depends only on domain/
+3. Use cases receive their dependencies via injection
+4. React components delegate logic to hooks/use cases
+5. No business logic in controllers
 
 ---
 
 ## Modules / Features
 
-| Module   | Responsabilité   | Statut                       |
-| -------- | ---------------- | ---------------------------- |
-| [module] | [responsabilité] | [stable / en cours / legacy] |
+| Module   | Responsibility   | Status                          |
+| -------- | ---------------- | ------------------------------- |
+| [module] | [responsibility] | [stable / in progress / legacy] |

@@ -12,19 +12,19 @@ Multi-agent setup for web2 development. 11 specialized agents, mandatory TDD, pa
 A simulated engineering team that follows a structured workflow from business need to deployable
 code.
 
-| Agent               | Rôle                                           |
-| ------------------- | ---------------------------------------------- |
-| `product-owner`     | User stories, ACs, scope, dire non             |
-| `ux-designer`       | Parcours utilisateur, wireframes, états UI     |
-| `tech-lead`         | Standards d'équipe, cohérence, arbitrage       |
-| `architect`         | Découpage modules, API contracts, blast radius |
-| `spec-writer`       | Spec technique + test list exhaustive          |
-| `dev-senior-a`      | Implémentation TDD (RED → GREEN → BLUE)        |
-| `dev-senior-b`      | Review critique — test d'abord, code ensuite   |
-| `qa-engineer`       | Couverture comportementale, edge cases         |
-| `security-reviewer` | OWASP, auth, injections, secrets               |
-| `data-engineer`     | Schema BDD, migrations, N+1, indexes           |
-| `devops-engineer`   | CI/CD, Docker, déploiement, rollback           |
+| Agent               | Role                                          |
+| ------------------- | --------------------------------------------- |
+| `product-owner`     | User stories, ACs, scope, saying no           |
+| `ux-designer`       | User journeys, wireframes, UI states          |
+| `tech-lead`         | Team standards, consistency, arbitration      |
+| `architect`         | Module breakdown, API contracts, blast radius |
+| `spec-writer`       | Technical spec + exhaustive test list         |
+| `dev-senior-a`      | TDD implementation (RED → GREEN → BLUE)       |
+| `dev-senior-b`      | Critical review — test first, then code       |
+| `qa-engineer`       | Behavioral coverage, edge cases               |
+| `security-reviewer` | OWASP, auth, injections, secrets              |
+| `data-engineer`     | DB schema, migrations, N+1, indexes           |
+| `devops-engineer`   | CI/CD, Docker, deployment, rollback           |
 
 ---
 
@@ -42,105 +42,104 @@ bash /path/to/web2-agents-v1/install.sh .cursor
 
 ---
 
-## Étape obligatoire : remplir les 3 docs fondation
+## Mandatory step: fill in the 3 foundation docs
 
-Ces 3 fichiers sont la mémoire partagée de tous les agents. **Sans eux les agents bossent à
-l'aveugle.** Une fois remplis (~1h), tu les mets à jour au fil du projet.
+These 3 files are the shared memory of all the agents. **Without them the agents work blind.** Once
+filled in (~1h), you keep them updated as the project evolves.
 
 ### `.claude/project-architecture.md` (~30 min)
 
-Vue d'ensemble du système, modules, authentification, invariants clés, dépendances externes.
+System overview, modules, authentication, key invariants, external dependencies.
 
 ### `.claude/data-architecture.md` (~20 min)
 
-Schéma BDD, relations, indexes, stratégie de migration, soft delete, données sensibles, caching.
+DB schema, relations, indexes, migration strategy, soft delete, sensitive data, caching.
 
 ### `.claude/constants.md` (~10 min)
 
-Variables d'environnement, URLs par env, versions du toolchain, rate limits, feature flags.
+Environment variables, URLs per env, toolchain versions, rate limits, feature flags.
 
-> **Règle de fraîcheur** : chaque doc a une ligne `last-verified: YYYY-MM-DD`. Les agents vérifient
-> cette date. Si > 30 jours → ils explorent le codebase plutôt que de faire confiance au doc.
+> **Freshness rule**: every doc has a `last-verified: YYYY-MM-DD` line. Agents check this date. If >
+> 30 days → they explore the codebase rather than trusting the doc.
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
-cd ton-projet-web2
+cd your-web2-project
 claude
 ```
 
 ---
 
-### `/story <besoin>`
+### `/story <need>`
 
-Transformer un besoin en user stories avec ACs et wireframes.
+Turn a need into user stories with ACs and wireframes.
 
 ```
-/story permettre aux utilisateurs de réinitialiser leur mot de passe
+/story allow users to reset their password
 ```
 
-**Ce qui se passe :** `product-owner` et `ux-designer` travaillent en parallèle. L'un produit les
-ACs, l'autre les wireframes. Ils se cross-reviewent. Résultat : stories validées prêtes pour
-`/spec`.
+**What happens:** `product-owner` and `ux-designer` work in parallel. One produces the ACs, the
+other the wireframes. They cross-review each other. Result: validated stories ready for `/spec`.
 
 ---
 
 ### `/spec <story>`
 
-Produire une spec technique avec test list exhaustive. **La test list est le livrable principal —
-elle drive tout le `/build`.**
+Produce a technical spec with an exhaustive test list. **The test list is the main deliverable — it
+drives the entire `/build`.**
 
 ```
 /spec reset-password
 ```
 
-**Ce qui se passe :**
+**What happens:**
 
 ```
-1. spec-writer explore le codebase
-2. spec-writer drafts la spec + test list ordonnée
-3. Tu valides le draft
-4. Tous les agents reviewent en parallèle
-5. Boucle jusqu'à APPROVE unanime
-6. Spec sauvegardée dans .claude/specs/
+1. spec-writer explores the codebase
+2. spec-writer drafts the spec + ordered test list
+3. You validate the draft
+4. All agents review in parallel
+5. Loop until unanimous APPROVE
+6. Spec saved to .claude/specs/
 ```
 
 ---
 
 ### `/build <spec>`
 
-Implémenter en TDD strict. Un test à la fois.
+Implement in strict TDD. One test at a time.
 
 ```
 /build reset-password
 ```
 
-**Ce qui se passe (pour chaque item de la test list) :**
+**What happens (for each item in the test list):**
 
 ```
-1. dev-senior-a écrit UN test → RED (doit échouer)
-2. dev-senior-b review le TEST en premier
-3. dev-senior-a écrit le minimum de code → GREEN (doit passer)
-4. Tous les agents reviewent en parallèle
-5. dev-senior-a refactore → BLUE (tests toujours verts)
-6. Commit → item suivant
+1. dev-senior-a writes ONE test → RED (must fail)
+2. dev-senior-b reviews the TEST first
+3. dev-senior-a writes the minimum code → GREEN (must pass)
+4. All agents review in parallel
+5. dev-senior-a refactors → BLUE (tests still green)
+6. Commit → next item
 ```
 
-> TDD canon (Kent Beck) : aucun code de prod sans test qui échoue d'abord. dev-senior-b review le
-> test avant le code — toujours.
+> Canon TDD (Kent Beck): no production code without a failing test first. dev-senior-b reviews the
+> test before the code — always.
 
 ---
 
 ### `/review`
 
-Review parallèle par tous les agents sur n'importe quel diff.
+Parallel review by all agents on any diff.
 
 ```
-/review              ← dernier commit
-/review 42           ← PR numéro 42
-/review src/auth/    ← fichiers spécifiques
+/review              ← latest commit
+/review 42           ← PR number 42
+/review src/auth/    ← specific files
 /review staged       ← staging area
 ```
 
@@ -148,60 +147,60 @@ Review parallèle par tous les agents sur n'importe quel diff.
 
 ### `/check`
 
-Review ciblée qualité avant déploiement. `qa-engineer` + `security-reviewer` + `data-engineer` en
-parallèle.
+Targeted quality review before deployment. `qa-engineer` + `security-reviewer` + `data-engineer` in
+parallel.
 
 ```
 /check
 ```
 
-Les 3 verdicts doivent être `APPROVE` avant tout déploiement prod.
+All 3 verdicts must be `APPROVE` before any prod deployment.
 
 ---
 
-## Comment les agents s'orchestrent
+## How the agents orchestrate themselves
 
-Tu ne gères rien manuellement. Claude Code s'en occupe.
+You don't manage anything manually. Claude Code takes care of it.
 
 ```
-Tu tapes /story, /spec, /build, /review ou /check
+You type /story, /spec, /build, /review or /check
     ↓
-Claude lit CLAUDE.md → connaît la liste des agents actifs
+Claude reads CLAUDE.md → knows the list of active agents
     ↓
-Claude spawne les agents en parallèle (Task tool natif)
+Claude spawns the agents in parallel (native Task tool)
     ↓
-Chaque agent charge son fichier .md → sait qui il est et quoi checker
+Each agent loads its .md file → knows who it is and what to check
     ↓
-Chaque agent charge les foundation docs → connaît ton projet
+Each agent loads the foundation docs → knows your project
     ↓
-Chaque agent retourne son verdict structuré
+Each agent returns its structured verdict
     ↓
-Claude merge, itère si nécessaire, présente le résultat
+Claude merges, iterates if needed, and presents the result
 ```
 
 ---
 
-## TDD — Règle absolue
+## TDD — Absolute rule
 
 ```
-RED   → écrire UN test qui échoue pour la bonne raison
-GREEN → minimum de code pour le faire passer
-BLUE  → refactorer sans casser les tests
+RED   → write ONE test that fails for the right reason
+GREEN → minimum code to make it pass
+BLUE  → refactor without breaking the tests
 ```
 
-**dev-senior-b review le test AVANT le code.** Si le test est mauvais, le code qui suit l'est aussi.
+**dev-senior-b reviews the test BEFORE the code.** If the test is bad, the code that follows is too.
 
-Le cycle complet prend 2-5 minutes par item de test list. C'est normal. C'est le prix d'un code
-qu'on maîtrise.
+The full cycle takes 2-5 minutes per test list item. That's normal. It's the price of code you
+actually own.
 
 ---
 
-## Personnaliser les agents actifs
+## Customizing the active agents
 
-Dans `CLAUDE.md`, section `## Agent Team` : retire les lignes des agents non pertinents pour ce
-projet.
+In `CLAUDE.md`, section `## Agent Team`: remove the rows for agents that aren't relevant to this
+project.
 
-Exemple minimal (backend only, pas de frontend) :
+Minimal example (backend only, no frontend):
 
 ```markdown
 | AGENT             | PERSONA              | CONTEXT DOCS                                                | SKILLS                                                        |

@@ -10,81 +10,78 @@ module.exports = {
 };
 ```
 
-## Structure d'un Step File
+## Structure of a Step File
 
 ```typescript
 // features/cancellation/cancellation.steps.ts
-import { defineFeature, loadFeature } from 'jest-cucumber'
-import { aBooking, daysFromNow } from '../helpers/builders'
-import { InMemoryBookingRepository } from '../../src/infrastructure'
-import { CancelBooking } from '../../src/application/use-cases'
+import { defineFeature, loadFeature } from 'jest-cucumber';
+import { aBooking, daysFromNow } from '../helpers/builders';
+import { InMemoryBookingRepository } from '../../src/infrastructure';
+import { CancelBooking } from '../../src/application/use-cases';
 
-const feature = loadFeature('./features/cancellation/cancellation.feature')
+const feature = loadFeature('./features/cancellation/cancellation.feature');
 
-defineFeature(feature, test => {
-
-  let bookingRepo: InMemoryBookingRepository
-  let cancelBooking: CancelBooking
-  let result: { refundPercentage: number } | undefined
-  let thrownError: Error | undefined
+defineFeature(feature, (test) => {
+  let bookingRepo: InMemoryBookingRepository;
+  let cancelBooking: CancelBooking;
+  let result: { refundPercentage: number } | undefined;
+  let thrownError: Error | undefined;
 
   beforeEach(() => {
-    bookingRepo = new InMemoryBookingRepository()
-    cancelBooking = new CancelBooking(bookingRepo)
-    result = undefined
-    thrownError = undefined
-  })
+    bookingRepo = new InMemoryBookingRepository();
+    cancelBooking = new CancelBooking(bookingRepo);
+    result = undefined;
+    thrownError = undefined;
+  });
 
-  test('Annulation avec remboursement total (plus de 48h avant)', ({ given, when, then, and }) => {
+  test('Cancellation with full refund (more than 48h before)', ({ given, when, then, and }) => {
+    given(/^I have a confirmed booking starting in (\d+) days$/, async (days: string) => {
+      const booking = aBooking({ departureDate: daysFromNow(parseInt(days)) });
+      await bookingRepo.save(booking);
+    });
 
-    given(/^j'ai une réservation confirmée qui débute dans (\d+) jours$/, async (days: string) => {
-      const booking = aBooking({ departureDate: daysFromNow(parseInt(days)) })
-      await bookingRepo.save(booking)
-    })
-
-    when(/^j'annule la réservation$/, async () => {
+    when(/^I cancel the booking$/, async () => {
       try {
-        const booking = await bookingRepo.findFirst()
-        result = await cancelBooking.execute(booking!.id, new Date())
+        const booking = await bookingRepo.findFirst();
+        result = await cancelBooking.execute(booking!.id, new Date());
       } catch (e) {
-        thrownError = e as Error
+        thrownError = e as Error;
       }
-    })
+    });
 
-    then(/^le remboursement est de (\d+)%$/, (percentage: string) => {
-      expect(result!.refundPercentage).toBe(parseInt(percentage))
-    })
+    then(/^the refund is (\d+)%$/, (percentage: string) => {
+      expect(result!.refundPercentage).toBe(parseInt(percentage));
+    });
 
-    and('la réservation est marquée comme annulée', async () => {
-      const booking = await bookingRepo.findFirst()
-      expect(booking!.status).toBe('CANCELLED')
-    })
-  })
+    and('the booking is marked as cancelled', async () => {
+      const booking = await bookingRepo.findFirst();
+      expect(booking!.status).toBe('CANCELLED');
+    });
+  });
 
-  test('Tentative d'annulation d'une réservation déjà annulée', ({ given, when, then }) => {
+  test('Attempt to cancel an already-cancelled booking', ({ given, when, then }) => {
+    given('I have an already-cancelled booking', async () => {
+      const booking = aBooking({ status: 'CANCELLED' });
+      await bookingRepo.save(booking);
+    });
 
-    given('j'ai une réservation déjà annulée', async () => {
-      const booking = aBooking({ status: 'CANCELLED' })
-      await bookingRepo.save(booking)
-    })
-
-    when('j'annule la réservation', async () => {
+    when('I cancel the booking', async () => {
       try {
-        const booking = await bookingRepo.findFirst()
-        await cancelBooking.execute(booking!.id, new Date())
+        const booking = await bookingRepo.findFirst();
+        await cancelBooking.execute(booking!.id, new Date());
       } catch (e) {
-        thrownError = e as Error
+        thrownError = e as Error;
       }
-    })
+    });
 
-    then('je reçois une erreur indiquant que la réservation est déjà annulée', () => {
-      expect(thrownError).toBeInstanceOf(AlreadyCancelledError)
-    })
-  })
-})
+    then('I get an error indicating that the booking is already cancelled', () => {
+      expect(thrownError).toBeInstanceOf(AlreadyCancelledError);
+    });
+  });
+});
 ```
 
-## Helpers de Build pour les Tests
+## Test Build Helpers
 
 ```typescript
 // features/helpers/builders.ts

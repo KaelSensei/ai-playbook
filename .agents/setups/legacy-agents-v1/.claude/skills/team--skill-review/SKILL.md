@@ -1,86 +1,86 @@
 ---
 name: team--skill-review
 description: >
-  Protocole de review partagé par tous les agents. Définit les niveaux de verdict, le format de
-  sortie et les règles de merge. Chargé par tous les agents pendant /review, /spec, /build et
-  /check.
+  Review protocol shared by all agents. Defines verdict levels, output format, and merge rules.
+  Loaded by all agents during /review, /spec, /build, and /check.
 ---
 
 # Team Review Protocol
 
-## Niveaux de Verdict
+## Verdict Levels
 
-| Verdict                | Signification                                      | Bloque ?           |
-| ---------------------- | -------------------------------------------------- | ------------------ |
-| `APPROVE`              | Aucun problème significatif                        | Non                |
-| `APPROVE_WITH_CHANGES` | Problèmes présents mais pas bloquants              | Itération attendue |
-| `REQUEST_REDESIGN`     | Problème fondamental — must fix avant de continuer | Oui, hard stop     |
+| Verdict                | Meaning                                          | Blocks?            |
+| ---------------------- | ------------------------------------------------ | ------------------ |
+| `APPROVE`              | No significant issue                             | No                 |
+| `APPROVE_WITH_CHANGES` | Issues present but not blocking                  | Iteration expected |
+| `REQUEST_REDESIGN`     | Fundamental problem — must fix before continuing | Yes, hard stop     |
 
-**Règles :**
+**Rules:**
 
-- Un seul `REQUEST_REDESIGN` de n'importe quel agent = arrêt complet
-- Un seul `APPROVE_WITH_CHANGES` = itération avant l'étape suivante
-- `APPROVE` unanime = on avance
-- Pas de vote majoritaire. Pas d'override par séniorité. Unanime.
+- A single `REQUEST_REDESIGN` from any agent = complete halt
+- A single `APPROVE_WITH_CHANGES` = iteration before the next step
+- Unanimous `APPROVE` = proceed
+- No majority vote. No seniority override. Unanimous.
 
-## Format de Sortie Obligatoire
+## Mandatory Output Format
 
-Chaque agent DOIT retourner exactement cette structure :
+Each agent MUST return exactly this structure:
 
 ```markdown
 ## [Discipline] Review
 
 **Verdict**: APPROVE | APPROVE_WITH_CHANGES | REQUEST_REDESIGN
 
-### 🔴 Blockers
+### Blockers
 
-<!-- Doit être corrigé avant de continuer.
-     Une entrée par problème. Référencer l'emplacement précis. -->
+<!-- Must be fixed before continuing.
+     One entry per issue. Reference the exact location. -->
 
-- **[fichier:ligne ou composant]**: [problème] — [pourquoi c'est bloquant] — [correction requise]
+- **[file:line or component]**: [issue] — [why it's blocking] — [required fix]
 
-### 🟡 Improvements
+### Improvements
 
-<!-- Devrait être corrigé, pas bloquant. -->
+<!-- Should be fixed, not blocking. -->
 
-- **[emplacement]**: [problème] — [correction suggérée]
+- **[location]**: [issue] — [suggested fix]
 
-### 🔵 Nits
+### Nits
 
-<!-- Optionnel. Style, nommage, suggestions mineures. -->
+<!-- Optional. Style, naming, minor suggestions. -->
 
 - [note]
 
-### Checklist Discipline
+### Discipline Checklist
 
 - [x] / [ ] / [N/A] [item 1]
 - [x] / [ ] / [N/A] [item 2] ...
 ```
 
-## Règles de Merge (pour l'orchestrateur)
+## Merge Rules (for the orchestrator)
 
-1. Collecter tous les verdicts
-2. Si au moins un `REQUEST_REDESIGN` → verdict global = `REQUEST_REDESIGN`
-3. Si au moins un `APPROVE_WITH_CHANGES` (sans redesign) → verdict global = `APPROVE_WITH_CHANGES`
-4. Tous `APPROVE` → verdict global = `APPROVE`
-5. Dédupliquer les findings cross-agents — une entrée par problème unique, sévérité la plus haute
-6. Si plusieurs agents ont flaggé le même problème → noter : _"flaggé par N agents"_
-7. Présenter le verdict mergé avec attribution par agent
+1. Collect all verdicts
+2. If at least one `REQUEST_REDESIGN` → global verdict = `REQUEST_REDESIGN`
+3. If at least one `APPROVE_WITH_CHANGES` (without redesign) → global verdict =
+   `APPROVE_WITH_CHANGES`
+4. All `APPROVE` → global verdict = `APPROVE`
+5. Deduplicate findings across agents — one entry per unique issue, highest severity
+6. If multiple agents flagged the same issue → note: _"flagged by N agents"_
+7. Present the merged verdict with per-agent attribution
 
-## Scope par Flow
+## Scope Per Flow
 
-| Flow                   | Lire | Écrire du code                | Périmètre                               |
-| ---------------------- | ---- | ----------------------------- | --------------------------------------- |
-| `/review`              | ✅   | ❌                            | Diff complet                            |
-| `/spec` review         | ✅   | ❌                            | Design uniquement, pas d'implémentation |
-| `/build` pair review   | ✅   | Agent propriétaire uniquement | Diff de l'étape courante                |
-| `/build` review finale | ✅   | ❌                            | Diff complet depuis le début            |
-| `/check`               | ✅   | ❌                            | Diff complet, focus qualité/sécu/data   |
+| Flow                  | Read | Write code        | Scope                                  |
+| --------------------- | ---- | ----------------- | -------------------------------------- |
+| `/review`             | yes  | no                | Full diff                              |
+| `/spec` review        | yes  | no                | Design only, no implementation         |
+| `/build` pair review  | yes  | Owning agent only | Diff of the current step               |
+| `/build` final review | yes  | no                | Full diff from the start               |
+| `/check`              | yes  | no                | Full diff, focus quality/security/data |
 
-## Comportements Interdits
+## Forbidden Behaviors
 
-- ❌ APPROVE sans avoir coché la checklist
-- ❌ Feedback générique non lié à sa discipline
-- ❌ APPROVE parce qu'un autre agent a approuvé
-- ❌ Critiquer ce qui est hors scope de sa discipline
-- ❌ `REQUEST_REDESIGN` sans expliquer le problème
+- APPROVE without having ticked the checklist
+- Generic feedback not tied to your discipline
+- APPROVE because another agent approved
+- Criticizing things outside your discipline's scope
+- `REQUEST_REDESIGN` without explaining the problem

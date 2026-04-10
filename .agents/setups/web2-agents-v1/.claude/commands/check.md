@@ -1,135 +1,134 @@
 ---
 name: check
 description: >
-  Review qualité ciblée : qa-engineer + security-reviewer + data-engineer en parallèle.
-  Complémentaire à /review — focus sur couverture de tests, vulnérabilités et intégrité des données.
-  Utiliser avant tout déploiement en staging ou production.
-argument-hint: '[fichiers, PR numéro, ou vide pour dernier commit]'
+  Targeted quality review: qa-engineer + security-reviewer + data-engineer in parallel.
+  Complementary to /review — focused on test coverage, vulnerabilities, and data integrity. Use
+  before any staging or production deployment.
+argument-hint: '[files, PR number, or empty for the latest commit]'
 ---
 
 # /check
 
-Update `tasks/current_task.md` : status=CHECK
+Update `tasks/current_task.md`: status=CHECK
 
 ---
 
-## Contexte
+## Context
 
-`/check` est plus ciblé que `/review`. Il lance uniquement les 3 agents spécialisés qualité :
+`/check` is more targeted than `/review`. It runs only the 3 specialized quality agents:
 
-- `qa-engineer` — couverture comportementale, edge cases manquants
-- `security-reviewer` — OWASP, vulnérabilités, secrets
-- `data-engineer` — migrations, indexes, N+1, intégrité
+- `qa-engineer` — behavioral coverage, missing edge cases
+- `security-reviewer` — OWASP, vulnerabilities, secrets
+- `data-engineer` — migrations, indexes, N+1, integrity
 
-Utiliser `/review` pour une review complète d'équipe. Utiliser `/check` pour un double-check ciblé
-avant déploiement.
+Use `/review` for a full team review. Use `/check` for a targeted double-check before deployment.
 
 ---
 
-## Étape 1 — Déterminer l'input
+## Step 1 — Determine the input
 
-Même logique que `/review` :
+Same logic as `/review`:
 
-- Numéro PR → `gh pr diff [N]`
-- Vide → `git diff HEAD~1`
+- PR number → `gh pr diff [N]`
+- Empty → `git diff HEAD~1`
 - `staged` → `git diff --cached`
 
-Lancer les tests :
+Run the tests:
 
 ```bash
 [runner]             # must pass
-[runner] --coverage  # afficher le rapport de couverture
+[runner] --coverage  # show the coverage report
 ```
 
-Passer le rapport de couverture à `qa-engineer`.
+Pass the coverage report to `qa-engineer`.
 
 ---
 
-## Étape 2 — Spawner les 3 agents en parallèle
+## Step 2 — Spawn the 3 agents in parallel
 
-**qa-engineer prompt :**
-
-```
-Tu es qa-engineer.
-Charge .claude/agents/qa-engineer.md.
-Charge project-architecture.md, data-architecture.md.
-Charge testing-patterns, team--skill-review.
-
-Review la couverture de tests du diff suivant.
-Rapport de couverture : [coverage output]
-Spec de référence (si disponible) : [spec]
-
-Focus : manques de couverture, edge cases non testés,
-ACs non couverts, tests existants qui pourraient manquer.
-```
-
-**security-reviewer prompt :**
+**qa-engineer prompt:**
 
 ```
-Tu es security-reviewer.
-Charge .claude/agents/security-reviewer.md.
-Charge project-architecture.md, constants.md.
-Charge security-web2, team--skill-review.
+You are qa-engineer.
+Load .claude/agents/qa-engineer.md.
+Load project-architecture.md, data-architecture.md.
+Load testing-patterns, team--skill-review.
 
-Review sécurité du diff suivant.
-Parcourir la checklist OWASP complète.
-Vérifier : injection, auth, données sensibles, access control,
+Review the test coverage of the following diff.
+Coverage report: [coverage output]
+Reference spec (if available): [spec]
+
+Focus: coverage gaps, untested edge cases,
+uncovered ACs, existing tests that might be missing.
+```
+
+**security-reviewer prompt:**
+
+```
+You are security-reviewer.
+Load .claude/agents/security-reviewer.md.
+Load project-architecture.md, constants.md.
+Load security-web2, team--skill-review.
+
+Security review of the following diff.
+Walk the full OWASP checklist.
+Check: injection, auth, sensitive data, access control,
 misconfiguration, XSS, rate limiting, input validation, secrets.
 ```
 
-**data-engineer prompt :**
+**data-engineer prompt:**
 
 ```
-Tu es data-engineer.
-Charge .claude/agents/data-engineer.md.
-Charge project-architecture.md, data-architecture.md.
-Charge database-patterns, team--skill-review.
+You are data-engineer.
+Load .claude/agents/data-engineer.md.
+Load project-architecture.md, data-architecture.md.
+Load database-patterns, team--skill-review.
 
-Review des aspects data du diff suivant.
-Vérifier : migrations zero-downtime, indexes manquants,
-N+1 queries, intégrité des données, soft delete respecté,
-pagination sur les listes.
+Review the data aspects of the following diff.
+Check: zero-downtime migrations, missing indexes,
+N+1 queries, data integrity, soft delete honored,
+pagination on lists.
 ```
 
 ---
 
-## Étape 3 — Présenter les résultats
+## Step 3 — Present the results
 
 ```markdown
 # Check Report
 
 ## qa-engineer
 
-**Verdict** : [verdict] [findings]
+**Verdict**: [verdict] [findings]
 
 ## security-reviewer
 
-**Verdict** : [verdict] [findings]
+**Verdict**: [verdict] [findings]
 
 ## data-engineer
 
-**Verdict** : [verdict] [findings]
+**Verdict**: [verdict] [findings]
 
 ---
 
-## Verdict Global : APPROVE | APPROVE_WITH_CHANGES | REQUEST_REDESIGN
+## Global Verdict: APPROVE | APPROVE_WITH_CHANGES | REQUEST_REDESIGN
 
-### 🔴 Blockers Critiques
+### 🔴 Critical Blockers
 
-[dédupliqué cross-agents]
+[deduped across agents]
 
-### 🟡 À Corriger
+### 🟡 To Fix
 
-[dédupliqué]
+[deduped]
 ```
 
 ---
 
-## Étape 4 — Gate de déploiement
+## Step 4 — Deployment gate
 
-Avant tout déploiement en prod, les 3 verdicts DOIVENT être `APPROVE`.
+Before any prod deployment, all 3 verdicts MUST be `APPROVE`.
 
-Si `REQUEST_REDESIGN` → bloquer le déploiement, corriger, relancer `/check`. Si
-`APPROVE_WITH_CHANGES` → décision utilisateur : corriger ou accepter le risque documenté.
+If `REQUEST_REDESIGN` → block the deployment, fix, re-run `/check`. If `APPROVE_WITH_CHANGES` → user
+decision: fix or accept the documented risk.
 
-Update `tasks/current_task.md` : status=IDLE
+Update `tasks/current_task.md`: status=IDLE

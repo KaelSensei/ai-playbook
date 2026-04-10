@@ -8,21 +8,21 @@ IDLE
 
 none
 
-## Module / Cible
+## Module / Target
 
 none
 
-## Filet de Tests Existant
+## Existing Test Safety Net
 
 none
 
-## Seams Identifiés
+## Identified Seams
 
 none
 
 ## Decisions Made
 
-## Zones à Risque
+## Risk Zones
 
 ## Deferred Items
 

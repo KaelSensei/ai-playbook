@@ -17,23 +17,23 @@ afterEach(() => {
 ## Queries — Priority Order (Testing Library Philosophy)
 
 ```typescript
-// Priorité 1 : Accessible (ce que l'utilisateur voit/interagit)
-screen.getByRole('button', { name: /annuler/i });
-screen.getByRole('heading', { name: /mes réservations/i });
+// Priority 1: Accessible (what the user sees/interacts with)
+screen.getByRole('button', { name: /cancel/i });
+screen.getByRole('heading', { name: /my bookings/i });
 screen.getByLabelText('Email');
-screen.getByPlaceholderText('Rechercher...');
+screen.getByPlaceholderText('Search...');
 
-// Priorité 2 : Contenu textuel
-screen.getByText('Aucune réservation');
-screen.getByText(/remboursement de/i); // regex pour contenu partiel
+// Priority 2: Textual content
+screen.getByText('No bookings');
+screen.getByText(/refund of/i); // regex for partial content
 
-// Priorité 3 : Test ID (dernier recours, couplé à l'implémentation)
-screen.getByTestId('booking-total'); // ❌ à éviter sauf nécessité absolue
+// Priority 3: Test ID (last resort, coupled to the implementation)
+screen.getByTestId('booking-total'); // ❌ avoid unless absolutely necessary
 ```
 
-## Patterns Courants
+## Common Patterns
 
-### Tester un formulaire complet
+### Testing a full form
 
 ```typescript
 it('should submit form with valid values', async () => {
@@ -43,9 +43,9 @@ it('should submit form with valid values', async () => {
   render(<RegisterForm onSubmit={onSubmit} />)
 
   await user.type(screen.getByLabelText('Email'), 'alice@test.com')
-  await user.type(screen.getByLabelText('Mot de passe'), 'Pass1!xy')
-  await user.type(screen.getByLabelText('Confirmer'), 'Pass1!xy')
-  await user.click(screen.getByRole('button', { name: /s'inscrire/i }))
+  await user.type(screen.getByLabelText('Password'), 'Pass1!xy')
+  await user.type(screen.getByLabelText('Confirm'), 'Pass1!xy')
+  await user.click(screen.getByRole('button', { name: /sign up/i }))
 
   await waitFor(() => {
     expect(onSubmit).toHaveBeenCalledWith({
@@ -61,10 +61,10 @@ it('should show validation error for invalid email', async () => {
   render(<RegisterForm onSubmit={vi.fn()} />)
 
   await user.type(screen.getByLabelText('Email'), 'invalid')
-  await user.tab() // déclenche la validation onBlur
+  await user.tab() // triggers onBlur validation
 
-  expect(await screen.findByText(/email invalide/i)).toBeInTheDocument()
-  expect(screen.getByRole('button', { name: /s'inscrire/i })).toBeDisabled()
+  expect(await screen.findByText(/invalid email/i)).toBeInTheDocument()
+  expect(screen.getByRole('button', { name: /sign up/i })).toBeDisabled()
 })
 ```
 
@@ -72,7 +72,7 @@ it('should show validation error for invalid email', async () => {
 
 ```typescript
 it('should show loading state while fetching', async () => {
-  // Simuler une réponse lente
+  // Simulate a slow response
   vi.mocked(bookingService.getAll).mockReturnValue(new Promise(() => {}))
 
   render(<BookingList userId="user-1" />)
@@ -86,8 +86,8 @@ it('should show error state when fetch fails', async () => {
 
   render(<BookingList userId="user-1" />)
 
-  expect(await screen.findByText(/une erreur est survenue/i)).toBeInTheDocument()
-  expect(screen.getByRole('button', { name: /réessayer/i })).toBeInTheDocument()
+  expect(await screen.findByText(/something went wrong/i)).toBeInTheDocument()
+  expect(screen.getByRole('button', { name: /retry/i })).toBeInTheDocument()
 })
 
 it('should show empty state when no bookings', async () => {
@@ -95,12 +95,12 @@ it('should show empty state when no bookings', async () => {
 
   render(<BookingList userId="user-1" />)
 
-  expect(await screen.findByText(/vous n'avez pas encore de réservation/i))
+  expect(await screen.findByText(/you don't have any bookings yet/i))
     .toBeInTheDocument()
 })
 ```
 
-### Render avec Providers
+### Render with Providers
 
 ```typescript
 // tests/utils/renderWithProviders.tsx
@@ -128,6 +128,6 @@ it('should show admin button for admin user', () => {
     <BookingActions bookingId="booking-1" />,
     { initialAuth: { user: { role: 'ADMIN', id: 'admin-1' } } }
   )
-  expect(screen.getByRole('button', { name: /supprimer/i })).toBeInTheDocument()
+  expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument()
 })
 ```

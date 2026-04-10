@@ -1,20 +1,20 @@
 # Context Patterns — React TypeScript
 
-## When Utiliser Context
+## When to Use Context
 
 ```
-✅ Context adapté pour :
-  - Auth (utilisateur connecté, rôle)
-  - Thème (dark/light, préférences UI)
-  - Langue / i18n
+✅ Context is a good fit for:
+  - Auth (logged-in user, role)
+  - Theme (dark/light, UI preferences)
+  - Language / i18n
   - Feature flags
-  - Toast / notifications globales
+  - Global toast / notifications
 
-❌ Context inadapté pour :
-  - État serveur (données fetched) → React Query / SWR
-  - État de formulaire → React Hook Form
-  - État complexe partagé entre quelques composants → prop drilling OK ou local state
-  - Cache de requêtes → React Query
+❌ Context is a poor fit for:
+  - Server state (fetched data) → React Query / SWR
+  - Form state → React Hook Form
+  - Complex state shared between a few components → prop drilling is fine or use local state
+  - Request cache → React Query
 ```
 
 ## Complete Pattern — Auth Context
@@ -22,7 +22,7 @@
 ```typescript
 // contexts/AuthContext.tsx
 
-// 1. Types d'abord
+// 1. Types first
 type AuthState =
   | { status: 'loading' }
   | { status: 'unauthenticated' }
@@ -35,15 +35,15 @@ type AuthContextValue = {
   isAuthenticated: () => boolean
 }
 
-// 2. Context privé — jamais exporté directement
+// 2. Private context — never exported directly
 const AuthContext = createContext<AuthContextValue | null>(null)
 
-// 3. Provider avec logique encapsulée
+// 3. Provider with encapsulated logic
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AuthState>({ status: 'loading' })
 
   useEffect(() => {
-    // Vérifier le token existant au montage
+    // Check the existing token on mount
     const token = localStorage.getItem('access_token')
     if (!token) {
       setState({ status: 'unauthenticated' })
@@ -78,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   )
 }
 
-// 4. Hook avec guard — le seul export pour consommer le context
+// 4. Hook with guard — the only export to consume the context
 export function useAuth(): AuthContextValue {
   const context = useContext(AuthContext)
   if (!context) {
@@ -87,7 +87,7 @@ export function useAuth(): AuthContextValue {
   return context
 }
 
-// 5. Hooks dérivés pour éviter la logique dans les composants
+// 5. Derived hooks to keep logic out of components
 export function useCurrentUser(): AuthUser {
   const { state } = useAuth()
   if (state.status !== 'authenticated') {
@@ -105,7 +105,7 @@ export function useIsAdmin(): boolean {
 ## Separate Contexts to Avoid Re-Renders
 
 ```typescript
-// ❌ Un seul context qui regroupe tout → tous les consommateurs re-rendent
+// ❌ A single context bundling everything → every consumer re-renders
 const AppContext = createContext({
   user: null,
   theme: 'light',
@@ -113,14 +113,14 @@ const AppContext = createContext({
   setTheme: () => {},
   addNotification: () => {},
 })
-// → un toast ajouté = tous les composants qui lisent le user re-rendent
+// → a toast added = every component that reads user re-renders
 
-// ✅ Contextes séparés par domaine — re-renders isolés
+// ✅ Contexts separated by domain — isolated re-renders
 // AuthContext → user, login, logout
 // ThemeContext → theme, setTheme
 // NotificationContext → notifications, addNotification, removeNotification
 
-// Composition dans App.tsx
+// Composition in App.tsx
 function App() {
   return (
     <AuthProvider>
@@ -137,7 +137,7 @@ function App() {
 ## Context + useReducer — Complex State
 
 ```typescript
-// Pour les états avec plusieurs transitions
+// For states with multiple transitions
 
 type NotificationState = {
   items: Notification[]

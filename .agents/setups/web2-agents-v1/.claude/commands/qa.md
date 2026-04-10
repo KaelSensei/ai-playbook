@@ -1,105 +1,104 @@
 ---
 name: qa
 description: >
-  Lance les tests QA selon le mode choisi. Smoke (pré-merge rapide), full E2E, performance
-  Lighthouse, load testing k6/Artillery, ou tout. Lit l'observabilité pendant les tests de charge.
-  Résultats dans TEST_PLAN.md.
-argument-hint: '[smoke | e2e | perf | load | full — défaut: smoke]'
+  Runs QA tests in the chosen mode. Smoke (fast pre-merge), full E2E, Lighthouse performance,
+  k6/Artillery load testing, or all. Reads observability during load tests. Results in TEST_PLAN.md.
+argument-hint: '[smoke | e2e | perf | load | full — default: smoke]'
 ---
 
 # /qa
 
-Update `tasks/current_task.md` : status=QA
+Update `tasks/current_task.md`: status=QA
 
-Charger `TEST_PLAN.md` et `.claude/observability.md` avant tout.
-
----
-
-## Modes disponibles
-
-| Mode    | Durée     | Contenu                        | Quand                              |
-| ------- | --------- | ------------------------------ | ---------------------------------- |
-| `smoke` | < 2 min   | Flows critiques uniquement     | Avant chaque merge (auto dans /pr) |
-| `e2e`   | 5-15 min  | Tous les flows + accessibilité | Après deploy staging               |
-| `perf`  | 5-10 min  | Lighthouse sur pages critiques | Après feature frontend             |
-| `load`  | 10-30 min | k6/Artillery + observabilité   | Avant release prod                 |
-| `full`  | 30-60 min | Tout                           | Release majeure                    |
+Load `TEST_PLAN.md` and `.claude/observability.md` first.
 
 ---
 
-## Mode SMOKE (défaut si pas d'argument)
+## Available modes
+
+| Mode    | Duration  | Contents                     | When                            |
+| ------- | --------- | ---------------------------- | ------------------------------- |
+| `smoke` | < 2 min   | Critical flows only          | Before each merge (auto in /pr) |
+| `e2e`   | 5-15 min  | All flows + accessibility    | After a staging deploy          |
+| `perf`  | 5-10 min  | Lighthouse on critical pages | After a frontend feature        |
+| `load`  | 10-30 min | k6/Artillery + observability | Before a prod release           |
+| `full`  | 30-60 min | Everything                   | Major release                   |
+
+---
+
+## SMOKE mode (default if no argument)
 
 ```
-Tu es qa-automation.
-Charge .claude/agents/qa-automation.md.
-Charge TEST_PLAN.md → section "Smoke Tests"
-Charge .claude/observability.md
+You are qa-automation.
+Load .claude/agents/qa-automation.md.
+Load TEST_PLAN.md → "Smoke Tests" section
+Load .claude/observability.md
 
-Lance UNIQUEMENT les flows smoke :
+Run ONLY the smoke flows:
 ```
 
 ```bash
 # Playwright smoke
 npx playwright test --grep "@smoke"
-# ou si pas de tag smoke : lancer les fichiers smoke uniquement
+# or if there is no smoke tag: run only the smoke files
 npx playwright test tests/e2e/smoke/
 ```
 
-Résultat :
+Result:
 
 ```
-Smoke tests : [N/N] ✅ / [N] ❌
-Durée : [Xs]
-Verdict : PASS ✅ / FAIL ❌
+Smoke tests: [N/N] ✅ / [N] ❌
+Duration: [Xs]
+Verdict: PASS ✅ / FAIL ❌
 ```
 
-Si FAIL → arrêter et lister les tests en échec avec les erreurs.
+If FAIL → stop and list the failing tests with their errors.
 
 ---
 
-## Mode E2E
+## E2E mode
 
 ```
-Tu es qa-automation.
-Charge TEST_PLAN.md → section "Full Suite"
-Charge .claude/observability.md
+You are qa-automation.
+Load TEST_PLAN.md → "Full Suite" section
+Load .claude/observability.md
 
-Lancer tous les flows :
+Run all flows:
 ```
 
 ```bash
-# Tous les tests Playwright
+# All Playwright tests
 npx playwright test
 
-# Avec accessibilité axe
+# With axe accessibility
 npx playwright test --project=chromium
 
-# Rapport HTML
+# HTML report
 npx playwright show-report
 ```
 
-Vérifier aussi Sentry pendant l'exécution si configuré :
+Also check Sentry during the run if configured:
 
 ```bash
-# Lire les nouvelles erreurs depuis le début des tests
+# Read new errors since the tests started
 curl -H "Authorization: Bearer $SENTRY_API_TOKEN" \
   "https://sentry.io/api/0/projects/[org]/[project]/issues/?query=firstSeen:>[test-start-timestamp]"
 ```
 
 ---
 
-## Mode PERF (Lighthouse)
+## PERF mode (Lighthouse)
 
 ```bash
-# Pour chaque page critique dans TEST_PLAN.md
+# For each critical page listed in TEST_PLAN.md
 
-# Lancer Lighthouse
+# Run Lighthouse
 npx lighthouse [URL]/[page] \
   --output=json \
   --output-path=./qa-results/lighthouse-[page]-$(date +%Y%m%d).json \
   --chrome-flags="--headless"
 
-# Extraire les métriques clés
+# Extract key metrics
 node -e "
 const r = require('./qa-results/lighthouse-[page]-latest.json');
 const a = r.categories.performance.score * 100;
@@ -111,57 +110,56 @@ console.log({score: a, lcp, fcp, tti, cls});
 "
 ```
 
-Comparer avec les seuils de `TEST_PLAN.md`.
+Compare with the thresholds in `TEST_PLAN.md`.
 
 ---
 
-## Mode LOAD (k6 + observabilité)
+## LOAD mode (k6 + observability)
 
 ```bash
-# Lancer le script k6 du scénario choisi
+# Run the k6 script for the chosen scenario
 k6 run tests/load/[scenario].js \
   --out json=qa-results/k6-$(date +%Y%m%d-%H%M).json
 
-# En parallèle : lire les métriques toutes les 10s
+# In parallel: read metrics every 10s
 bash tests/qa/correlate.sh &
 ```
 
-Pendant les tests, lire depuis le stack configuré :
+During the tests, read from the configured stack:
 
-- Prometheus : CPU, mémoire, latence DB
-- Sentry : nouvelles erreurs générées
-- Datadog/New Relic si configuré
+- Prometheus: CPU, memory, DB latency
+- Sentry: new errors generated
+- Datadog/New Relic if configured
 
-Comparer p95, p99, error_rate avec les seuils de `TEST_PLAN.md`.
-
----
-
-## Mode FULL
-
-Enchaîner dans l'ordre :
-
-1. Smoke → si FAIL, arrêter ici
-2. E2E complet
-3. Perf Lighthouse sur toutes les pages critiques
-4. Load test scénario nominal
-5. Load test scénario pic de charge
+Compare p95, p99, error_rate with the thresholds in `TEST_PLAN.md`.
 
 ---
 
-## Mise à jour TEST_PLAN.md
+## FULL mode
 
-Après chaque exécution, ajouter une ligne dans la section "Historique" :
+Chain in order:
+
+1. Smoke → if FAIL, stop here
+2. Full E2E
+3. Perf Lighthouse on every critical page
+4. Nominal-load scenario
+5. Peak-load scenario
+
+---
+
+## Updating TEST_PLAN.md
+
+After each run, add a line to the "History" section:
 
 ```markdown
-| [date] | [env] | [mode] | [E2E résultat] | [Lighthouse score] | [k6 p95] | [Sentry errors] |
+| [date] | [env] | [mode] | [E2E result] | [Lighthouse score] | [k6 p95] | [Sentry errors] |
 [verdict] |
 ```
 
 ---
 
-## Intégration avec /pr
+## Integration with /pr
 
-La commande `/pr` lance automatiquement le mode `smoke` avant le merge. Si smoke FAIL → merge
-bloqué.
+The `/pr` command automatically runs `smoke` mode before merging. If smoke FAIL → merge blocked.
 
-Update `tasks/current_task.md` : status=IDLE
+Update `tasks/current_task.md`: status=IDLE

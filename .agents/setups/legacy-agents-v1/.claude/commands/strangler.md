@@ -1,149 +1,149 @@
 ---
 name: strangler
 description: >
-  Introduire du nouveau code autour du legacy (Strangler Fig). architect définit la frontière et
-  l'ACL, dev-senior-a implémente en TDD, tous les agents reviewent. Le legacy n'est jamais modifié.
-argument-hint: '[feature à envelopper]'
+  Introduce new code around the legacy (Strangler Fig). architect defines the boundary and the ACL,
+  dev-senior-a implements with TDD, all agents review. The legacy is never modified.
+argument-hint: '[feature to wrap]'
 ---
 
 # /strangler
 
-Update `tasks/current_task.md` : status=STRANGLER, module=$ARGUMENTS
+Update `tasks/current_task.md`: status=STRANGLER, module=$ARGUMENTS
 
 ---
 
-## Prérequis
+## Prerequisites
 
 ```
-[ ] /understand sur le module legacy concerné → fiche dans legacy-map.md
-[ ] Tests de caractérisation sur le comportement legacy de référence
-    (pour détecter si le legacy change de façon inattendue)
+[ ] /understand on the legacy module involved → card in legacy-map.md
+[ ] Characterization tests on the reference legacy behavior
+    (to detect if the legacy unexpectedly changes)
 ```
 
 ---
 
-## Phase 1 — Design de la frontière (architect)
+## Phase 1 — Boundary design (architect)
 
 ```
-Tu es architect.
-Charge .claude/agents/architect.md.
-Charge project-architecture.md, legacy-map.md, constants.md.
-Charge strangler-fig, clean-code skills.
+You are architect.
+Load .claude/agents/architect.md.
+Load project-architecture.md, legacy-map.md, constants.md.
+Load strangler-fig, clean-code skills.
 
-Feature à implémenter : $ARGUMENTS
-Module legacy concerné : [depuis legacy-map.md]
+Feature to implement: $ARGUMENTS
+Legacy module involved: [from legacy-map.md]
 
-Produis un design note Strangler Fig :
-- Frontière entre legacy et nouveau code
-- Anti-Corruption Layer (interface de traduction)
-- Plan de migration en 3 phases (coexistence → redirection → suppression)
-- Feature flag nécessaire ? comment ?
-- Ce qu'on NE touche PAS dans le legacy
-- TDD entry points pour le nouveau code
+Produce a Strangler Fig design note:
+- Boundary between legacy and new code
+- Anti-Corruption Layer (translation interface)
+- 3-phase migration plan (coexistence → redirection → deletion)
+- Feature flag needed? how?
+- What we DO NOT touch in the legacy
+- TDD entry points for the new code
 ```
 
-Présenter à l'utilisateur. **Gate** : _"La frontière est-elle correcte ?"_
+Present to the user. **Gate**: _"Is the boundary correct?"_
 
 ---
 
-## Phase 2 — Spec du nouveau code (spec-writer)
+## Phase 2 — Spec for the new code (spec-writer)
 
 ```
-Tu es spec-writer.
-Charge .claude/agents/spec-writer.md.
-Charge project-architecture.md, data-architecture.md.
-Charge clean-code, testing-patterns, team--skill-lookup skills.
+You are spec-writer.
+Load .claude/agents/spec-writer.md.
+Load project-architecture.md, data-architecture.md.
+Load clean-code, testing-patterns, team--skill-lookup skills.
 
-Feature : $ARGUMENTS
-Design note : [output de l'architect]
+Feature: $ARGUMENTS
+Design note: [architect output]
 
-Produis une spec technique avec test list pour le NOUVEAU CODE uniquement.
-Le legacy n'est pas spécifié ici — seulement le comportement nouveau.
+Produce a technical spec with a test list for the NEW CODE only.
+The legacy is not specified here — only the new behavior.
 ```
 
-Review parallèle par tous les agents (sauf legacy-analyst et archaeologist). Boucle jusqu'à APPROVE
-unanime.
+Parallel review by all agents (except legacy-analyst and archaeologist). Loop until unanimous
+APPROVE.
 
 ---
 
-## Phase 3 — Implémenter l'Anti-Corruption Layer (dev-senior-a, TDD)
+## Phase 3 — Implement the Anti-Corruption Layer (dev-senior-a, TDD)
 
 ```
-Tu es dev-senior-a. Mode NOUVEAU CODE — TDD strict.
-Charge .claude/agents/dev-senior-a.md.
+You are dev-senior-a. NEW CODE mode — strict TDD.
+Load .claude/agents/dev-senior-a.md.
 
-Implémenter l'ACL en TDD :
-1. Écrire un test pour la traduction legacy → nouveau format
+Implement the ACL in TDD:
+1. Write a test for the legacy → new format translation
 2. RED → GREEN → BLUE
-3. Écrire un test pour la traduction nouveau → legacy format
+3. Write a test for the new → legacy format translation
 4. RED → GREEN → BLUE
 
-L'ACL doit être testable sans le legacy (fakes/stubs).
+The ACL must be testable without the legacy (fakes/stubs).
 ```
 
-dev-senior-b review le test d'abord, puis le code.
+dev-senior-b reviews the test first, then the code.
 
 ---
 
-## Phase 4 — Implémenter le nouveau code (TDD strict)
+## Phase 4 — Implement the new code (strict TDD)
 
-Pour chaque item de la test list de la spec :
+For each item of the spec's test list:
 
-### 4a. RED — dev-senior-a écrit un test
+### 4a. RED — dev-senior-a writes a test
 
 ```
-Tu es dev-senior-a. Mode NOUVEAU CODE — TDD strict.
-Test suivant de la spec : [item]
-Écrire UN test. Lancer. Doit être RED pour la bonne raison.
+You are dev-senior-a. NEW CODE mode — strict TDD.
+Next test from the spec: [item]
+Write ONE test. Run it. Must be RED for the right reason.
 ```
 
-### 4b. dev-senior-b review le test
+### 4b. dev-senior-b reviews the test
 
-### 4c. GREEN — minimum de code
+### 4c. GREEN — minimum code
 
-### 4d. Tous les agents reviewent en parallèle
+### 4d. All agents review in parallel
 
 ### 4e. BLUE — refactoring
 
 ### 4f. Commit
 
 ```bash
-git commit -m "feat([feature]): [description comportement — nouveau code]"
+git commit -m "feat([feature]): [behavior description — new code]"
 ```
 
 ---
 
 ## Phase 5 — Coexistence (feature flag)
 
-Le nouveau code est prêt mais pas encore en production. Mettre en place le feature flag :
+The new code is ready but not yet in production. Put the feature flag in place:
 
 ```javascript
 if (featureFlags.isEnabled('new-$ARGUMENTS', context)) {
-  return newService.handle(request); // nouveau code
+  return newService.handle(request); // new code
 }
-return legacyModule.handle(request); // legacy inchangé
+return legacyModule.handle(request); // legacy unchanged
 ```
 
 ---
 
-## Phase 6 — Review finale
+## Phase 6 — Final review
 
-Tous les agents sur le diff complet :
-
-```
-Review le Strangler Fig complet pour $ARGUMENTS.
-- Le legacy est-il INCHANGÉ ?
-- L'ACL traduit-il correctement dans les deux sens ?
-- Le feature flag permet-il un rollback immédiat ?
-- Le nouveau code est-il testable indépendamment du legacy ?
-```
-
-Update `tasks/current_task.md` : status=IDLE
+All agents on the full diff:
 
 ```
-✅ Strangler Fig prêt : $ARGUMENTS
-Legacy : inchangé
-Nouveau code : TDD, [N] tests passants
-Feature flag : en place
-Prêt pour : activer progressivement (1% → 10% → 100%)
+Review the complete Strangler Fig for $ARGUMENTS.
+- Is the legacy UNCHANGED?
+- Does the ACL translate correctly in both directions?
+- Does the feature flag allow an immediate rollback?
+- Is the new code testable independently of the legacy?
+```
+
+Update `tasks/current_task.md`: status=IDLE
+
+```
+Strangler Fig ready: $ARGUMENTS
+Legacy: unchanged
+New code: TDD, [N] tests passing
+Feature flag: in place
+Ready for: progressive enablement (1% → 10% → 100%)
 ```

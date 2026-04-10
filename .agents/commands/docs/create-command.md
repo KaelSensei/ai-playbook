@@ -78,6 +78,6 @@ git push origin $(git branch --show-current)
 
 ## External Resources
 
-- [Cursor Commands Documentation](https://cursor.com/fr/docs/context/commands)
+- [Cursor Commands Documentation](https://cursor.com/docs/context/commands)
 - [cursor-commands Repository](https://github.com/hamzafer/cursor-commands/tree/main/.cursor/commands)
 - [AIBlueprint](https://github.com/Melvynx/aiblueprint) -- Similar CLI for Claude Code

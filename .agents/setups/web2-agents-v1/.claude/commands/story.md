@@ -1,131 +1,131 @@
 ---
 name: story
 description: >
-  Transformer un besoin en user stories avec Acceptance Criteria et wireframes. product-owner +
-  ux-designer en parallèle. Livrable : stories prêtes pour /spec.
-argument-hint: '[besoin métier ou idée de feature]'
+  Turn a need into user stories with Acceptance Criteria and wireframes. product-owner + ux-designer
+  in parallel. Deliverable: stories ready for /spec.
+argument-hint: '[business need or feature idea]'
 ---
 
 # /story
 
-Update `tasks/current_task.md` : status=STORY, task=$ARGUMENTS
+Update `tasks/current_task.md`: status=STORY, task=$ARGUMENTS
 
 ---
 
-## Phase 1 — EXPLORE (contexte avant de drafter)
+## Phase 1 — EXPLORE (context before drafting)
 
-Charger `team--skill-lookup`.
+Load `team--skill-lookup`.
 
-Invoquer `spec-writer` en mode exploration :
-
-```
-Tu es spec-writer.
-Charge project-architecture.md. Vérifie la fraîcheur.
-Charge team--skill-lookup.
-
-Explore le codebase pour comprendre :
-1. Les features existantes liées à : $ARGUMENTS
-2. Les patterns UI / flux utilisateur déjà en place
-3. Les contraintes techniques connues
-
-Produis : un résumé des findings (patterns existants, contraintes, questions ouvertes)
-```
-
----
-
-## Phase 2 — DRAFT PARALLÈLE
-
-Spawner `product-owner` et `ux-designer` simultanément.
-
-**product-owner prompt :**
+Invoke `spec-writer` in exploration mode:
 
 ```
-Tu es product-owner.
-Charge project-architecture.md.
-Charge team--skill-review.
+You are spec-writer.
+Load project-architecture.md. Check freshness.
+Load team--skill-lookup.
 
-À partir de ce besoin : $ARGUMENTS
-Et de ces findings d'exploration : [findings]
+Explore the codebase to understand:
+1. Existing features related to: $ARGUMENTS
+2. UI patterns / user flows already in place
+3. Known technical constraints
 
-Produis :
-1. Les user stories (format : En tant que [persona], je veux [action] afin de [bénéfice])
-2. Les Acceptance Criteria en Given/When/Then pour chaque story
-3. Les critères de rejet explicites
-4. Ce qui est OUT OF SCOPE pour cette itération
-
-Max 3 stories. Si plus, prioriser et reporter le reste.
-```
-
-**ux-designer prompt :**
-
-```
-Tu es ux-designer.
-Charge project-architecture.md.
-Charge team--skill-review.
-
-À partir de ce besoin : $ARGUMENTS
-Et de ces findings d'exploration : [findings]
-
-Produis :
-1. Le parcours utilisateur (happy path + chemins d'erreur)
-2. Les wireframes textuels des écrans clés
-3. Les états UI à couvrir : chargement, erreur, vide, succès
-4. Les points de friction identifiés
-
+Produce: a summary of findings (existing patterns, constraints, open questions)
 ```
 
 ---
 
-## Phase 3 — REVIEW CROISÉE
+## Phase 2 — PARALLEL DRAFT
 
-Chaque agent review le livrable de l'autre :
+Spawn `product-owner` and `ux-designer` at the same time.
 
-- `product-owner` review les wireframes : _"Ces wireframes correspondent-ils aux ACs ?"_
-- `ux-designer` review les ACs : _"Ces ACs couvrent-ils tous les états UI définis ?"_
+**product-owner prompt:**
 
-Appliquer `team--skill-refine` si désaccord.
+```
+You are product-owner.
+Load project-architecture.md.
+Load team--skill-review.
+
+From this need: $ARGUMENTS
+And these exploration findings: [findings]
+
+Produce:
+1. The user stories (format: As a [persona], I want [action] so that [benefit])
+2. Acceptance Criteria in Given/When/Then for each story
+3. Explicit rejection criteria
+4. What is OUT OF SCOPE for this iteration
+
+Max 3 stories. If more, prioritize and defer the rest.
+```
+
+**ux-designer prompt:**
+
+```
+You are ux-designer.
+Load project-architecture.md.
+Load team--skill-review.
+
+From this need: $ARGUMENTS
+And these exploration findings: [findings]
+
+Produce:
+1. The user journey (happy path + error paths)
+2. Textual wireframes for the key screens
+3. The UI states to cover: loading, error, empty, success
+4. Identified friction points
+
+```
 
 ---
 
-## Phase 4 — PRÉSENTER
+## Phase 3 — CROSS REVIEW
 
-Quand accord unanime, présenter à l'utilisateur :
+Each agent reviews the other's deliverable:
+
+- `product-owner` reviews the wireframes: _"Do these wireframes match the ACs?"_
+- `ux-designer` reviews the ACs: _"Do these ACs cover all the defined UI states?"_
+
+Apply `team--skill-refine` on disagreement.
+
+---
+
+## Phase 4 — PRESENT
+
+Once there is unanimous agreement, present to the user:
 
 ```markdown
-# Stories : $ARGUMENTS
+# Stories: $ARGUMENTS
 
-## Story 1 : [titre]
+## Story 1: [title]
 
-**En tant que** [persona], **je veux** [action] **afin de** [bénéfice]
+**As a** [persona], **I want** [action] **so that** [benefit]
 
 ### Acceptance Criteria
 
 - [ ] Given [...], When [...], Then [...] ...
 
-### Critères de rejet
+### Rejection criteria
 
-- [ ] [cas d'échec explicite]
+- [ ] [explicit failure case]
 
 ### Wireframe
 
-[wireframe textuel]
+[textual wireframe]
 
-### États UI
+### UI states
 
-- Chargement : [description]
-- Erreur : [description]
-- Succès : [description]
+- Loading: [description]
+- Error: [description]
+- Success: [description]
 
 ## Out of Scope
 
-- [items reportés]
+- [deferred items]
 ```
 
-**Gate** : _"Ces stories sont-elles correctes ? Des ajustements avant /spec ?"_
+**Gate**: _"Are these stories correct? Any adjustments before /spec?"_
 
-Sauvegarder dans `.claude/specs/[slug]-story.md` Update `tasks/current_task.md` : status=IDLE
+Save to `.claude/specs/[slug]-story.md`. Update `tasks/current_task.md`: status=IDLE
 
 ```
-✅ Stories validées
-Prêt pour : /spec [slug]-story
+✅ Stories validated
+Ready for: /spec [slug]-story
 ```

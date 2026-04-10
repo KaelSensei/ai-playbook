@@ -5,32 +5,32 @@
 ```markdown
 ## [First name] — [Role/Title]
 
-### Contexte
+### Context
 
-[2-3 phrases : qui est cette personne, dans quel contexte elle utilise le produit]
+[2-3 sentences: who this person is, in what context they use the product]
 
-### Objectifs principaux
+### Primary goals
 
-1. [Ce qu'elle veut accomplir avec le produit]
-2. [Son objectif secondaire]
+1. [What they want to accomplish with the product]
+2. [Their secondary goal]
 
-### Frustrations actuelles
+### Current frustrations
 
-- [Ce qui l'énerve dans le processus actuel]
-- [Ce qui lui fait perdre du temps]
+- [What annoys them in the current process]
+- [What wastes their time]
 
-### Comportement digital
+### Digital behaviour
 
-[Comment elle utilise la technologie : mobile-first ? desktop ? fréquence ?]
+[How they use technology: mobile-first? desktop? frequency?]
 
 ### Representative quote
 
-"[Ce qu'elle dirait pour résumer son besoin]"
+"[What they would say to sum up their need]"
 
 ### Features they care most about
 
-- [Feature 1] : [pourquoi c'est critique pour elle]
-- [Feature 2] : [pourquoi]
+- [Feature 1]: [why it is critical for them]
+- [Feature 2]: [why]
 ```
 
 ---
@@ -40,73 +40,72 @@
 ```markdown
 ## Marie — Regular Traveller (35, employed)
 
-### Contexte
+### Context
 
-Marie voyage 4 à 6 fois par an pour des voyages personnels. Elle réserve depuis son smartphone dans
-les transports. Elle a déjà eu une mauvaise expérience d'annulation difficile avec un concurrent.
+Marie takes 4 to 6 personal trips a year. She books from her smartphone while commuting. She has
+already had a bad experience with a difficult cancellation on a competitor's platform.
 
-### Objectifs principaux
+### Primary goals
 
-1. Réserver rapidement sans surprises de prix
-2. Pouvoir annuler facilement si ses plans changent
-3. Avoir un historique clair de ses voyages et remboursements
+1. Book quickly without price surprises
+2. Be able to cancel easily if her plans change
+3. Keep a clear history of her trips and refunds
 
-### Frustrations actuelles
+### Current frustrations
 
-- Ne comprend pas les politiques d'annulation avant d'avoir réservé
-- Doit appeler le service client pour toute modification
-- Les emails de confirmation sont illisibles sur mobile
+- Does not understand cancellation policies before booking
+- Has to call customer service for any change
+- Confirmation emails are unreadable on mobile
 
-### Comportement digital
+### Digital behaviour
 
-Mobile-first (80% des actions sur smartphone). Utilise principalement l'app entre 7h et 9h et après
-20h. Attend un retour visuel immédiat sur chaque action.
+Mobile-first (80% of actions on smartphone). Mainly uses the app between 7am and 9am and after 8pm.
+Expects immediate visual feedback on every action.
 
 ### Representative quote
 
-"Je veux juste savoir ce qui se passe si j'annule, avant de payer."
+"I just want to know what happens if I cancel, before I pay."
 
-### Features critiques pour Marie
+### Features critical for Marie
 
-- Politique d'annulation visible AVANT le paiement
-- Annulation en ligne sans appel téléphonique
-- Remboursement rapide et tracé
+- Cancellation policy visible BEFORE payment
+- Online cancellation without a phone call
+- Fast and traceable refund
 ```
 
 ```markdown
-## Thomas — Gestionnaire de voyages d'affaires (42 ans, PME)
+## Thomas — Business Travel Manager (42, SMB)
 
-### Contexte
+### Context
 
-Thomas organise les voyages de 15 commerciaux dans une PME. Il doit justifier chaque dépense et
-gérer les remboursements de notes de frais. Il accède à la plateforme depuis son desktop au bureau.
+Thomas organises trips for 15 salespeople in an SMB. He has to justify every expense and handle
+expense report reimbursements. He accesses the platform from his office desktop.
 
-### Objectifs principaux
+### Primary goals
 
-1. Réserver pour plusieurs personnes en une session
-2. Obtenir des justificatifs fiscaux conformes (TVA, mentions légales)
-3. Avoir une vision centralisée des dépenses voyages
+1. Book for several people in one session
+2. Get tax-compliant invoices (VAT, legal mentions)
+3. Have a centralised view of travel spend
 
-### Frustrations actuelles
+### Current frustrations
 
-- Doit créer un compte par voyageur → gestion impossible
-- Les factures PDF ne contiennent pas le numéro de TVA intracommunautaire
-- Pas de vue consolidée : dépenses du mois, par voyageur, par destination
+- Has to create one account per traveller → impossible to manage
+- PDF invoices do not include the intra-community VAT number
+- No consolidated view: spend per month, per traveller, per destination
 
-### Comportement digital
+### Digital behaviour
 
-Desktop exclusif. Utilise des spreadsheets pour le suivi. Sensible à la fiabilité : pas de bugs, pas
-de surprises.
+Desktop only. Uses spreadsheets for tracking. Sensitive to reliability: no bugs, no surprises.
 
 ### Representative quote
 
-"Si je dois appeler le support pour avoir une facture correcte, je change de solution."
+"If I have to call support to get a correct invoice, I switch solutions."
 
-### Features critiques pour Thomas
+### Features critical for Thomas
 
-- Compte entreprise avec plusieurs voyageurs rattachés
-- Factures conformes en PDF téléchargeables
-- Dashboard dépenses avec export CSV
+- Company account with multiple travellers attached
+- Compliant PDF invoices that can be downloaded
+- Spend dashboard with CSV export
 ```
 
 ---
@@ -114,15 +113,14 @@ de surprises.
 ## Using Personas in Specs
 
 ```markdown
-# Dans une user story
+# In a user story
 
-En tant que Marie (voyageuse régulière sur mobile), je veux voir la politique d'annulation avant de
-payer, afin de décider en connaissance de cause si je réserve.
+As Marie (regular mobile traveller), I want to see the cancellation policy before I pay, so that I
+can decide in full awareness whether to book.
 
-# Dans les CAs — contexte du persona
+# In the ACs — persona context
 
-Scenario: Marie voit la politique avant paiement sur mobile Given je suis sur la fiche d'un
-hébergement sur mobile When je clique "Réserver" Then avant la page de paiement, je vois clairement
-: "Annulation gratuite jusqu'au [date à 48h]" And je peux revenir en arrière sans perdre ma
-sélection
+Scenario: Marie sees the policy before payment on mobile Given I am on an accommodation page on
+mobile When I click "Book" Then before the payment page, I clearly see: "Free cancellation until
+[date at 48h]" And I can go back without losing my selection
 ```

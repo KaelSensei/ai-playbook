@@ -1,9 +1,9 @@
 ---
 name: api-design-ts
 description: >
-  Design d'API REST TypeScript/Express production-ready. Conventions REST, format de réponse
-  standard, validation Zod middleware, gestion d'erreurs, controllers typés, pagination, versioning.
-  Loaded by dev-senior-a/b, tech-lead.
+  Production-ready TypeScript/Express REST API design. REST conventions, standard response format,
+  Zod validation middleware, error handling, typed controllers, pagination, versioning. Loaded by
+  dev-senior-a/b, tech-lead.
 ---
 
 # API Design TypeScript — Production
@@ -13,34 +13,34 @@ description: >
 ## REST Conventions
 
 ```typescript
-// URLs : ressources en plural, noms — jamais de verbes
-GET    /api/v1/users              // liste paginée
-GET    /api/v1/users/:id          // détail
-POST   /api/v1/users              // créer
-PATCH  /api/v1/users/:id          // modifier partiellement
-PUT    /api/v1/users/:id          // remplacer entièrement
-DELETE /api/v1/users/:id          // supprimer
+// URLs: plural resources, nouns — never verbs
+GET    /api/v1/users              // paginated list
+GET    /api/v1/users/:id          // detail
+POST   /api/v1/users              // create
+PATCH  /api/v1/users/:id          // partial update
+PUT    /api/v1/users/:id          // full replacement
+DELETE /api/v1/users/:id          // delete
 
-// Relations imbriquées — max 2 niveaux
+// Nested relationships — max 2 levels
 GET    /api/v1/users/:id/orders
 POST   /api/v1/users/:id/orders
 
-// Actions non-CRUD — sous-ressource verbe
+// Non-CRUD actions — verb sub-resource
 POST   /api/v1/users/:id/activate
 POST   /api/v1/bookings/:id/cancel
 POST   /api/v1/auth/refresh-token
 
-// Status codes corrects
-201 Created          → POST qui crée une ressource
-200 OK               → GET, PATCH, PUT réussi
-204 No Content       → DELETE réussi
-400 Bad Request      → validation échouée
-401 Unauthorized     → pas de token ou token invalide
-403 Forbidden        → token valide mais permissions insuffisantes
-404 Not Found        → ressource inexistante
-409 Conflict         → violation de contrainte unique
-422 Unprocessable    → données valides mais règle métier violée
-500 Internal Error   → erreur inattendue
+// Correct status codes
+201 Created          → POST that creates a resource
+200 OK               → successful GET, PATCH, PUT
+204 No Content       → successful DELETE
+400 Bad Request      → validation failed
+401 Unauthorized     → missing or invalid token
+403 Forbidden        → valid token but insufficient permissions
+404 Not Found        → resource does not exist
+409 Conflict         → unique constraint violation
+422 Unprocessable    → valid data but business rule violated
+500 Internal Error   → unexpected error
 ```
 
 ## Standard Response Format
@@ -70,7 +70,7 @@ export type ApiError = {
   };
 };
 
-// Helper centralisé
+// Centralised helper
 export const respond = {
   ok: <T>(res: Response, data: T, meta?: PaginationMeta): void => {
     res.status(200).json({ data, ...(meta && { meta }) });
@@ -95,7 +95,7 @@ export const respond = {
 };
 ```
 
-## Controller Complet
+## Full Controller
 
 ```typescript
 // presentation/http/controllers/UserController.ts
@@ -203,7 +203,7 @@ export const validate = {
     },
 };
 
-// Schémas courants
+// Common schemas
 const RegisterUserSchema = z.object({
   email: z
     .string()
@@ -227,7 +227,7 @@ const ListUsersQuerySchema = z.object({
   search: z.string().max(100).optional(),
 });
 
-// Routes typées
+// Typed routes
 router.post('/users', validate.body(RegisterUserSchema), controller.register);
 router.get(
   '/users',
@@ -260,10 +260,10 @@ export const globalErrorHandler: ErrorRequestHandler = (error, req, res, _next) 
     },
   });
 };
-// Toujours en dernier dans app.ts
+// Always last in app.ts
 app.use(globalErrorHandler);
 ```
 
 ## Available References
 
-- `references/auth-middleware.md` — JWT, refresh tokens, RBAC par rôle
+- `references/auth-middleware.md` — JWT, refresh tokens, role-based RBAC

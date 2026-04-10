@@ -1,7 +1,7 @@
 # Observability Config
 
-<!-- Remplir une seule fois pour ce projet -->
-<!-- Chargé par qa-automation et devops-engineer -->
+<!-- Fill in once for this project -->
+<!-- Loaded by qa-automation and devops-engineer -->
 
 ## Stack
 
@@ -14,29 +14,29 @@ apm: none # datadog | newrelic | elastic | none
 
 ## Endpoints
 
-<!-- Ne pas mettre les valeurs sensibles ici — utiliser les env vars -->
+<!-- Do not put sensitive values here — use env vars -->
 
 ```yaml
-sentry_dsn: '' # ou env: SENTRY_DSN
+sentry_dsn: '' # or env: SENTRY_DSN
 sentry_org: ''
 sentry_project: ''
 sentry_api_token: '' # env: SENTRY_API_TOKEN
 
-prometheus_url: '' # ex: http://prometheus:9090
-grafana_url: '' # ex: http://grafana:3000
+prometheus_url: '' # e.g. http://prometheus:9090
+grafana_url: '' # e.g. http://grafana:3000
 grafana_api_key: '' # env: GRAFANA_API_KEY
 
-datadog_site: '' # ex: datadoghq.eu
+datadog_site: '' # e.g. datadoghq.eu
 datadog_api_key: '' # env: DD_API_KEY
 datadog_app_key: '' # env: DD_APP_KEY
-datadog_app_name: '' # nom de l'app dans Datadog
+datadog_app_name: '' # app name in Datadog
 
 newrelic_account: ''
 newrelic_api_key: '' # env: NEW_RELIC_API_KEY
 newrelic_app_name: ''
 ```
 
-## SLOs (surcharge les défauts de observability skill)
+## SLOs (overrides the defaults of the observability skill)
 
 ```yaml
 api_p95_ms: 200
@@ -46,9 +46,9 @@ cpu_max_pct: 80
 memory_max_pct: 85
 ```
 
-## Dashboard URLs (pour les rapports QA)
+## Dashboard URLs (for QA reports)
 
 ```yaml
-main_dashboard: '' # URL du dashboard principal
-load_test_dash: '' # URL du dashboard dédié aux tests de charge
+main_dashboard: '' # URL of the main dashboard
+load_test_dash: '' # URL of the dashboard dedicated to load tests
 ```

@@ -2,95 +2,94 @@
 
 ## How to Use This File
 
-Ce fichier est la **source de vérité du vocabulaire** du projet. Tout terme utilisé dans une spec
-doit être défini ici ou référencer ce glossaire.
+This file is the **source of truth for the project's vocabulary**. Any term used in a spec must be
+defined here or reference this glossary.
 
-Règles :
+Rules:
 
-- Ajouter tout nouveau terme métier lors de la rédaction d'une spec
-- Signaler les ambiguïtés et les faux synonymes
-- Valider les définitions avec les experts métier, pas seulement les devs
+- Add every new business term while writing a spec
+- Flag ambiguities and false synonyms
+- Validate definitions with domain experts, not just developers
 
 ---
 
 ## Entry Template
 
 ```markdown
-### [Terme canonique]
+### [Canonical term]
 
-**Définition** : [Description précise dans le contexte du projet] **Exemples** :
+**Definition**: [Precise description in the context of the project] **Examples**:
 
-- [Exemple 1]
-- [Exemple 2] **Ne pas confondre avec** : [Terme proche mais différent] **Termes rejetés** : [Ce
-  qu'on n'utilisera PAS — et pourquoi] **Contexte d'utilisation** : [Features ou domaines où ce
-  terme apparaît]
+- [Example 1]
+- [Example 2] **Do not confuse with**: [Similar but different term] **Rejected terms**: [What we
+  will NOT use — and why] **Used in**: [Features or domains where this term appears]
 ```
 
 ---
 
 ## Glossary Template — E-commerce / Booking Domain
 
-> Copier-coller ce bloc comme point de départ, puis adapter au projet réel
+> Copy-paste this block as a starting point, then adapt it to the real project
 
-### Commande
+### Order
 
-**Définition** : Achat formalisé d'un ou plusieurs produits par un client, donnant lieu à un
-paiement et une livraison. **Exemples** :
+**Definition**: A formalised purchase of one or more products by a customer, resulting in a payment
+and a delivery. **Examples**:
 
-- Commande de 3 articles passée le 15 mars, livrée le 18 mars **Ne pas confondre avec** :
-  Réservation (prestation future), Devis (non-engageant) **Termes rejetés** : "order" (anglicisme),
-  "achat" (trop générique)
+- An order of 3 items placed on March 15, delivered on March 18 **Do not confuse with**: Booking
+  (future service), Quote (non-binding) **Rejected terms**: "purchase" (too generic), "transaction"
+  (accounting term, not business)
 
-### Utilisateur
+### User
 
-**Définition** : Personne ayant un compte sur la plateforme. Recouvre plusieurs rôles : client,
-administrateur, support. **Ne pas confondre avec** :
+**Definition**: A person with an account on the platform. Covers several roles: customer,
+administrator, support. **Do not confuse with**:
 
-- "Client" : sous-ensemble des utilisateurs ayant passé au moins une commande
-- "Visiteur" : personne non-connectée, sans compte **Termes rejetés** : "user" (anglicisme),
-  "membre" (connotation club/abonnement)
+- "Customer": subset of users who have placed at least one order
+- "Visitor": unauthenticated person without an account **Rejected terms**: "member" (club /
+  subscription connotation), "account holder" (too formal)
 
-### Panier
+### Cart
 
-**Définition** : Sélection temporaire d'articles par un utilisateur, non encore confirmée. Le panier
-est lié à la session et peut expirer. **Ne pas confondre avec** : Commande (engagement finalisé)
-**Termes rejetés** : "cart" (anglicisme), "sélection" (trop vague)
+**Definition**: A temporary selection of items by a user, not yet confirmed. The cart is tied to the
+session and can expire. **Do not confuse with**: Order (finalised commitment) **Rejected terms**:
+"basket" (depends on locale — pick one and stick to it), "selection" (too vague)
 
-### Remboursement
+### Refund
 
-**Définition** : Restitution de tout ou partie du montant payé par le client, suite à une annulation
-ou un litige. **Ne pas confondre avec** :
+**Definition**: Restitution of part or all of the amount paid by the customer, following a
+cancellation or a resolved dispute. **Do not confuse with**:
 
-- "Avoir" : crédit sur le compte, utilisable en futur achat
-- "Compensation" : geste commercial unilatéral **Termes rejetés** : "refund" (anglicisme)
+- "Credit": store credit on the account, usable on a future purchase
+- "Compensation": unilateral commercial gesture **Rejected terms**: "reimbursement" (inconsistent
+  with codebase), "money back" (informal)
 
 ---
 
 ## Empty Entries — To Be Filled by the Team
 
-> Remplacer ce bloc par les termes du domaine réel du projet
+> Replace this block with the terms of the project's real domain
 
-### [Terme 1]
+### [Term 1]
 
-**Définition** : À définir **Statut** : 🔴 Non validé
+**Definition**: To be defined **Status**: Not validated
 
-### [Terme 2]
+### [Term 2]
 
-**Définition** : À définir **Statut** : 🔴 Non validé
+**Definition**: To be defined **Status**: Not validated
 
 ---
 
 ## False Friends — Terms That Must Always Be Defined
 
-Liste de termes qui semblent clairs mais sont systématiquement ambigus dans les projets. Les définir
-dès le début :
+A list of terms that look clear but are systematically ambiguous in projects. Define them upfront:
 
 ```
-"Valider"     → Valider par qui ? Le système ? Un humain ? Quelle action déclenche ?
-"Actif"       → Actif = non-supprimé ? ou actif = abonnement en cours ?
-"Modifier"    → Modifier = un seul champ ? Tout le profil ? Déclenche-t-il une notification ?
-"Envoyer"     → Email ? Push notification ? SMS ? Les trois ?
-"Archiver"    → Soft delete ? Changer de statut ? Visible côté admin seulement ?
-"Confirmer"   → Par l'utilisateur ? Par le prestataire ? Par le système ?
-"Statut"      → Quel enum exact ? Les valeurs sont-elles dans ce glossaire ?
+"Validate"  → Validated by whom? The system? A human? What action triggers it?
+"Active"    → Active = not deleted? Or active = ongoing subscription?
+"Edit"      → A single field? The whole profile? Does it trigger a notification?
+"Send"      → Email? Push notification? SMS? All three?
+"Archive"   → Soft delete? Status change? Visible only to admins?
+"Confirm"   → By the user? By the provider? By the system?
+"Status"    → What exact enum? Are the values listed in this glossary?
 ```

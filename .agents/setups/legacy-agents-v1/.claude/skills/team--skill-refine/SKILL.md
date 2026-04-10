@@ -1,88 +1,87 @@
 ---
 name: team--skill-refine
 description: >
-  Protocole d'itération. Chargé quand un agent retourne APPROVE_WITH_CHANGES ou REQUEST_REDESIGN.
-  Définit comment résoudre les conflits, prioriser les corrections, les router vers le bon agent et
-  éviter les boucles infinies.
+  Iteration protocol. Loaded when an agent returns APPROVE_WITH_CHANGES or REQUEST_REDESIGN. Defines
+  how to resolve conflicts, prioritize fixes, route them to the right agent, and avoid infinite
+  loops.
 ---
 
 # Team Refinement Protocol
 
-## Sur REQUEST_REDESIGN (arrêt immédiat)
+## On REQUEST_REDESIGN (immediate halt)
 
-1. Arrêter immédiatement — ne pas tenter de corriger en place
-2. Citer le finding exact qui a déclenché le redesign
-3. Identifier quel agent l'a soulevé et sa discipline
-4. Escalader à l'utilisateur avec :
-   - Le problème verbatim
-   - L'agent qui l'a soulevé
-   - Deux options : (a) revoir le design, (b) l'utilisateur accepte explicitement le risque
-5. Si override → documenter dans `tasks/current_task.md` : _"[date] [agent] → risque accepté :
-   [problème] — Raison : [raison utilisateur]"_
-6. Jamais contourner silencieusement un `REQUEST_REDESIGN`
+1. Stop immediately — do not try to fix in place
+2. Quote the exact finding that triggered the redesign
+3. Identify which agent raised it and their discipline
+4. Escalate to the user with:
+   - The problem verbatim
+   - The agent who raised it
+   - Two options: (a) rework the design, (b) the user explicitly accepts the risk
+5. If override → document in `tasks/current_task.md`: _"[date] [agent] → risk accepted: [problem] —
+   Reason: [user reason]"_
+6. Never silently bypass a `REQUEST_REDESIGN`
 
-## Sur APPROVE_WITH_CHANGES (itérer)
+## On APPROVE_WITH_CHANGES (iterate)
 
-### Étape 1 — Collecter
+### Step 1 — Collect
 
-Rassembler toutes les améliorations de tous les agents en une liste unique.
+Gather all improvements from all agents into a single list.
 
-### Étape 2 — Prioriser
+### Step 2 — Prioritize
 
 ```
-1. Sécurité (security-reviewer)
-2. Correctness / logique (dev-senior-a/b, qa-engineer)
-3. Intégrité des données (data-engineer)
-4. Architecture / dette (architect, tech-lead)
-5. Déploiement / ops (devops-engineer)
-6. UX / accessibilité (ux-designer)
-7. Style / nits (tout agent)
+1. Security (security-reviewer)
+2. Correctness / logic (dev-senior-a/b, qa-engineer)
+3. Data integrity (data-engineer)
+4. Architecture / debt (architect, tech-lead)
+5. Deployment / ops (devops-engineer)
+6. UX / accessibility (ux-designer)
+7. Style / nits (any agent)
 ```
 
-### Étape 3 — Router
+### Step 3 — Route
 
-Assigner chaque correction à son agent propriétaire par discipline. Les corrections indépendantes
-peuvent être adressées en parallèle.
+Assign each fix to its owning agent by discipline. Independent fixes can be addressed in parallel.
 
-### Étape 4 — Re-review
+### Step 4 — Re-review
 
-Après corrections :
+After fixes:
 
-- Périmètre : uniquement les zones modifiées, pas re-review complète
-- Exception : si les changements sont larges → re-review complète
-- Les agents sans amélioration → leur verdict précédent reste valable
+- Scope: only the modified areas, not a full re-review
+- Exception: if the changes are large → full re-review
+- Agents with no improvement → their previous verdict remains valid
 
-### Étape 5 — Vérifier le compteur de boucles
+### Step 5 — Check the loop counter
 
-- Maximum **3 boucles** de refinement avant d'escalader à l'utilisateur
-- Si après la boucle 3 un agent retourne encore `APPROVE_WITH_CHANGES` sur le même problème →
-  escalader : _"3 itérations sur [problème]. Décision utilisateur requise."_
-- Ne jamais supprimer silencieusement un finding répété pour éviter l'escalade
+- Maximum **3 refinement loops** before escalating to the user
+- If after loop 3 an agent still returns `APPROVE_WITH_CHANGES` on the same issue → escalate: _"3
+  iterations on [problem]. User decision required."_
+- Never silently drop a repeated finding to avoid escalation
 
-## Médiation de Conflits
+## Conflict Mediation
 
-Quand deux agents sont en désaccord sur une décision technique :
+When two agents disagree on a technical decision:
 
-1. Citer les deux positions verbatim
-2. Identifier le vrai trade-off (perf vs maintenabilité, simplicité vs extensibilité)
-3. Présenter à l'utilisateur : _"[Agent A] recommande X parce que [raison]. [Agent B] recommande Y
-   parce que [raison]. Lequel préférez-vous ?"_
-4. Le tech-lead peut arbitrer si l'utilisateur délègue
-5. Documenter dans `tasks/current_task.md`
+1. Quote both positions verbatim
+2. Identify the real trade-off (perf vs maintainability, simplicity vs extensibility)
+3. Present to the user: _"[Agent A] recommends X because [reason]. [Agent B] recommends Y because
+   [reason]. Which do you prefer?"_
+4. The tech-lead can arbitrate if the user delegates
+5. Document in `tasks/current_task.md`
 
-Ne jamais résoudre les conflits en choisissant l'option "la plus gentille" ou celle de l'agent le
-plus senior. Surfacer le trade-off clairement.
+Never resolve conflicts by picking the "nicest" option or the most senior agent's option. Surface
+the trade-off clearly.
 
-## Préservation du Contexte entre Boucles
+## Context Preservation Between Loops
 
-Chaque itération transmet aux agents :
+Each iteration passes to the agents:
 
-- Le verdict précédent de chaque agent (pour vérifier que leurs problèmes ont été adressés)
-- Le diff de ce qui a changé depuis leur dernière review
-- Les context docs inchangés
+- Each agent's previous verdict (so they can check whether their issues were addressed)
+- The diff of what changed since their last review
+- Unchanged context docs
 
-L'orchestrateur trace :
+The orchestrator tracks:
 
-- Problèmes soulevés par agent par boucle
-- Problèmes corrigés et vérifiés fermés
-- Problèmes encore ouverts après chaque boucle
+- Issues raised per agent per loop
+- Issues fixed and verified closed
+- Issues still open after each loop

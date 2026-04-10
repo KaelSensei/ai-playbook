@@ -1,59 +1,59 @@
 ---
 name: review
 description: >
-  Review parallèle par tous les agents. Read-only. Verdict mergé. Sur n'importe quel diff avant de
-  merger ou déployer.
-argument-hint: '[fichiers, PR numéro, ou vide pour dernier commit]'
+  Parallel review by all agents. Read-only. Merged verdict. For any diff before merging or
+  deploying.
+argument-hint: '[files, PR number, or empty for latest commit]'
 ---
 
 # /review
 
-Update `tasks/current_task.md` : status=REVIEW
+Update `tasks/current_task.md`: status=REVIEW
 
 ---
 
-## Étape 1 — Déterminer l'input
+## Step 1 — Determine the input
 
-| Argument         | Action              |
-| ---------------- | ------------------- |
-| Numéro PR        | `gh pr diff [N]`    |
-| Chemins fichiers | Lire ces fichiers   |
-| `staged`         | `git diff --cached` |
-| Aucun            | `git diff HEAD~1`   |
+| Argument   | Action              |
+| ---------- | ------------------- |
+| PR number  | `gh pr diff [N]`    |
+| File paths | Read those files    |
+| `staged`   | `git diff --cached` |
+| None       | `git diff HEAD~1`   |
 
-Avant de lancer : vérifier que les tests passent.
+Before running: verify the tests pass.
 
 ```bash
-[runner]  # tous les tests doivent passer
+[runner]  # all tests must pass
 ```
 
-Si les tests échouent → arrêter. Reporter l'échec. Ne pas reviewer du code cassé.
+If tests fail → stop. Report the failure. Do not review broken code.
 
 ---
 
-## Étape 2 — Spawner tous les agents simultanément
+## Step 2 — Spawn all agents simultaneously
 
-Charger `team--skill-review` pour tous les agents. Lire le tableau `## Agent Team` dans `CLAUDE.md`.
-Spawner TOUS les agents en même temps :
+Load `team--skill-review` for all agents. Read the `## Agent Team` table in `CLAUDE.md`. Spawn EVERY
+agent at the same time:
 
 ```
-Tu es [AGENT_PERSONA]. Mode review uniquement — pas d'écriture de code.
-Charge context docs et skills selon Agent Team table.
-Charge team--skill-review.
+You are [AGENT_PERSONA]. Review mode only — no code writing.
+Load context docs and skills per the Agent Team table.
+Load team--skill-review.
 
-Review le code suivant depuis ton angle disciplinaire uniquement.
-Tous les agents reviewent en parallèle.
+Review the following code from your disciplinary angle only.
+All agents are reviewing in parallel.
 
 [diff / code]
 
-Suivre le format team--skill-review exactement.
+Follow the team--skill-review format exactly.
 ```
 
 ---
 
-## Étape 3 — Merger les verdicts
+## Step 3 — Merge the verdicts
 
-Collecter tous les verdicts. Appliquer les règles de merge de `team--skill-review`.
+Collect all verdicts. Apply the merge rules from `team--skill-review`.
 
 ```markdown
 # Code Review
@@ -73,35 +73,35 @@ Collecter tous les verdicts. Appliquer les règles de merge de `team--skill-revi
 | data-engineer     | [verdict] |
 | devops-engineer   | [verdict] |
 
-**Verdict global : APPROVE | APPROVE_WITH_CHANGES | REQUEST_REDESIGN**
+**Global verdict: APPROVE | APPROVE_WITH_CHANGES | REQUEST_REDESIGN**
 
 ---
 
 ## 🔴 Blockers
 
-[Dédupliqué. Si flaggé par plusieurs agents : "(flaggé par N agents)"]
+[Deduped. If flagged by multiple agents: "(flagged by N agents)"]
 
 ## 🟡 Improvements
 
-[Dédupliqué]
+[Deduped]
 
 ## 🔵 Nits
 
-[Dédupliqué]
+[Deduped]
 ```
 
 ---
 
-## Étape 4 — Gate sécurité
+## Step 4 — Security gate
 
-Si le diff touche auth, sessions, données utilisateur, ou endpoints publics → `security-reviewer`
-DOIT explicitement confirmer :
+If the diff touches auth, sessions, user data, or public endpoints → `security-reviewer` MUST
+explicitly confirm:
 
-- Checklist OWASP complète
-- Aucune vulnérabilité critique
-- Rate limiting présent si applicable
+- Full OWASP checklist
+- No critical vulnerability
+- Rate limiting present if applicable
 
-Si `security-reviewer` retourne `REQUEST_REDESIGN` sur ces zones → verdict global =
-`REQUEST_REDESIGN` sans exception.
+If `security-reviewer` returns `REQUEST_REDESIGN` on these areas → global verdict =
+`REQUEST_REDESIGN` with no exception.
 
-Update `tasks/current_task.md` : status=IDLE
+Update `tasks/current_task.md`: status=IDLE

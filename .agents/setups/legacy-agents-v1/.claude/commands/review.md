@@ -1,101 +1,101 @@
 ---
 name: review
 description: >
-  Review parallèle legacy-aware. Tous les agents reviewent simultanément. Vérification spéciale : le
-  comportement legacy est-il préservé ? Les tests de caractérisation passent-ils ?
-argument-hint: '[fichiers, PR numéro, ou vide pour dernier commit]'
+  Parallel legacy-aware review. All agents review simultaneously. Special check: is the legacy
+  behavior preserved? Are characterization tests passing?
+argument-hint: '[files, PR number, or empty for last commit]'
 ---
 
 # /review
 
-Update `tasks/current_task.md` : status=REVIEW
+Update `tasks/current_task.md`: status=REVIEW
 
 ---
 
-## Étape 1 — Déterminer l'input et vérifier les tests
+## Step 1 — Determine the input and verify tests
 
 | Argument  | Action              |
 | --------- | ------------------- |
-| Numéro PR | `gh pr diff [N]`    |
-| Fichiers  | Lire ces fichiers   |
+| PR number | `gh pr diff [N]`    |
+| Files     | Read those files    |
 | `staged`  | `git diff --cached` |
-| Aucun     | `git diff HEAD~1`   |
+| None      | `git diff HEAD~1`   |
 
-**Vérification critique avant review :**
+**Critical check before review:**
 
 ```bash
-[runner]  # tous les tests doivent passer
+[runner]  # all tests must pass
 
-# Si des tests de caractérisation existent pour les modules touchés :
-[runner] tests/characterization/  # TOUS doivent passer
+# If characterization tests exist for the touched modules:
+[runner] tests/characterization/  # ALL must pass
 ```
 
-Si des tests de caractérisation échouent → arrêter. Un test de caractérisation rouge = comportement
-changé = régression possible. Ne pas continuer sans analyse.
+If any characterization tests fail → stop. A red characterization test = changed behavior = possible
+regression. Do not proceed without analysis.
 
 ---
 
-## Étape 2 — Identifier le type de changement
+## Step 2 — Identify the type of change
 
-Lire le diff. Catégoriser :
+Read the diff. Categorize:
 
-| Type                     | Ce qui change               | Mode review                       |
-| ------------------------ | --------------------------- | --------------------------------- |
-| Refactoring pur          | Structure sans comportement | Vérifier comportement préservé    |
-| Nouveau code (Strangler) | Ajout autour du legacy      | Vérifier que le legacy est intact |
-| Bug fix                  | Comportement corrigé        | Vérifier le test de régression    |
-| Feature nouvelle         | Nouveau comportement        | Review standard                   |
+| Type                 | What changes               | Review mode                      |
+| -------------------- | -------------------------- | -------------------------------- |
+| Pure refactoring     | Structure without behavior | Verify behavior preserved        |
+| New code (Strangler) | Addition around the legacy | Verify that the legacy is intact |
+| Bug fix              | Corrected behavior         | Verify the regression test       |
+| New feature          | New behavior               | Standard review                  |
 
-Communiquer le type identifié aux agents dans leur prompt.
+Communicate the identified type to the agents in their prompt.
 
 ---
 
-## Étape 3 — Spawner tous les agents en parallèle
+## Step 3 — Spawn all agents in parallel
 
-Charger `team--skill-review` pour tous les agents. Spawner TOUS les agents du tableau
-`## Agent Team` simultanément :
+Load `team--skill-review` for all agents. Spawn ALL agents from the `## Agent Team` table
+simultaneously:
 
 ```
-Tu es [AGENT_PERSONA].
-Charge context docs et skills selon Agent Team table.
-Charge team--skill-review.
+You are [AGENT_PERSONA].
+Load context docs and skills per Agent Team table.
+Load team--skill-review.
 
-Type de changement identifié : [type]
-Module(s) concerné(s) : [depuis legacy-map.md si cartographié]
-Tests de caractérisation en place : [oui/non/liste]
+Identified change type: [type]
+Module(s) involved: [from legacy-map.md if mapped]
+Characterization tests in place: [yes/no/list]
 
-Review depuis ton angle disciplinaire.
+Review from your disciplinary angle.
 
-Points d'attention legacy spécifiques :
-- Si refactoring : comportement est-il strictement préservé ?
-- Si Strangler : le legacy est-il inchangé ?
-- Si bug fix : y a-t-il un test de régression ?
-- Si feature : y a-t-il des tests de caractérisation sur le legacy touché ?
+Legacy-specific points of attention:
+- If refactoring: is the behavior strictly preserved?
+- If Strangler: is the legacy unchanged?
+- If bug fix: is there a regression test?
+- If feature: are there characterization tests on the legacy being touched?
 
 [diff / code]
 
-Suivre le format team--skill-review exactement.
+Follow the team--skill-review format exactly.
 ```
 
 ---
 
-## Étape 4 — Gate sécurité legacy
+## Step 4 — Legacy security gate
 
-Sur du code legacy, les vulnérabilités les plus courantes sont :
+On legacy code, the most common vulnerabilities are:
 
-- SQL injection par concaténation de string
-- Secrets hardcodés découverts lors du refactoring
-- Dépendances obsolètes exposées
+- SQL injection from string concatenation
+- Hardcoded secrets discovered during refactoring
+- Obsolete dependencies exposed
 
-`security-reviewer` doit confirmer :
+`security-reviewer` must confirm:
 
-- Checklist OWASP + checklist legacy spécifique complète
-- Aucun secret découvert et laissé en place
-- Aucune injection introduite ou exposée
+- OWASP checklist + legacy-specific checklist complete
+- No secret discovered and left in place
+- No injection introduced or exposed
 
 ---
 
-## Étape 5 — Merger les verdicts
+## Step 5 — Merge verdicts
 
 ```markdown
 # Code Review (Legacy-Aware)
@@ -114,18 +114,18 @@ Sur du code legacy, les vulnérabilités les plus courantes sont :
 | security-reviewer       | [verdict] |
 | data-engineer           | [verdict] |
 
-**Verdict global : APPROVE | APPROVE_WITH_CHANGES | REQUEST_REDESIGN**
+**Global verdict: APPROVE | APPROVE_WITH_CHANGES | REQUEST_REDESIGN**
 
-## Tests de Caractérisation
+## Characterization Tests
 
-- En place : ✅ / ❌
-- Tous passants : ✅ / ❌
+- In place: yes / no
+- All passing: yes / no
 
-## 🔴 Blockers
+## Blockers
 
-## 🟡 Improvements
+## Improvements
 
-## 🔵 Nits
+## Nits
 ```
 
-Update `tasks/current_task.md` : status=IDLE
+Update `tasks/current_task.md`: status=IDLE

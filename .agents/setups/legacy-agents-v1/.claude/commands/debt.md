@@ -1,151 +1,151 @@
 ---
 name: debt
 description: >
-  Auditer et prioriser la dette technique. debt-tracker + legacy-analyst en parallèle. Produit un
-  inventaire priorisé et un plan de remboursement.
-argument-hint: '[module spécifique ou vide pour audit global]'
+  Audit and prioritize technical debt. debt-tracker + legacy-analyst in parallel. Produces a
+  prioritized inventory and a repayment plan.
+argument-hint: '[specific module or empty for global audit]'
 ---
 
 # /debt
 
-Update `tasks/current_task.md` : status=DEBT
+Update `tasks/current_task.md`: status=DEBT
 
 ---
 
-## Phase 1 — Collecte des métriques
+## Phase 1 — Metrics collection
 
 ```bash
-# Hotspots (fichiers les plus modifiés = dette probable)
+# Hotspots (most modified files = likely debt)
 git log --name-only --format="" | grep -v "^$" | sort | uniq -c | sort -rn | head -20
 
-# Taille des fichiers (gros fichiers = red flag)
+# File size (large files = red flag)
 find . -name "*.[extension]" | xargs wc -l 2>/dev/null | sort -rn | head -20
 
-# Complexité (si outil disponible)
-# PHP : phploc src/
-# Python : radon cc src/ -a
-# JS : npx complexity-report src/
+# Complexity (if tool available)
+# PHP: phploc src/
+# Python: radon cc src/ -a
+# JS: npx complexity-report src/
 
 # Duplication
-# PHP : phpcpd src/ --min-lines 5
-# JS : npx jscpd src/
+# PHP: phpcpd src/ --min-lines 5
+# JS: npx jscpd src/
 ```
 
 ---
 
-## Phase 2 — Spawner debt-tracker et legacy-analyst en parallèle
+## Phase 2 — Spawn debt-tracker and legacy-analyst in parallel
 
-**debt-tracker prompt :**
-
-```
-Tu es debt-tracker.
-Charge .claude/agents/debt-tracker.md.
-Charge project-architecture.md, legacy-map.md.
-Charge technical-debt skill.
-
-Périmètre : $ARGUMENTS (ou global si vide)
-Métriques collectées : [output Phase 1]
-Legacy map existante : [contenu legacy-map.md]
-
-Produis :
-1. Inventaire de la dette par catégorie (critique/significatif/mineur)
-2. Score Impact/Effort pour chaque item
-3. Top 5 items à rembourser en priorité
-4. Dette délibérée acceptée (documenter les raisons)
-```
-
-**legacy-analyst prompt :**
+**debt-tracker prompt:**
 
 ```
-Tu es legacy-analyst.
-Charge .claude/agents/legacy-analyst.md.
-Charge project-architecture.md, legacy-map.md.
-Charge legacy-patterns, technical-debt skills.
+You are debt-tracker.
+Load .claude/agents/debt-tracker.md.
+Load project-architecture.md, legacy-map.md.
+Load technical-debt skill.
 
-Périmètre : $ARGUMENTS
-Métriques : [output Phase 1]
+Scope: $ARGUMENTS (or global if empty)
+Metrics collected: [Phase 1 output]
+Existing legacy map: [legacy-map.md content]
 
-Enrichir l'inventaire avec :
-1. Zones non encore cartographiées (risque inconnu)
-2. Couplages dangereux identifiés
-3. Modules qui bloquent les features actuellement
-4. Estimation du "interest" pour chaque item (coût par feature future)
+Produce:
+1. Debt inventory by category (critical/significant/minor)
+2. Impact/Effort score for each item
+3. Top 5 items to pay back in priority
+4. Accepted deliberate debt (document reasons)
+```
+
+**legacy-analyst prompt:**
+
+```
+You are legacy-analyst.
+Load .claude/agents/legacy-analyst.md.
+Load project-architecture.md, legacy-map.md.
+Load legacy-patterns, technical-debt skills.
+
+Scope: $ARGUMENTS
+Metrics: [Phase 1 output]
+
+Enrich the inventory with:
+1. Zones not yet mapped (unknown risk)
+2. Identified dangerous couplings
+3. Modules currently blocking features
+4. Estimate the "interest" for each item (cost per future feature)
 ```
 
 ---
 
-## Phase 3 — Synthèse et plan
+## Phase 3 — Synthesis and plan
 
-Merger les outputs et produire :
+Merge the outputs and produce:
 
 ```markdown
-# Audit de Dette Technique
+# Technical Debt Audit
 
-Date : [aujourd'hui] Périmètre : $ARGUMENTS
+Date: [today] Scope: $ARGUMENTS
 
-## Résumé Exécutif
+## Executive Summary
 
-[3-5 phrases : état général, top problèmes, recommandation principale]
+[3-5 sentences: general state, top problems, main recommendation]
 
-## Inventaire Priorisé
+## Prioritized Inventory
 
-### 🔴 Critique (score > 3)
+### Critical (score > 3)
 
-| Item | Type | Fichier(s) | Impact | Effort | Score | Action |
-| ---- | ---- | ---------- | ------ | ------ | ----- | ------ |
+| Item | Type | File(s) | Impact | Effort | Score | Action |
+| ---- | ---- | ------- | ------ | ------ | ----- | ------ |
 
-### 🟡 Significatif (score 1.5-3)
+### Significant (score 1.5-3)
 
-| Item | Type | Fichier(s) | Impact | Effort | Score | Action |
-| ---- | ---- | ---------- | ------ | ------ | ----- | ------ |
+| Item | Type | File(s) | Impact | Effort | Score | Action |
+| ---- | ---- | ------- | ------ | ------ | ----- | ------ |
 
-### 🟢 Mineur (score < 1.5)
+### Minor (score < 1.5)
 
-| Item | Type | Fichier(s) | Impact | Effort | Score | Action |
-| ---- | ---- | ---------- | ------ | ------ | ----- | ------ |
+| Item | Type | File(s) | Impact | Effort | Score | Action |
+| ---- | ---- | ------- | ------ | ------ | ----- | ------ |
 
-### Dette Délibérée Acceptée
+### Accepted Deliberate Debt
 
-| Item | Raison | Depuis | Remboursement prévu |
-| ---- | ------ | ------ | ------------------- |
+| Item | Reason | Since | Planned Repayment |
+| ---- | ------ | ----- | ----------------- |
 
-## Plan de Remboursement Recommandé
+## Recommended Repayment Plan
 
-### Cette semaine (Quick wins — effort 1)
-
-- [items]
-
-### Ce sprint (effort 2-3)
+### This week (Quick wins — effort 1)
 
 - [items]
 
-### Prochain trimestre (effort 4-5, Strangler Fig)
+### This sprint (effort 2-3)
 
 - [items]
 
-### Accepté indéfiniment
+### Next quarter (effort 4-5, Strangler Fig)
 
-- [items avec justification]
+- [items]
 
-## Zones Non Cartographiées (risque inconnu)
+### Accepted indefinitely
 
-- [modules jamais explorés]
+- [items with justification]
+
+## Unmapped Zones (unknown risk)
+
+- [modules never explored]
 ```
 
 ---
 
-## Phase 4 — Présenter et décider
+## Phase 4 — Present and decide
 
-Présenter à l'utilisateur. **Gate** : _"Ce plan correspond-il aux priorités business ?"_
+Present to the user. **Gate**: _"Does this plan match the business priorities?"_
 
-Mettre à jour `legacy-map.md` avec les nouvelles découvertes. Sauvegarder le rapport dans
+Update `legacy-map.md` with the new findings. Save the report to
 `.claude/specs/debt-audit-[date].md`.
 
-Update `tasks/current_task.md` : status=IDLE
+Update `tasks/current_task.md`: status=IDLE
 
 ```
-✅ Audit terminé
-Items critiques : [N]
-Quick wins identifiés : [N]
-Rapport : .claude/specs/debt-audit-[date].md
+Audit complete
+Critical items: [N]
+Quick wins identified: [N]
+Report: .claude/specs/debt-audit-[date].md
 ```

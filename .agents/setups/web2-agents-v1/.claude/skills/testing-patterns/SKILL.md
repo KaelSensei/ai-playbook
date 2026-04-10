@@ -1,40 +1,40 @@
 ---
 name: testing-patterns
 description: >
-  Canon TDD (Kent Beck), patterns de tests unitaires/integration/E2E, mocking, test doubles,
-  pyramide de tests. Auto-chargé par dev-senior-a/b, qa-engineer, tech-lead, spec-writer. Invoke
-  pour toute question sur TDD, structure de tests, ou stratégie de couverture.
+  Canon TDD (Kent Beck), unit/integration/E2E test patterns, mocking, test doubles, testing pyramid.
+  Auto-loaded by dev-senior-a/b, qa-engineer, tech-lead and spec-writer. Invoke for any question
+  about TDD, test structure, or coverage strategy.
 ---
 
 # Testing Patterns Reference
 
-## Canon TDD — Le Workflow
+## Canon TDD — The Workflow
 
-Source : Kent Beck (2023) + 3 Laws of TDD (Uncle Bob)
-
-```
-1. TEST LIST  — lister tous les comportements à tester (pas de code)
-2. RED        — écrire UN test qui échoue pour la bonne raison
-3. GREEN      — minimum de code pour faire passer le test
-4. BLUE       — refactorer sans casser les tests
-5. Répéter    — jusqu'à ce que la test list soit vide
-```
-
-### Les 3 erreurs communes
+Source: Kent Beck (2023) + the 3 Laws of TDD (Uncle Bob)
 
 ```
-❌ Écrire plusieurs tests avant de coder
-❌ Refactorer pendant GREEN (deux chapeaux en même temps)
-❌ Écrire plus de code que nécessaire pour GREEN
+1. TEST LIST  — list all the behaviors to test (no code)
+2. RED        — write ONE test that fails for the right reason
+3. GREEN      — minimum code to make the test pass
+4. BLUE       — refactor without breaking the tests
+5. Repeat     — until the test list is empty
 ```
 
-### Choisir le prochain test (Starter Test principle)
+### The 3 common mistakes
 
-- Commencer par le cas le plus trivial (retour fixe, input vide)
-- Chaque test doit être un pas vers l'objectif
-- Si tu es bloqué → tu as fait un trop grand pas → revenir en arrière
+```
+❌ Writing several tests before coding
+❌ Refactoring during GREEN (two hats at once)
+❌ Writing more code than GREEN requires
+```
 
-## Structure AAA (Arrange / Act / Assert)
+### Picking the next test (Starter Test principle)
+
+- Start with the most trivial case (fixed return, empty input)
+- Each test must be a step toward the goal
+- If you're stuck → you took too big a step → back off
+
+## AAA Structure (Arrange / Act / Assert)
 
 ```typescript
 describe('UserService', () => {
@@ -58,16 +58,16 @@ describe('UserService', () => {
 });
 ```
 
-## Test Doubles (du plus simple au plus complexe)
+## Test Doubles (simplest to most complex)
 
 ```typescript
-// DUMMY — objet passé mais jamais utilisé
+// DUMMY — object passed but never used
 const dummyLogger = {} as Logger;
 
-// STUB — retourne des valeurs prédéfinies
+// STUB — returns predefined values
 const stubRepo = { findById: async () => ({ id: '1', name: 'Alice' }) };
 
-// FAKE — implémentation simplifiée mais fonctionnelle (préférer les fakes)
+// FAKE — simplified but functional implementation (prefer fakes)
 class InMemoryUserRepository implements UserRepository {
   private users = new Map<string, User>();
   async save(user: User) {
@@ -78,40 +78,39 @@ class InMemoryUserRepository implements UserRepository {
   }
 }
 
-// SPY — enregistre les appels
+// SPY — records calls
 const spy = jest.spyOn(emailService, 'send');
 expect(spy).toHaveBeenCalledWith(expect.objectContaining({ to: 'test@test.com' }));
 
-// MOCK — vérifie les interactions (utiliser avec parcimonie)
+// MOCK — verifies interactions (use sparingly)
 const mockRepo = { save: jest.fn(), findById: jest.fn() };
 ```
 
-**Règle** : préférer les Fakes aux Mocks. Les Fakes testent le comportement, les Mocks testent
-l'implémentation.
+**Rule**: prefer Fakes over Mocks. Fakes test behavior, Mocks test implementation.
 
-## Pyramide de Tests
+## Testing Pyramid
 
 ```
         /\
-       /E2E\       ← peu, lents, flaky, coûteux
+       /E2E\       ← few, slow, flaky, expensive
       /------\
-     /  Integ  \   ← quelques-uns par feature
+     /  Integ  \   ← a handful per feature
     /------------\
-   /     Unit     \ ← beaucoup, rapides, déterministes
+   /     Unit     \ ← many, fast, deterministic
   /________________\
 ```
 
 ### Unit Tests
 
-- Testent une unité isolée (classe, fonction)
-- Pas de BDD, pas d'HTTP, pas de filesystem
-- Rapides (< 1ms)
-- Déterministes toujours
+- Test an isolated unit (class, function)
+- No DB, no HTTP, no filesystem
+- Fast (< 1ms)
+- Always deterministic
 
 ### Integration Tests
 
 ```typescript
-// Avec vraie BDD (testcontainers ou BDD de test)
+// With a real DB (testcontainers or a test DB)
 describe('UserRepository (integration)', () => {
   let db: Database;
   beforeAll(async () => {
@@ -136,7 +135,7 @@ describe('UserRepository (integration)', () => {
 ### E2E Tests
 
 ```typescript
-// HTTP complet avec app en mémoire
+// Full HTTP with an in-memory app
 describe('POST /api/v1/auth/register', () => {
   it('should register a new user and return 201', async () => {
     const res = await request(app)
@@ -149,24 +148,24 @@ describe('POST /api/v1/auth/register', () => {
 });
 ```
 
-## Nommage des Tests
+## Test Naming
 
 ```typescript
-// Pattern : [unité] [comportement attendu] [condition]
+// Pattern: [unit] [expected behavior] [condition]
 ✅ 'should return null when user is not found'
 ✅ 'should throw InvalidEmailError when email format is wrong'
 ✅ 'should hash password before saving'
 
 // Anti-patterns
-❌ 'test user creation'  // trop vague
-❌ 'it works'           // ne décrit rien
-❌ 'test 1'             // inutile
+❌ 'test user creation'  // too vague
+❌ 'it works'           // describes nothing
+❌ 'test 1'             // useless
 ```
 
 ## Test Data Builders
 
 ```typescript
-// Builder pattern pour les données de test
+// Builder pattern for test data
 function buildUser(overrides: Partial<User> = {}): User {
   return {
     id: randomUUID(),
@@ -183,9 +182,9 @@ const adminUser = buildUser({ role: 'ADMIN' });
 const deletedUser = buildUser({ deletedAt: new Date() });
 ```
 
-## Ce qu'il ne faut PAS tester
+## What NOT to Test
 
-- Les getters/setters triviaux sans logique
-- Les constructeurs qui n'ont pas de logique
-- Les dépendances externes (tester son propre code, pas Prisma)
-- Les détails d'implémentation (tester le comportement, pas comment)
+- Trivial getters/setters with no logic
+- Constructors with no logic
+- External dependencies (test your own code, not Prisma)
+- Implementation details (test behavior, not how)

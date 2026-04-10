@@ -1,18 +1,18 @@
 # TypeScript Decorators — Production Patterns
 
-> Decorators nécessitent `"experimentalDecorators": true` et `"emitDecoratorMetadata": true` dans
-> tsconfig. En 2024 : TC39 Stage 3, syntaxe stable mais API peut évoluer.
+> Decorators require `"experimentalDecorators": true` and `"emitDecoratorMetadata": true` in
+> tsconfig. As of 2024: TC39 Stage 3, stable syntax but the API may still evolve.
 
 ---
 
-## Decorators de Validation (Class Validator)
+## Validation Decorators (Class Validator)
 
 ```typescript
 import { IsEmail, IsString, MinLength, MaxLength, IsEnum, IsOptional } from 'class-validator';
 import { plainToInstance, Transform } from 'class-transformer';
 import { validate } from 'class-validator';
 
-// DTO avec decorators de validation
+// DTO with validation decorators
 class RegisterUserDto {
   @IsEmail({}, { message: 'Invalid email format' })
   @Transform(({ value }) => (value as string).toLowerCase().trim())
@@ -34,7 +34,7 @@ class RegisterUserDto {
   role?: UserRole = UserRole.USER;
 }
 
-// Validation dans le middleware
+// Validation in the middleware
 async function validateDto<T extends object>(cls: new () => T, plain: unknown): Promise<T> {
   const instance = plainToInstance(cls, plain);
   const errors = await validate(instance as object);
@@ -44,7 +44,7 @@ async function validateDto<T extends object>(cls: new () => T, plain: unknown): 
   return instance;
 }
 
-// Usage dans le controller
+// Usage in the controller
 router.post('/users', async (req, res, next) => {
   try {
     const dto = await validateDto(RegisterUserDto, req.body);
@@ -56,10 +56,10 @@ router.post('/users', async (req, res, next) => {
 });
 ```
 
-## Decorators de Logging (DIY simple)
+## Logging Decorators (simple DIY)
 
 ```typescript
-// Decorator de méthode — log automatique des appels
+// Method decorator — automatic call logging
 function LogMethod(target: unknown, propertyKey: string, descriptor: PropertyDescriptor) {
   const originalMethod = descriptor.value as (...args: unknown[]) => unknown;
 
@@ -83,7 +83,7 @@ function LogMethod(target: unknown, propertyKey: string, descriptor: PropertyDes
 class UserService {
   @LogMethod
   async register(input: RegisterInput): Promise<User> {
-    // logué automatiquement
+    // logged automatically
   }
 }
 ```
@@ -93,7 +93,7 @@ class UserService {
 ```typescript
 import { injectable, inject, container } from 'tsyringe'
 
-// Tokens pour l'injection
+// Tokens for injection
 const TOKENS = {
   UserRepository: Symbol('UserRepository'),
   PasswordHasher: Symbol('PasswordHasher'),
@@ -101,7 +101,7 @@ const TOKENS = {
   EventBus: Symbol('EventBus'),
 } as const
 
-// Marquer les classes comme injectables
+// Mark the classes as injectable
 @injectable()
 class RegisterUser {
   constructor(
@@ -114,16 +114,16 @@ class RegisterUser {
   async execute(input: RegisterInput): Promise<UserDTO> { ... }
 }
 
-// Composition root — enregistrer les implémentations
+// Composition root — register the implementations
 container.register(TOKENS.UserRepository, { useClass: PrismaUserRepository })
 container.register(TOKENS.PasswordHasher, { useClass: BcryptPasswordHasher })
 container.register(TOKENS.EmailService,   { useClass: SendgridEmailService })
 container.register(TOKENS.EventBus,       { useClass: InMemoryEventBus })
 
-// Résolution
+// Resolution
 const registerUser = container.resolve(RegisterUser)
 
-// Override pour les tests — sans tsyringe (injection manuelle préférable)
+// Override for tests — without tsyringe (manual injection preferred)
 const registerUser = new RegisterUser(
   new InMemoryUserRepository(),
   new FakePasswordHasher(),
@@ -132,17 +132,17 @@ const registerUser = new RegisterUser(
 )
 ```
 
-## When NE PAS Utiliser les Decorators
+## When NOT to Use Decorators
 
 ```typescript
-// ❌ Decorators pour la logique métier → couplage fort, difficile à tester
+// ❌ Decorators for business logic → tight coupling, hard to test
 @RequiresRole('ADMIN')
 @ValidateInput(DeleteUserSchema)
 async deleteUser(id: string): Promise<void> { ... }
-// → la logique d'autorisation et de validation disparaît dans les decorators
-// → difficile à comprendre l'ordre d'exécution, difficile à déboguer
+// → authorization and validation logic disappears inside decorators
+// → hard to understand execution order, hard to debug
 
-// ✅ Logique explicite dans le code — lisible et testable
+// ✅ Explicit logic in the code — readable and testable
 async deleteUser(requesterId: string, targetId: string): Promise<void> {
   const requester = await this.userRepo.findById(requesterId)
   if (!requester || requester.role !== UserRole.ADMIN) {

@@ -7,15 +7,15 @@ npm install --save-dev jest-cucumber
 ```
 
 ```typescript
-// features/booking-cancellation.feature — fichier Gherkin
-Feature: Annulation de réservation
+// features/booking-cancellation.feature — Gherkin file
+Feature: Booking cancellation
 
-  Scenario: Remboursement total pour annulation anticipée
-    Given j'ai une réservation confirmée de 120€ TTC avec frais de 5€
-    And ma réservation débute dans 72 heures
-    When j'annule ma réservation
-    Then le remboursement affiché est 115€
-    And je reçois un email de confirmation d'annulation
+  Scenario: Full refund for early cancellation
+    Given I have a confirmed booking of EUR 120 incl. tax with a EUR 5 service fee
+    And my booking starts in 72 hours
+    When I cancel my booking
+    Then the displayed refund is EUR 115
+    And I receive a cancellation confirmation email
 ```
 
 ```typescript
@@ -40,31 +40,31 @@ defineFeature(feature, (test) => {
     cancelBooking = new CancelBooking(bookingRepo, emailSpy, new InMemoryEventBus());
   });
 
-  test('Remboursement total pour annulation anticipée', ({ given, and, when, then }) => {
-    given("j'ai une réservation confirmée de 120€ TTC avec frais de 5€", async () => {
-      booking = aBooking({ totalTTC: 120, serviceFees: 5, status: 'confirmed' });
+  test('Full refund for early cancellation', ({ given, and, when, then }) => {
+    given('I have a confirmed booking of EUR 120 incl. tax with a EUR 5 service fee', async () => {
+      booking = aBooking({ totalInclTax: 120, serviceFees: 5, status: 'confirmed' });
       await bookingRepo.save(booking);
     });
 
-    and('ma réservation débute dans 72 heures', () => {
+    and('my booking starts in 72 hours', () => {
       booking.departureDate = hoursFromNow(72);
       bookingRepo.update(booking);
     });
 
-    when("j'annule ma réservation", async () => {
+    when('I cancel my booking', async () => {
       result = await cancelBooking.execute({ bookingId: booking.id, userId: booking.userId });
     });
 
-    then('le remboursement affiché est 115€', () => {
+    then('the displayed refund is EUR 115', () => {
       expect(result.refundAmount).toBe(115);
     });
 
-    and("je reçois un email de confirmation d'annulation", () => {
+    and('I receive a cancellation confirmation email', () => {
       expect(emailSpy.sent).toHaveLength(1);
       expect(emailSpy.sent[0]).toMatchObject({
         to: booking.userEmail,
-        subject: expect.stringContaining('annulation'),
-        body: expect.stringContaining('115€'),
+        subject: expect.stringContaining('cancellation'),
+        body: expect.stringContaining('115'),
       });
     });
   });
@@ -100,21 +100,21 @@ let lastResult: CancellationResult;
 let lastError: Error | null;
 
 Before(() => {
-  // Reset de l'état entre chaque scénario
+  // Reset state between each scenario
   const repo = new InMemoryBookingRepository();
   cancelBooking = new CancelBooking(repo, new SpyEmailService(), new InMemoryEventBus());
   lastError = null;
 });
 
 Given(
-  "j'ai une réservation confirmée de {int}€ TTC avec frais de {int}€",
-  async (totalTTC: number, serviceFees: number) => {
-    const booking = aBooking({ totalTTC, serviceFees, status: 'confirmed' });
+  'I have a confirmed booking of EUR {int} incl. tax with a EUR {int} service fee',
+  async (totalInclTax: number, serviceFees: number) => {
+    const booking = aBooking({ totalInclTax, serviceFees, status: 'confirmed' });
     await bookingRepo.save(booking);
   }
 );
 
-When("j'annule ma réservation", async () => {
+When('I cancel my booking', async () => {
   try {
     lastResult = await cancelBooking.execute({ bookingId: currentBooking.id });
   } catch (error) {
@@ -122,11 +122,11 @@ When("j'annule ma réservation", async () => {
   }
 });
 
-Then('le remboursement affiché est {int}€', (expectedAmount: number) => {
+Then('the displayed refund is EUR {int}', (expectedAmount: number) => {
   expect(lastResult.refundAmount).toBe(expectedAmount);
 });
 
-Then("je vois l'erreur {string}", (expectedMessage: string) => {
+Then('I see the error {string}', (expectedMessage: string) => {
   expect(lastError).not.toBeNull();
   expect(lastError!.message).toContain(expectedMessage);
 });
@@ -135,20 +135,20 @@ Then("je vois l'erreur {string}", (expectedMessage: string) => {
 ## Scenario Outline — Step Implementation
 
 ```typescript
-// Feature avec tableau de données
-// Scenario Outline: Calcul du remboursement selon le délai
-//   Given j'ai une réservation de <montant>€ TTC avec <frais>€ de frais
-//   And ma réservation débute dans <heures> heures
-//   When j'annule
-//   Then le remboursement est <remboursement>€
+// Feature with a data table
+// Scenario Outline: Refund calculation based on timing
+//   Given I have a booking of EUR <amount> incl. tax with EUR <fees> in service fees
+//   And my booking starts in <hours> hours
+//   When I cancel
+//   Then the refund is EUR <refund>
 //   Examples:
-//     | montant | frais | heures | remboursement |
-//     | 120     | 5     | 72     | 115           |
-//     | 120     | 5     | 36     | 57.5          |
-//     | 120     | 5     | 12     | 0             |
+//     | amount | fees | hours | refund |
+//     | 120    | 5    | 72    | 115    |
+//     | 120    | 5    | 36    | 57.5   |
+//     | 120    | 5    | 12    | 0      |
 
-// Les {int} et {float} sont résolus automatiquement depuis les colonnes du tableau
-// Cucumber génère un test séparé pour chaque ligne du tableau Examples
+// The {int} and {float} placeholders are resolved automatically from the table columns.
+// Cucumber generates a separate test for each row in the Examples table.
 ```
 
 ## File Organisation
@@ -156,14 +156,14 @@ Then("je vois l'erreur {string}", (expectedMessage: string) => {
 ```
 features/
 ├── booking/
-│   ├── cancellation.feature       # Scénarios Gherkin
+│   ├── cancellation.feature       # Gherkin scenarios
 │   └── steps/
-│       └── cancellation.steps.ts  # Implémentation des steps
+│       └── cancellation.steps.ts  # Step implementations
 ├── auth/
 │   ├── registration.feature
 │   └── steps/
 │       └── registration.steps.ts
 └── fixtures/
-    ├── bookings.ts                 # Builders de fixtures partagés
+    ├── bookings.ts                 # Shared fixture builders
     └── users.ts
 ```

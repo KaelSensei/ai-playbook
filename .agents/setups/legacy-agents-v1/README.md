@@ -8,32 +8,31 @@ Strangler Fig.
 
 ---
 
-## Le Problème du Legacy
+## The Legacy Problem
 
-Sur un projet legacy, les règles du développement classique ne s'appliquent pas. On ne peut pas
-faire du TDD sur du code sans seams. On ne peut pas refactorer sans filet de tests. On ne peut pas
-tout réécrire en une fois.
+On a legacy project, the rules of classic development don't apply. You can't do TDD on code without
+seams. You can't refactor without a test safety net. You can't rewrite everything at once.
 
-Ce setup implémente la méthode de Michael Feathers (_Working Effectively with Legacy Code_) avec une
-équipe d'agents spécialisés.
+This setup implements Michael Feathers' method (_Working Effectively with Legacy Code_) with a team
+of specialized agents.
 
 ---
 
-## Les Agents
+## The Agents
 
-| Agent                     | Rôle                                                            |
-| ------------------------- | --------------------------------------------------------------- |
-| `legacy-analyst`          | Cartographie les modules, identifie les seams et zones à risque |
-| `archaeologist`           | Comprend l'histoire du code, retrouve les décisions héritées    |
-| `characterization-tester` | Écrit les tests qui figent le comportement existant             |
-| `refactoring-guide`       | Guide le refactoring micro-incrémental (catalogue Fowler)       |
-| `debt-tracker`            | Inventorie et priorise la dette technique                       |
-| `dev-senior-a`            | Implémente (refactoring legacy ou TDD sur nouveau code)         |
-| `dev-senior-b`            | Review critique — teste le filet avant le code                  |
-| `architect`               | Strangler Fig, Anti-Corruption Layer, frontières                |
-| `tech-lead`               | Arbitrage dette vs features, cohérence de migration             |
-| `security-reviewer`       | OWASP + vulnérabilités legacy spécifiques                       |
-| `data-engineer`           | Migrations legacy-aware, données sales, indexes                 |
+| Agent                     | Role                                                              |
+| ------------------------- | ----------------------------------------------------------------- |
+| `legacy-analyst`          | Maps modules, identifies seams and risk zones                     |
+| `archaeologist`           | Understands the history of the code, recovers inherited decisions |
+| `characterization-tester` | Writes tests that pin down existing behavior                      |
+| `refactoring-guide`       | Guides micro-incremental refactoring (Fowler catalogue)           |
+| `debt-tracker`            | Inventories and prioritizes technical debt                        |
+| `dev-senior-a`            | Implements (legacy refactoring or TDD on new code)                |
+| `dev-senior-b`            | Critical review — tests the safety net before the code            |
+| `architect`               | Strangler Fig, Anti-Corruption Layer, boundaries                  |
+| `tech-lead`               | Arbitrates debt vs features, migration consistency                |
+| `security-reviewer`       | OWASP + legacy-specific vulnerabilities                           |
+| `data-engineer`           | Legacy-aware migrations, dirty data, indexes                      |
 
 ---
 
@@ -51,42 +50,41 @@ bash /path/to/legacy-agents-v1/install.sh .cursor
 
 ---
 
-## Les 3 docs à remplir
+## The 3 docs to fill in
 
 ### `.claude/project-architecture.md` (~30 min)
 
-Ce que fait le système, les modules connus (même partiellement), les zones à risque, **ce qui NE
-PEUT PAS changer**.
+What the system does, the known modules (even partially), the risk zones, **what CANNOT change**.
 
-### `.claude/legacy-map.md` (vivant — commence vide)
+### `.claude/legacy-map.md` (living — starts empty)
 
-Se remplit automatiquement au fur et à mesure des `/understand`. C'est la carte du territoire — elle
-grandit à chaque exploration. Ne jamais supprimer une entrée, seulement annoter.
+Fills up automatically as you run `/understand`. It's the map of the territory — it grows with each
+exploration. Never delete an entry, only annotate.
 
 ### `.claude/constants.md` (~10 min)
 
-Variables d'env connues, URLs par environnement, versions du toolchain. Sur un legacy, certaines
-sont peut-être hardcodées dans le code — documenter où elles se trouvent.
+Known env vars, URLs per environment, toolchain versions. On a legacy codebase, some may be
+hardcoded in the code — document where they live.
 
 ---
 
-## La Règle d'Or
+## The Golden Rule
 
 ```
-JAMAIS toucher du code legacy sans filet de tests.
+NEVER touch legacy code without a test safety net.
 
-Ordre obligatoire :
-  /understand → /characterize → /refactor ou /strangler
+Mandatory order:
+  /understand → /characterize → /refactor or /strangler
 
-Pas de raccourci. Même pour "un petit changement".
+No shortcuts. Not even for "a small change".
 ```
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
-cd ton-projet-legacy
+cd your-legacy-project
 claude
 ```
 
@@ -94,149 +92,148 @@ claude
 
 ### `/understand <module>`
 
-Cartographier un module avant tout changement.
+Map a module before any change.
 
 ```
 /understand src/billing/BillingService.php
 ```
 
-**Ce qui se passe :** `legacy-analyst` + `archaeologist` en parallèle. L'un cartographie les
-dépendances et seams, l'autre fouille l'histoire git. Résultat : fiche module dans `legacy-map.md`,
-niveau de risque, seams identifiés.
+**What happens:** `legacy-analyst` + `archaeologist` in parallel. One maps dependencies and seams,
+the other digs through git history. Result: a module card in `legacy-map.md`, a risk level,
+identified seams.
 
 ---
 
 ### `/characterize <module>`
 
-Écrire des tests qui figent le comportement existant.
+Write tests that pin down existing behavior.
 
 ```
 /characterize src/billing/BillingService.php
 ```
 
-**Ce qui se passe :**
+**What happens:**
 
 ```
-1. Plan de caractérisation établi
-2. Pour chaque comportement :
-   a. Test écrit avec assertion intentionnellement fausse
-   b. Test lancé → valeur réelle notée
-   c. Test mis à jour avec la valeur réelle
-   d. dev-senior-b review le test
-3. Tous les tests passent → filet en place
+1. Characterization plan established
+2. For each behavior:
+   a. Test written with intentionally false assertion
+   b. Test run → actual value recorded
+   c. Test updated with the real value
+   d. dev-senior-b reviews the test
+3. All tests pass → safety net in place
 ```
 
-Les tests de caractérisation documentent **ce que le code fait**, pas ce qu'on croit qu'il devrait
-faire.
+Characterization tests document **what the code does**, not what we think it should do.
 
 ---
 
-### `/refactor <cible>`
+### `/refactor <target>`
 
-Refactoring sécurisé, micro-incrémental.
+Safe, micro-incremental refactoring.
 
 ```
 /refactor src/billing/BillingService.php
 ```
 
-**Prérequis** : `/understand` + `/characterize` faits.
+**Prerequisites**: `/understand` + `/characterize` done.
 
-**Ce qui se passe :**
+**What happens:**
 
 ```
-1. Plan de refactoring en micro-étapes (catalogue Fowler)
-2. Pour chaque étape :
-   a. dev-senior-a fait UN changement minimal
-   b. Tous les tests (caractérisation incluse) doivent passer
-   c. dev-senior-b review
-   d. Commit atomique
-3. Review finale tous les agents
+1. Refactoring plan broken into micro-steps (Fowler catalogue)
+2. For each step:
+   a. dev-senior-a makes ONE minimal change
+   b. All tests (characterization included) must pass
+   c. dev-senior-b reviews
+   d. Atomic commit
+3. Final review by all agents
 ```
 
-Si un test de caractérisation passe au rouge → `git revert` immédiat.
+If a characterization test goes red → `git revert` immediately.
 
 ---
 
 ### `/strangler <feature>`
 
-Implémenter une nouvelle feature autour du legacy, sans le modifier.
+Implement a new feature around the legacy code, without modifying it.
 
 ```
-/strangler nouveau système de calcul de factures
+/strangler new invoice calculation system
 ```
 
-**Ce qui se passe :**
+**What happens:**
 
 ```
-1. architect définit la frontière et l'Anti-Corruption Layer
-2. spec-writer produit la spec + test list du NOUVEAU code
-3. dev-senior-a implémente en TDD strict (le legacy n'est jamais modifié)
-4. Feature flag pour activation progressive
-5. Review finale tous les agents
+1. architect defines the boundary and the Anti-Corruption Layer
+2. spec-writer produces the spec + test list for the NEW code
+3. dev-senior-a implements in strict TDD (the legacy is never modified)
+4. Feature flag for progressive rollout
+5. Final review by all agents
 ```
 
-Le legacy reste en place jusqu'à ce que le nouveau code soit à 100%.
+The legacy stays in place until the new code reaches 100%.
 
 ---
 
 ### `/debt`
 
-Auditer et prioriser la dette technique.
+Audit and prioritize technical debt.
 
 ```
-/debt                          ← audit global
-/debt src/billing/             ← audit d'un module
+/debt                          ← global audit
+/debt src/billing/             ← audit of a single module
 ```
 
-**Ce qui se passe :** `debt-tracker` + `legacy-analyst` analysent, produisent un inventaire priorisé
-par Impact/Effort avec un plan de remboursement.
+**What happens:** `debt-tracker` + `legacy-analyst` analyze and produce an inventory prioritized by
+Impact/Effort with a repayment plan.
 
 ---
 
 ### `/review`
 
-Review parallèle par tous les agents sur n'importe quel diff.
+Parallel review by all agents on any diff.
 
 ```
 /review
-/review 42           ← PR numéro 42
+/review 42           ← PR number 42
 /review staged
 ```
 
-**Spécial legacy** : vérifie que les tests de caractérisation passent et que le comportement est
-préservé si c'est un refactoring.
+**Legacy special**: verifies that characterization tests pass and that behavior is preserved if it's
+a refactoring.
 
 ---
 
-## Deux Modes de Développement
+## Two Development Modes
 
-### Sur du code legacy existant
-
-```
-1. /understand → cartographier
-2. /characterize → figer le comportement
-3. /refactor → restructurer sans changer le comportement
-   (chaque étape doit laisser les tests verts)
-```
-
-### Sur du nouveau code (Strangler Fig)
+### On existing legacy code
 
 ```
-TDD strict — Canon TDD (Kent Beck) :
-RED   → UN test qui échoue
-GREEN → minimum de code pour passer
-BLUE  → refactorer sans casser
+1. /understand → map it
+2. /characterize → pin down behavior
+3. /refactor → restructure without changing behavior
+   (each step must leave the tests green)
 ```
 
-`dev-senior-b` review le test AVANT le code dans les deux cas.
+### On new code (Strangler Fig)
+
+```
+Strict TDD — Canon TDD (Kent Beck):
+RED   → ONE failing test
+GREEN → minimum code to pass
+BLUE  → refactor without breaking
+```
+
+`dev-senior-b` reviews the test BEFORE the code in both cases.
 
 ---
 
-## Personnaliser l'équipe
+## Customizing the team
 
-Dans `CLAUDE.md`, section `## Agent Team` : retirer les lignes des agents non pertinents.
+In `CLAUDE.md`, section `## Agent Team`: remove the lines for agents that aren't relevant.
 
-Exemple minimal (pas de frontend, pas de BDD complexe) :
+Minimal example (no frontend, no complex database):
 
 ```markdown
 | AGENT                   | PERSONA                    | CONTEXT DOCS                                         | SKILLS                                                                      |

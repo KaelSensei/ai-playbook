@@ -1,112 +1,112 @@
 ---
 name: spec
 description: >
-  Produire une spec technique avec test list exhaustive à partir des stories. La test list est le
-  livrable central — elle drive tout le /build TDD. EXPLORE → DRAFT → review parallèle → boucle →
-  spec approuvée.
-argument-hint: '[slug de la story ou description]'
+  Produce a technical spec with an exhaustive test list from the stories. The test list is the
+  central deliverable — it drives the whole TDD /build. EXPLORE → DRAFT → parallel review → loop →
+  approved spec.
+argument-hint: '[story slug or description]'
 ---
 
 # /spec
 
-Update `tasks/current_task.md` : status=SPEC, task=$ARGUMENTS
+Update `tasks/current_task.md`: status=SPEC, task=$ARGUMENTS
 
 ---
 
 ## Phase 1 — EXPLORE
 
-Charger `team--skill-lookup`.
+Load `team--skill-lookup`.
 
-Invoquer `spec-writer` en mode exploration :
+Invoke `spec-writer` in exploration mode:
 
 ```
-Tu es spec-writer.
-Charge project-architecture.md, data-architecture.md.
-Charge team--skill-lookup.
+You are spec-writer.
+Load project-architecture.md, data-architecture.md.
+Load team--skill-lookup.
 
-Vérifie la fraîcheur des docs.
+Check the freshness of the docs.
 
-Explore le codebase pour :
-1. Les patterns existants liés à : $ARGUMENTS
-2. Les interfaces et modules que cette feature va toucher
-3. Les migrations BDD existantes et le schéma actuel
-4. Les tests existants pour comprendre les conventions
+Explore the codebase for:
+1. Existing patterns related to: $ARGUMENTS
+2. The interfaces and modules this feature will touch
+3. Existing DB migrations and the current schema
+4. Existing tests to understand conventions
 
-Produis : exploration-findings avec statut des docs, findings codebase,
-divergences éventuelles, questions ouvertes.
+Produce: exploration-findings with doc status, codebase findings,
+any divergences, and open questions.
 ```
 
-Si questions ouvertes → demander à l'utilisateur avant de drafter.
+If there are open questions → ask the user before drafting.
 
 ---
 
 ## Phase 2 — DRAFT
 
-Invoquer `spec-writer` avec les findings :
+Invoke `spec-writer` with the findings:
 
 ```
-Tu es spec-writer.
-Charge project-architecture.md, data-architecture.md.
-Charge clean-code, testing-patterns.
+You are spec-writer.
+Load project-architecture.md, data-architecture.md.
+Load clean-code, testing-patterns.
 
-Findings d'exploration : [findings]
-Stories et ACs : [contenu de .claude/specs/$ARGUMENTS-story.md si existe]
+Exploration findings: [findings]
+Stories and ACs: [contents of .claude/specs/$ARGUMENTS-story.md if it exists]
 
-Produis une spec technique complète pour : $ARGUMENTS
+Produce a full technical spec for: $ARGUMENTS
 
-Sections obligatoires :
+Mandatory sections:
 - Summary
-- Acceptance Criteria (repris des stories si /story a été fait)
-- Test List (ordonnée simplest first — C'EST LE LIVRABLE PRINCIPAL)
+- Acceptance Criteria (taken from the stories if /story was run)
+- Test List (ordered simplest first — THIS IS THE MAIN DELIVERABLE)
   → Happy Path, Edge Cases, Error Cases, Integration
-- Interface Technique (signatures uniquement)
-- Contraintes (perf, sécu, data)
+- Technical Interface (signatures only)
+- Constraints (perf, security, data)
 - Out of Scope
 
-Règle : si la test list est vide → la spec est incomplète.
-Utiliser RFC 2119 (MUST, MUST NOT, MAY).
+Rule: if the test list is empty → the spec is incomplete.
+Use RFC 2119 (MUST, MUST NOT, MAY).
 ```
 
-Présenter le draft à l'utilisateur. **Gate** : _"La test list est-elle complète ? Des ACs manquants
-?"_ Ne pas continuer sans confirmation.
+Show the draft to the user. **Gate**: _"Is the test list complete? Any missing ACs?"_ Do not
+continue without confirmation.
 
 ---
 
-## Phase 3 — REVIEW PARALLÈLE
+## Phase 3 — PARALLEL REVIEW
 
-Charger `team--skill-review` pour tous les agents.
+Load `team--skill-review` for all agents.
 
-Spawner TOUS les agents du tableau `## Agent Team` dans `CLAUDE.md` simultanément — sauf
-`spec-writer` :
+Spawn EVERY agent from the `## Agent Team` table in `CLAUDE.md` at the same time — except
+`spec-writer`:
 
 ```
-Tu es [AGENT_PERSONA].
-Charge .claude/agents/[agent].md.
-Charge les context docs : [selon Agent Team table].
-Charge les skills : [selon Agent Team table].
-Charge team--skill-review.
+You are [AGENT_PERSONA].
+Load .claude/agents/[agent].md.
+Load the context docs: [per Agent Team table].
+Load the skills: [per Agent Team table].
+Load team--skill-review.
 
-Mode review uniquement — pas d'écriture de code.
+Review mode only — no code writing.
 
-Review cette spec technique de ton angle disciplinaire.
-Tous les agents reviewent en parallèle.
+Review this technical spec from your disciplinary angle.
+All agents are reviewing in parallel.
 
-[contenu complet de la spec]
+[full spec contents]
 
-Focus particulier sur la TEST LIST :
-- Tous les ACs sont-ils couverts par au moins un test ?
-- Les edge cases de ta discipline sont-ils dans la test list ?
-- Y a-t-il des comportements manquants ?
+Pay special attention to the TEST LIST:
+- Are all ACs covered by at least one test?
+- Are the edge cases from your discipline in the test list?
+- Are there missing behaviors?
 
-Suivre le format team--skill-review exactement.
+Follow the team--skill-review format exactly.
 ```
 
 ---
 
-## Phase 4 — SYNTHÈSE
+## Phase 4 — SYNTHESIS
 
 ```
-Boucle [N] :
+Loop [N]:
   spec-writer        : [verdict]
   architect          : [verdict]
   tech-lead          : [verdict]
@@ -117,31 +117,31 @@ Boucle [N] :
   data-engineer      : [verdict]
   devops-engineer    : [verdict]
 
-Verdict global : [merged]
+Global verdict: [merged]
 ```
 
 ---
 
-## Phase 5 — ITÉRER si pas unanime
+## Phase 5 — ITERATE if not unanimous
 
-Charger `team--skill-refine`. `REQUEST_REDESIGN` → arrêt, escalade utilisateur.
-`APPROVE_WITH_CHANGES` → `spec-writer` corrige, re-review, max 3 boucles.
+Load `team--skill-refine`. `REQUEST_REDESIGN` → stop, escalate to user. `APPROVE_WITH_CHANGES` →
+`spec-writer` fixes, re-review, max 3 loops.
 
 ---
 
-## Phase 6 — SAUVEGARDER
+## Phase 6 — SAVE
 
-Sauvegarder dans `.claude/specs/[slug].md` Update `tasks/current_task.md` :
+Save to `.claude/specs/[slug].md`. Update `tasks/current_task.md`:
 
 - status=IDLE
 - Active Spec: .claude/specs/[slug].md
 
 ```
-✅ Spec approuvée unanimement
-  Agents : [liste]
-  Boucles : [N]
-  Sauvegardée : .claude/specs/[slug].md
-  Test List : [N items]
+✅ Spec unanimously approved
+  Agents: [list]
+  Loops: [N]
+  Saved to: .claude/specs/[slug].md
+  Test List: [N items]
 
-Prêt pour : /build [slug]
+Ready for: /build [slug]
 ```

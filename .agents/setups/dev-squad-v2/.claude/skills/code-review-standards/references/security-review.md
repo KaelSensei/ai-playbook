@@ -3,35 +3,35 @@
 ## Injections
 
 ```typescript
-// ❌ Injection SQL via concaténation
+// ❌ SQL injection via concatenation
 const users = await db.query(`SELECT * FROM users WHERE email = '${req.body.email}'`);
 
-// ✅ Paramètres Prisma (protégés automatiquement)
+// ✅ Prisma parameters (protected automatically)
 const user = await prisma.user.findUnique({ where: { email: req.body.email } });
 
-// ❌ Injection NoSQL
-db.collection('users').find({ email: req.body.email }); // si email = { $ne: null }
+// ❌ NoSQL injection
+db.collection('users').find({ email: req.body.email }); // if email = { $ne: null }
 
-// ✅ Validation du type avant la requête
-const email = z.string().email().parse(req.body.email); // throws si invalide
+// ✅ Validate the type before the query
+const email = z.string().email().parse(req.body.email); // throws if invalid
 ```
 
-## Authentification et Autorisation
+## Authentication and Authorization
 
 ```typescript
-// ❌ Token généré avec Math.random()
+// ❌ Token generated with Math.random()
 const token = Math.random().toString(36).substring(7);
 
 // ✅ Crypto secure
 import { randomBytes } from 'crypto';
 const token = randomBytes(32).toString('hex');
 
-// ❌ Vérification d'autorisation côté controller uniquement
+// ❌ Authorization check only in the controller
 router.delete('/users/:id', authenticate, async (req, res) => {
-  await userService.delete(req.params.id); // pas de vérification qui peut supprimer qui
+  await userService.delete(req.params.id); // no check for who can delete whom
 });
 
-// ✅ Vérification dans le use case
+// ✅ Check in the use case
 class DeleteUser {
   async execute(requesterId: UserId, targetId: UserId): Promise<void> {
     const requester = await this.userRepo.findById(requesterId);
@@ -46,23 +46,23 @@ class DeleteUser {
 ## Secrets and Sensitive Data
 
 ```typescript
-// ❌ Mot de passe dans les logs
-console.log('User logging in:', { email, password }); // JAMAIS
+// ❌ Password in the logs
+console.log('User logging in:', { email, password }); // NEVER
 
-// ✅ Logs sans données sensibles
+// ✅ Logs without sensitive data
 console.log('User logging in:', { email }); // OK
 
-// ❌ Password hash dans la réponse API
+// ❌ Password hash in the API response
 res.json({ id: user.id, email: user.email, passwordHash: user.passwordHash });
 
-// ✅ DTO sans données sensibles
+// ✅ DTO without sensitive data
 const userDto = { id: user.id.value, email: user.email.value, role: user.role };
 res.json(userDto);
 
-// ❌ Clé API dans le code
-const apiKey = 'sk_live_abc123'; // JAMAIS en dur
+// ❌ API key in the code
+const apiKey = 'sk_live_abc123'; // NEVER hardcoded
 
-// ✅ Variables d'environnement validées au démarrage
+// ✅ Environment variables validated at startup
 const config = z
   .object({
     API_KEY: z.string().min(20),
@@ -76,7 +76,7 @@ const config = z
 ```typescript
 import rateLimit from 'express-rate-limit';
 
-// Endpoints auth — strict
+// Auth endpoints — strict
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 5,
@@ -86,6 +86,6 @@ const authLimiter = rateLimit({
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/register', rateLimit({ windowMs: 3600000, max: 3 }));
 
-// API globale
+// Global API
 app.use('/api/', rateLimit({ windowMs: 3600000, max: 1000 }));
 ```

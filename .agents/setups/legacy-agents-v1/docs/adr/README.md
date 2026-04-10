@@ -1,27 +1,27 @@
 # Architecture Decision Records
 
-Les ADR documentent les décisions architecturales importantes : pourquoi une décision a été prise,
-quelles alternatives ont été rejetées, et quelles en sont les conséquences.
+ADRs document important architectural decisions: why a decision was made, which alternatives were
+rejected, and what the consequences are.
 
 ## Index
 
-| ADR | Titre | Statut | Date |
+| ADR | Title | Status | Date |
 | --- | ----- | ------ | ---- |
 
-<!-- Alimenté par scribe -->
+<!-- Fed by scribe -->
 
 ---
 
-## Statuts possibles
+## Possible Statuses
 
-- **Proposed** — en discussion
-- **Accepted** — décision prise et appliquée
-- **Deprecated** — remplacée par une décision plus récente
-- **Superseded by ADR-XXX** — remplacée explicitement
+- **Proposed** — under discussion
+- **Accepted** — decision taken and applied
+- **Deprecated** — replaced by a more recent decision
+- **Superseded by ADR-XXX** — explicitly replaced
 
 ---
 
 ## Format
 
-Chaque ADR est dans un fichier `ADR-NNN-titre-en-kebab-case.md`. Numérotation séquentielle à partir
-de 001.
+Each ADR lives in a file named `ADR-NNN-title-in-kebab-case.md`. Sequential numbering starting
+from 001.

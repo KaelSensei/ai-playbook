@@ -2,22 +2,22 @@
 
 <!-- last-verified: YYYY-MM-DD -->
 <!--
-  STALENESS RULE : si aujourd'hui - last-verified > 30 jours → STALE.
-  Ne pas raisonner depuis un doc stale — explorer le codebase directement.
+  STALENESS RULE: if today - last-verified > 30 days → STALE.
+  Do not reason from a stale doc — explore the codebase directly.
 -->
 
 ## System Overview
 
 <!--
-  Que fait cette application, qui l'utilise, quelle valeur elle apporte.
-  1-2 paragraphes max.
+  What this application does, who uses it, what value it provides.
+  1-2 paragraphs max.
 -->
 
 ## Architecture Diagram
 
 <!--
-  Describe les composants et leurs connexions.
-  Exemple :
+  Describe the components and how they connect.
+  Example:
 
   Browser / Mobile
       │ HTTP/WS
@@ -35,57 +35,57 @@
 ## Module Map
 
 <!--
-  Liste des modules/packages principaux et leur responsabilité.
-  Exemple :
+  List of main modules/packages and their responsibilities.
+  Example:
   src/
-  ├── auth/          — authentification, sessions, tokens
-  ├── users/         — gestion des comptes utilisateurs
-  ├── billing/       — abonnements, paiements (Stripe)
+  ├── auth/          — authentication, sessions, tokens
+  ├── users/         — user account management
+  ├── billing/       — subscriptions, payments (Stripe)
   └── notifications/ — emails, push, webhooks
 -->
 
 ## API Contracts
 
 <!--
-  Les interfaces publiques entre couches (pas l'implémentation).
-  Exemple :
-  - Frontend → API : REST JSON, versioning via /api/v1/
-  - API → DB : Prisma ORM, toujours via repository layer
-  - API → Jobs : BullMQ queues, pas d'appel direct
+  The public interfaces between layers (not the implementation).
+  Example:
+  - Frontend → API: REST JSON, versioned via /api/v1/
+  - API → DB: Prisma ORM, always through the repository layer
+  - API → Jobs: BullMQ queues, no direct calls
 -->
 
 ## Authentication / Authorization
 
 <!--
-  Comment l'auth fonctionne. Qui peut faire quoi.
-  Exemple :
-  - JWT stateless, 15min access token, 7j refresh token
-  - Rôles : ADMIN, USER, READONLY
-  - Toutes les routes /api/** protégées sauf /auth/**
+  How auth works. Who can do what.
+  Example:
+  - Stateless JWT, 15min access token, 7d refresh token
+  - Roles: ADMIN, USER, READONLY
+  - All /api/** routes protected except /auth/**
 -->
 
 ## External Dependencies
 
 <!--
-  Service | Rôle | Failure mode
-  Stripe  | Paiements | dégradé : bloquer nouveaux abonnements, garder actifs
-  SendGrid | Emails | dégradé : queue les emails, retry 3x
-  Cloudinary | Media | dégradé : upload bloqué, existants accessibles
+  Service | Role | Failure mode
+  Stripe  | Payments | degraded: block new subscriptions, keep active ones
+  SendGrid | Emails | degraded: queue emails, retry 3x
+  Cloudinary | Media | degraded: upload blocked, existing assets accessible
 -->
 
 ## Key Invariants
 
 <!--
-  Ce qui doit TOUJOURS être vrai.
-  Exemple :
-  - Un user ne peut pas avoir deux abonnements actifs simultanément
-  - Les données supprimées sont soft-deleted, jamais hard-deleted
-  - Toute action d'un admin est loggée dans audit_log
+  What must ALWAYS be true.
+  Example:
+  - A user cannot have two active subscriptions at the same time
+  - Deleted data is soft-deleted, never hard-deleted
+  - Every admin action is logged in audit_log
 -->
 
 ## Known Limitations / Out of Scope
 
 <!--
-  Ce que le système ne gère pas intentionnellement.
-  Limite le scope creep pendant l'implémentation.
+  What the system intentionally does not handle.
+  Limits scope creep during implementation.
 -->

@@ -1,8 +1,8 @@
 ---
 name: typescript-patterns
 description: >
-  Patterns TypeScript pour projets production : types strict, erreurs typées, Result type,
-  validation Zod, immutabilité, génériques avancés. Loaded by dev-senior-a/b et tech-lead.
+  TypeScript patterns for production projects: strict types, typed errors, Result type, Zod
+  validation, immutability, advanced generics. Loaded by dev-senior-a/b and tech-lead.
 ---
 
 # TypeScript Patterns — Production
@@ -12,11 +12,11 @@ description: >
 ## Strict TypeScript Configuration
 
 ```json
-// tsconfig.json — settings obligatoires
+// tsconfig.json — required settings
 {
   "compilerOptions": {
-    "strict": true, // active tous les checks stricts
-    "noUncheckedIndexedAccess": true, // array[0] est T | undefined
+    "strict": true, // enables all strict checks
+    "noUncheckedIndexedAccess": true, // array[0] is T | undefined
     "exactOptionalPropertyTypes": true, // { a?: string } ≠ { a: string | undefined }
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
@@ -40,7 +40,7 @@ export const Result = {
   err: <E>(error: E): Result<never, E> => ({ ok: false, error }),
 };
 
-// Usage — pas d'exceptions pour les erreurs métier attendues
+// Usage — no exceptions for expected business errors
 type RegisterError = EmailAlreadyExistsError | WeakPasswordError | InvalidEmailError;
 
 async function registerUser(input: RegisterInput): Promise<Result<User, RegisterError>> {
@@ -58,7 +58,7 @@ async function registerUser(input: RegisterInput): Promise<Result<User, Register
   return Result.ok(user);
 }
 
-// Consommation dans le controller
+// Consumption in the controller
 const result = await registerUser(input);
 if (!result.ok) {
   switch (result.error.constructor) {
@@ -78,7 +78,7 @@ return res.status(201).json(toUserDto(result.value));
 ## Branded Types — Avoid Primitive Obsession
 
 ```typescript
-// Branded types pour les IDs — évite les confusions entre types
+// Branded types for IDs — avoids confusion between types
 declare const __brand: unique symbol
 type Brand<T, B> = T & { [__brand]: B }
 
@@ -86,7 +86,7 @@ type UserId = Brand<string, 'UserId'>
 type OrderId = Brand<string, 'OrderId'>
 type Email = Brand<string, 'Email'>
 
-// Factories avec validation
+// Factories with validation
 const UserId = {
   create: (id: string): UserId => {
     if (!id.match(/^[0-9a-f-]{36}$/)) throw new Error('Invalid UUID')
@@ -95,7 +95,7 @@ const UserId = {
   generate: (): UserId => crypto.randomUUID() as UserId,
 }
 
-// TypeScript empêche les confusions
+// TypeScript prevents confusion
 function getUser(id: UserId): Promise<User> { ... }
 function getOrder(id: OrderId): Promise<Order> { ... }
 
@@ -113,7 +113,7 @@ getUser(orderId)  // ❌ TypeScript error: OrderId ≠ UserId
 ```typescript
 import { z } from 'zod';
 
-// Schéma de validation — source de vérité pour le type
+// Validation schema — source of truth for the type
 const RegisterUserSchema = z.object({
   email: z
     .string()
@@ -132,10 +132,10 @@ const RegisterUserSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name too long').trim(),
 });
 
-// Type inféré depuis le schéma
+// Type inferred from the schema
 type RegisterUserInput = z.infer<typeof RegisterUserSchema>;
 
-// Middleware de validation Express
+// Express validation middleware
 const validateBody =
   <T>(schema: z.ZodType<T>) =>
   (req: Request, res: Response, next: NextFunction) => {
@@ -149,7 +149,7 @@ const validateBody =
         })),
       });
     }
-    req.body = result.data; // données transformées et validées
+    req.body = result.data; // transformed and validated data
     next();
   };
 
@@ -162,7 +162,7 @@ router.post('/users', validateBody(RegisterUserSchema), userController.register)
 ## Immutability
 
 ```typescript
-// Utiliser readonly partout dans le domain
+// Use readonly everywhere in the domain
 type UserProps = Readonly<{
   id: UserId;
   email: Email;
@@ -170,22 +170,22 @@ type UserProps = Readonly<{
   createdAt: Date;
 }>;
 
-// Readonly récursif pour les objets imbriqués
+// Recursive readonly for nested objects
 type DeepReadonly<T> = {
   readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
 };
 
-// Pour les tableaux — utiliser ReadonlyArray
+// For arrays — use ReadonlyArray
 type OrderItems = ReadonlyArray<CartItem>;
 
-// Mise à jour immutable avec spread
-const updatedUser = { ...user, email: newEmail }; // crée un nouvel objet
+// Immutable update with spread
+const updatedUser = { ...user, email: newEmail }; // creates a new object
 
-// Ou avec immer pour les structures complexes
+// Or with immer for complex structures
 import produce from 'immer';
 
 const newState = produce(state, (draft) => {
-  draft.users[userId].email = newEmail; // mutation sur le draft
+  draft.users[userId].email = newEmail; // mutation on the draft
 });
 ```
 
@@ -194,7 +194,7 @@ const newState = produce(state, (draft) => {
 ## Discriminated Unions — State Modeling
 
 ```typescript
-// Modéliser les états d'une commande avec des unions discriminées
+// Model an order's states with discriminated unions
 type Order =
   | { status: 'draft'; items: CartItem[]; userId: UserId }
   | { status: 'confirmed'; items: CartItem[]; userId: UserId; confirmedAt: Date; total: Money }
@@ -217,7 +217,7 @@ type Order =
     }
   | { status: 'cancelled'; items: CartItem[]; userId: UserId; cancelledAt: Date; reason: string };
 
-// TypeScript force à gérer tous les cas
+// TypeScript forces handling of all cases
 function renderOrderStatus(order: Order): string {
   switch (order.status) {
     case 'draft':
@@ -230,11 +230,11 @@ function renderOrderStatus(order: Order): string {
       return `Delivered on ${order.deliveredAt.toLocaleDateString()}`;
     case 'cancelled':
       return `Cancelled — ${order.reason}`;
-    // TypeScript error si un cas manque (exhaustive check)
+    // TypeScript error if a case is missing (exhaustive check)
   }
 }
 
-// Transitions d'état typées
+// Typed state transitions
 function confirmOrder(
   order: Extract<Order, { status: 'draft' }>
 ): Extract<Order, { status: 'confirmed' }> {
@@ -252,7 +252,7 @@ function confirmOrder(
 ## Advanced Generics
 
 ```typescript
-// Repository générique typé
+// Typed generic repository
 interface Repository<T, ID> {
   findById(id: ID): Promise<T | null>
   findAll(): Promise<T[]>
@@ -260,7 +260,7 @@ interface Repository<T, ID> {
   delete(id: ID): Promise<void>
 }
 
-// Use case générique avec validation
+// Generic use case with validation
 abstract class UseCase<Input, Output> {
   abstract execute(input: Input): Promise<Output>
 
@@ -272,7 +272,7 @@ abstract class UseCase<Input, Output> {
   protected abstract validate(input: unknown): Input
 }
 
-// Pagination typée
+// Typed pagination
 type PaginatedResult<T> = {
   data: T[]
   total: number
@@ -292,6 +292,6 @@ async function findUsers(
 
 ## Available References
 
-- `references/error-types.md` — hiérarchie d'erreurs domaine/application
+- `references/error-types.md` — domain/application error hierarchy
 - `references/utility-types.md` — Pick, Omit, Partial, Record patterns
-- `references/decorators.md` — decorators pour validation et DI
+- `references/decorators.md` — decorators for validation and DI

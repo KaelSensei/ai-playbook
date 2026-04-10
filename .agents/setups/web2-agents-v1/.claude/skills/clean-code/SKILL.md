@@ -1,9 +1,9 @@
 ---
 name: clean-code
 description: >
-  Principes SOLID, clean code, design patterns, nommage, couplage, cohésion. Auto-chargé par
-  tech-lead, architect, dev-senior-a/b. Invoke directement pour toute question de design OOP,
-  refactoring, ou choix de pattern.
+  SOLID principles, clean code, design patterns, naming, coupling, cohesion. Auto-loaded by
+  tech-lead, architect, and dev-senior-a/b. Invoke directly for any OOP design question,
+  refactoring, or pattern choice.
 ---
 
 # Clean Code Reference
@@ -12,16 +12,16 @@ description: >
 
 ### S — Single Responsibility
 
-Une classe/fonction = une raison de changer.
+One class/function = one reason to change.
 
 ```typescript
-// ❌ fait trop de choses
+// ❌ does too many things
 class UserService {
   createUser(data) {
     /* validation + save + email + log */
   }
 }
-// ✅ responsabilités séparées
+// ✅ separated responsibilities
 class UserService {
   createUser(dto) {
     /* orchestrate */
@@ -46,17 +46,17 @@ class EmailService {
 
 ### O — Open/Closed
 
-Ouvert à l'extension, fermé à la modification.
+Open for extension, closed for modification.
 
 ```typescript
-// ❌ modifier la classe pour chaque nouveau type
+// ❌ modify the class for every new type
 class PaymentProcessor {
   process(type: string) {
     if (type === 'stripe') { ... }
-    if (type === 'paypal') { ... } // modifier à chaque nouveau provider
+    if (type === 'paypal') { ... } // modify for every new provider
   }
 }
-// ✅ étendre sans modifier
+// ✅ extend without modifying
 interface PaymentProvider { charge(amount: number): Promise<void> }
 class StripeProvider implements PaymentProvider { ... }
 class PayPalProvider implements PaymentProvider { ... }
@@ -65,14 +65,14 @@ class PaymentProcessor { process(provider: PaymentProvider) { ... } }
 
 ### L — Liskov Substitution
 
-Un sous-type peut remplacer son parent sans casser le programme.
+A subtype can replace its parent without breaking the program.
 
 ### I — Interface Segregation
 
-Préférer plusieurs interfaces spécifiques à une interface générale.
+Prefer several specific interfaces over one general interface.
 
 ```typescript
-// ❌ oblige à implémenter des méthodes non nécessaires
+// ❌ forces implementing unneeded methods
 interface Repository {
   findAll();
   findById();
@@ -93,71 +93,71 @@ interface Writer {
 
 ### D — Dependency Inversion
 
-Dépendre des abstractions, pas des implémentations.
+Depend on abstractions, not on implementations.
 
 ```typescript
-// ❌ couplage fort à l'implémentation
+// ❌ tight coupling to the implementation
 class OrderService {
   private db = new PostgresDB();
 }
-// ✅ injection de dépendance
+// ✅ dependency injection
 class OrderService {
   constructor(private db: DatabasePort) {}
 }
 ```
 
-## Nommage
+## Naming
 
 ```typescript
-// Variables : nom + contexte
+// Variables: name + context
 ❌ const d = new Date()
 ✅ const createdAt = new Date()
 
-// Fonctions : verbe + objet
+// Functions: verb + object
 ❌ function user(id) {}
 ✅ function getUserById(id: string): Promise<User> {}
 
-// Booléens : is/has/can
+// Booleans: is/has/can
 ❌ const active = user.subscription !== null
 ✅ const hasActiveSubscription = user.subscription !== null
 
-// Classes : nom (pas de Manager, Handler, Processor génériques)
+// Classes: nouns (no generic Manager, Handler, Processor)
 ❌ class UserManager {}
 ✅ class UserRegistration {}
 ```
 
-## Fonctions
+## Functions
 
 ```typescript
-// Max 3 paramètres → au-delà, utiliser un objet
+// Max 3 parameters → beyond that, use an object
 ❌ function createUser(name, email, password, role, plan) {}
 ✅ function createUser(dto: CreateUserDto) {}
 
-// Pas d'effets de bord cachés
-❌ function getUser(id) { logAccess(id); return user; } // side effect surprenant
-✅ function getUser(id) { return user; } // logAccess appelé séparément
+// No hidden side effects
+❌ function getUser(id) { logAccess(id); return user; } // surprising side effect
+✅ function getUser(id) { return user; } // logAccess called separately
 
-// Retour anticipé plutôt que else imbriqués
+// Early return rather than nested else
 ❌ if (user) { if (user.active) { if (user.plan) { ... } } }
 ✅ if (!user) return null
    if (!user.active) return null
    if (!user.plan) return null
-   // happy path ici
+   // happy path here
 ```
 
-## Anti-Patterns à Éviter
+## Anti-Patterns to Avoid
 
-| Anti-pattern             | Problème                                        | Alternative                           |
-| ------------------------ | ----------------------------------------------- | ------------------------------------- |
-| God Class                | Une classe fait tout                            | Découper en responsabilités           |
-| Magic Numbers            | `if (status === 3)`                             | `if (status === OrderStatus.SHIPPED)` |
-| Shotgun Surgery          | Un changement = 10 fichiers                     | Regrouper la logique liée             |
-| Feature Envy             | Classe qui utilise plus les données d'une autre | Déplacer la méthode                   |
-| Primitive Obsession      | `string` pour email, phone, etc.                | Value Objects                         |
-| Long Method              | > 20 lignes                                     | Extraire des fonctions nommées        |
-| Comments instead of code | `// check if user is premium`                   | `if (user.isPremium())`               |
+| Anti-pattern             | Problem                                   | Alternative                           |
+| ------------------------ | ----------------------------------------- | ------------------------------------- |
+| God Class                | One class does everything                 | Break up by responsibility            |
+| Magic Numbers            | `if (status === 3)`                       | `if (status === OrderStatus.SHIPPED)` |
+| Shotgun Surgery          | One change = 10 files                     | Group related logic                   |
+| Feature Envy             | Class that uses another class's data more | Move the method                       |
+| Primitive Obsession      | `string` for email, phone, etc.           | Value Objects                         |
+| Long Method              | > 20 lines                                | Extract named functions               |
+| Comments instead of code | `// check if user is premium`             | `if (user.isPremium())`               |
 
-## Règle des Scouts
+## The Boy Scout Rule
 
-Laisser le code un peu plus propre qu'on l'a trouvé. Pas de refactoring complet non demandé — juste
-un petit nettoyage en passant.
+Leave the code a little cleaner than you found it. No unsolicited full refactorings — just a small
+cleanup as you pass through.
