@@ -63,6 +63,22 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `softprops/action-gh-release@v2` with `contents: write` permission scoped to the job.
 - README `Versioning` section rewritten to reflect the real policy: semver via git tags, links to
   CHANGELOG + RELEASE + CLI publish, and the pre-1.0.0 breaking-change caveat.
+- `.agents/docs/AGENTS_COMPATIBILITY.md` rewritten as a per-setup compatibility matrix grounded in a
+  real audit of each setup's internal layout and hooks. Corrects the prior version's oversold
+  "tool-agnostic" framing by distinguishing:
+  - **Base playbook** (rules/commands/skills) — truly tool-agnostic, works with Claude Code and
+    Cursor equivalently
+  - **Multi-agent setups** — Claude Code is primary. The 3 setups with shell hooks
+    (`legacy-agents-v1`, `web2-agents-v1`, `web3-agents-v3`) rely on Claude Code's hook system
+    (`CLAUDE_TOOL_INPUT` env var, `pre-tool-use` / `post-tool-use` events) which Cursor does not
+    support — on Cursor those guardrails are silently disabled. The 2 hook-free setups
+    (`dev-squad-v2`, `pm-ba-squad-v2`) degrade more gracefully Also documents the "sub-agent"
+    concept as Claude Code-native with no Cursor equivalent, explains what "⚠️ Partial" concretely
+    means, and provides a decision guide for Cursor users.
+- README `Available setups` table gains `Claude Code` and `Cursor` columns with `✅ Full` /
+  `⚠️ Partial` status, plus a short "Tool compatibility" paragraph linking to the detailed doc.
+- README "What This Repo Is" section softens the flat "tool-agnostic" claim to distinguish
+  base-playbook-agnostic from setups-are-Claude-primary.
 
 ### Fixed
 
