@@ -31,16 +31,41 @@ validation), `conventional-commits` (commit message).
 
 ---
 
-## Step 3: Understand the Feature
+## Step 3: Assess Complexity (Scale-Adaptive Routing)
+
+Before diving in, determine the scope of this feature:
+
+### Quick Flow (small feature — estimated 1-3 files, no architecture changes)
+
+Criteria: single-layer change, clear requirements, no new dependencies, no schema changes. → **Skip
+to Step 5** (Security Validation) and proceed through implementation.
+
+### Full Flow (medium+ feature — 4+ files, cross-layer, or unclear scope)
+
+Criteria: touches multiple layers, requires new dependencies, involves schema changes, or has
+ambiguous requirements. → **Continue with Step 4** (Understand the Feature) and follow all steps
+sequentially.
+
+If in doubt, default to **Full Flow**. You can always move faster; you can't undo a bad assumption.
+
+---
+
+## Step 4: Understand the Feature
 
 1. Parse description; incorporate context from attachments
 2. Define: what is being added, what is out of scope
 3. Identify impacted layers (UI, database, external sources, caching, utilities)
-4. If unclear: **stop and ask before coding**
+4. **Mark ambiguities explicitly** — do not guess or assume:
+   - For each unclear requirement, write: `[NEEDS CLARIFICATION] <what is ambiguous and why>`
+   - Maximum 3 markers. Only flag high-impact ambiguities that would change implementation.
+   - If any `[NEEDS CLARIFICATION]` markers exist: **stop and present them to the user before
+     coding**
+   - Do NOT proceed with assumptions — wait for explicit answers
+5. If the feature is clear: proceed
 
 ---
 
-## Step 4: Architecture Validation
+## Step 5: Architecture Validation
 
 1. Ensure no architecture violations (separation of concerns, single source of truth)
 2. For database changes: consider migrations, add indexes
@@ -49,7 +74,7 @@ validation), `conventional-commits` (commit message).
 
 ---
 
-## Step 5: Security Validation
+## Step 6: Security Validation
 
 Run the **`security-review` skill** checklist against the planned feature:
 
@@ -63,7 +88,7 @@ If security implications are unclear: **stop and ask**.
 
 ---
 
-## Step 6: Implement
+## Step 7: Implement
 
 1. Implement incrementally
 2. Follow visual specs from attachments if provided
@@ -72,7 +97,7 @@ If security implications are unclear: **stop and ask**.
 
 ---
 
-## Step 7: Validate
+## Step 8: Validate
 
 1. Reason through behavior end-to-end
 2. Confirm: existing functionality unaffected, edge cases handled
@@ -81,7 +106,7 @@ If security implications are unclear: **stop and ask**.
 
 ---
 
-## Step 8: Update Documentation (Required)
+## Step 9: Update Documentation (Required)
 
 Automatically update (per `documentation.mdc`):
 
@@ -95,7 +120,7 @@ Automatically update (per `documentation.mdc`):
 
 ---
 
-## Step 9: Commit & Push (Required -- Must Execute)
+## Step 10: Commit & Push (Required -- Must Execute)
 
 You **must** commit and push. The feature is not complete until pushed.
 

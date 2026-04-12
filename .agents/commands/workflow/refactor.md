@@ -21,7 +21,14 @@ message).
 1. Parse description
 2. Allowed: code organization, naming, readability, duplication removal, type safety
 3. **Not allowed**: behavior changes, logic changes, feature additions, bug fixes
-4. If scope is ambiguous: **stop and ask**
+4. **Mark ambiguities explicitly** — do not guess the intended scope:
+   - For each unclear aspect, write: `[NEEDS CLARIFICATION] <what is ambiguous and why>`
+   - Maximum 3 markers. Only flag scope ambiguities that could lead to unintended behavior changes.
+   - If any `[NEEDS CLARIFICATION]` markers exist: **stop and present them to the user before
+     refactoring**
+   - Examples: unclear boundaries between "cleanup" and "logic change", uncertain if a pattern is
+     intentional, ambiguous whether a function is part of a public API
+5. If scope is clear: proceed
 
 ---
 
