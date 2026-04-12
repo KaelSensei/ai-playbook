@@ -25,7 +25,9 @@ the shared rules in `.agents/rules/*.mdc`.
 | `/review-pr [PR# or branch]`   | Review a pull request with optional adversarial analysis (cynical reviewer + edge-case hunter).                                  |
 | `/audit-code [target]`         | Analyze code quality, security, and adherence to project standards for the selected scope.                                       |
 | `/ready-check [feature]`       | Implementation readiness gate — verify requirements, architecture, security, and technical prerequisites before coding.          |
+| `/validate [scope]`            | Cross-artifact consistency check — finds drift between spec, plan, tasks, and code. Read-only analysis.                          |
 | `/brainstorm [topic]`          | Run an AI-assisted product/feature ideation and planning workflow, turning ideas into actionable tasks.                          |
+| `/prfaq <idea>`                | Working Backwards product validation — write the press release and FAQ before building. Validates if an idea is worth building.  |
 | `/devops <task>`               | Design or update CI/CD and infrastructure (GitHub Actions, Docker, Kubernetes, etc.) in a security-first way.                    |
 | `/magic-wand [issue]`          | Perform deep, expert-level debugging and problem-solving when normal commands are not enough.                                    |
 | `/create-command <name> [...]` | Generate a new Cursor command file that matches the project's command structure and rules.                                       |
@@ -39,10 +41,10 @@ the shared rules in `.agents/rules/*.mdc`.
 - **git/** – add-commit-push, git, create-branch, feature-branch, merge-branch-into-main,
   merge-branch-into-dev, create-pr, review-pr, release
 - **workflow/** – spec, plan, feature, fix, refactor, beautify, clean-code
-- **quality/** – audit-code, ready-check, magic-wand, cleanup-repo
+- **quality/** – audit-code, ready-check, validate, magic-wand, cleanup-repo
 - **docs/** – create-user-guide, update-user-guide, create-command, export-context
 - **devops/** – devops
-- **ideation/** – brainstorm
+- **ideation/** – brainstorm, prfaq
 
 ### All commands
 
@@ -74,6 +76,7 @@ the shared rules in `.agents/rules/*.mdc`.
 | **Quality**                    |                                                                                        |
 | `/audit-code [target]`         | Analyze code quality, security, and adherence to project standards.                    |
 | `/ready-check [feature]`       | Implementation readiness gate — verify prerequisites before coding.                    |
+| `/validate [scope]`            | Cross-artifact consistency check (spec vs plan vs code). Read-only.                    |
 | `/magic-wand [issue]`          | Deep expert-level debugging when normal approaches fail.                               |
 | `/cleanup-repo`                | Reorganize repo structure (docs, scripts, assets) into a clean layout.                 |
 | **Docs**                       |                                                                                        |
@@ -85,26 +88,29 @@ the shared rules in `.agents/rules/*.mdc`.
 | `/devops <task>`               | Design or update CI/CD and infrastructure (GitHub Actions, Docker, Kubernetes, etc.).  |
 | **Ideation**                   |                                                                                        |
 | `/brainstorm [topic]`          | AI-assisted feature ideation and planning workflow.                                    |
+| `/prfaq <idea>`                | Working Backwards product validation (press release + FAQ before building).            |
 
 ### Agent Skills
 
 The playbook also includes **agent skills** in `.agents/skills/`. Skills are loaded on demand when
 the AI detects a matching task:
 
-| Skill                    | Purpose                                                       |
-| ------------------------ | ------------------------------------------------------------- |
-| `create-rule`            | How to write and structure a `.mdc` rule.                     |
-| `create-command`         | How to create a new command.                                  |
-| `security-review`        | Security checklist before merging a branch.                   |
-| `adversarial-review`     | Cynical reviewer + edge-case hunter for deep PR analysis.     |
-| `conventional-commits`   | Commit message format (feat/fix/docs/refactor/etc.).          |
-| `release-notes`          | How to generate release notes from commits.                   |
-| `git-branch-naming`      | Branch naming conventions and normalization rules.            |
-| `code-audit`             | Code quality and architecture audit checklist.                |
-| `debugging-methodology`  | Root-cause analysis for persistent bugs.                      |
-| `repo-organization`      | File/folder conventions for repo structure.                   |
-| `step-file-architecture` | Pattern for splitting complex commands into micro-step files. |
-| `token-optimization`     | Lightweight, RTK-free token hygiene for commands and context. |
+| Skill                    | Purpose                                                        |
+| ------------------------ | -------------------------------------------------------------- |
+| `create-rule`            | How to write and structure a `.mdc` rule.                      |
+| `create-command`         | How to create a new command.                                   |
+| `security-review`        | Security checklist before merging a branch.                    |
+| `adversarial-review`     | Cynical reviewer + edge-case hunter for deep PR analysis.      |
+| `conventional-commits`   | Commit message format (feat/fix/docs/refactor/etc.).           |
+| `release-notes`          | How to generate release notes from commits.                    |
+| `git-branch-naming`      | Branch naming conventions and normalization rules.             |
+| `code-audit`             | Code quality and architecture audit checklist.                 |
+| `debugging-methodology`  | Root-cause analysis for persistent bugs.                       |
+| `repo-organization`      | File/folder conventions for repo structure.                    |
+| `party-mode`             | Multi-agent roundtable for architecture decisions and reviews. |
+| `customization`          | How to customize playbook behavior via `.customize.yaml`.      |
+| `step-file-architecture` | Pattern for splitting complex commands into micro-step files.  |
+| `token-optimization`     | Lightweight, RTK-free token hygiene for commands and context.  |
 
 > For full behavior, see each command's markdown file under `.agents/commands/<category>/`. For
 > details on rules, commands, skills, and MCP, see [CONCEPTS.md](CONCEPTS.md).
