@@ -12,7 +12,12 @@ next pending task.
 
 1. Read project progress documentation (e.g., `PROGRESS.md`, `CHANGELOG.md`)
 2. Read development plan documentation (if present)
-3. Optionally skim:
+3. Read active artifacts (if they exist):
+   - `SPEC.md` — active feature specification (check `stepsCompleted` for progress)
+   - `PLAN.md` — active implementation plan (check `stepsCompleted` for progress)
+   - `CHECKLIST.md` — active validation checklist
+4. Check for `.customize.yaml` — apply project-level customizations
+5. Optionally skim:
    - Architecture documentation
    - Deployment documentation (if currently in a release/deployment phase)
 
@@ -85,3 +90,5 @@ AI:   Current branch: feature/add-search-reset
 
 - `/start` -- Heavier bootstrap; for first session or after a long break
 - `/feature <description>` -- For a specific feature you already have in mind
+- `/done` -- For verifying a feature is complete before merging
+- `/validate` -- For checking artifact consistency before closing a feature

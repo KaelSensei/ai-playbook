@@ -107,3 +107,12 @@ git push origin $(git branch --show-current)
 - `/audit-code src/screens/` -- Audit screen components
 - `/audit-code src/db/` -- Audit database layer
 - `/audit-code security` -- Focus on security audit only
+
+---
+
+## Related Commands
+
+- `/validate [scope]` -- Cross-artifact consistency check (spec vs plan vs code)
+- `/checklist [spec]` -- Generate validation checklists from specs
+- `/review-pr [PR#]` -- Review a specific PR with optional adversarial analysis
+- `/done` -- Technical completion checklist before merge

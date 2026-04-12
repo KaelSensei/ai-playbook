@@ -27,6 +27,7 @@ the shared rules in `.agents/rules/*.mdc`.
 | `/ready-check [feature]`       | Implementation readiness gate — verify requirements, architecture, security, and technical prerequisites before coding.          |
 | `/validate [scope]`            | Cross-artifact consistency check — finds drift between spec, plan, tasks, and code. Read-only analysis.                          |
 | `/checklist [spec or scope]`   | Generate validation checklists from specs — "unit tests for English." Verifiable items before and after implementation.          |
+| `/done`                        | Technical completion checklist — verify all artifacts aligned, tests pass, docs updated, ready to merge.                         |
 | `/brainstorm [topic]`          | Run an AI-assisted product/feature ideation and planning workflow, turning ideas into actionable tasks.                          |
 | `/prfaq <idea>`                | Working Backwards product validation — write the press release and FAQ before building. Validates if an idea is worth building.  |
 | `/devops <task>`               | Design or update CI/CD and infrastructure (GitHub Actions, Docker, Kubernetes, etc.) in a security-first way.                    |
@@ -41,7 +42,7 @@ the shared rules in `.agents/rules/*.mdc`.
 - **bootstrap/** – start, continue, init-project, adopt-legacy
 - **git/** – add-commit-push, git, create-branch, feature-branch, merge-branch-into-main,
   merge-branch-into-dev, create-pr, review-pr, release
-- **workflow/** – spec, plan, feature, fix, refactor, pivot, retro, beautify, clean-code
+- **workflow/** – spec, plan, feature, fix, refactor, pivot, retro, done, beautify, clean-code
 - **quality/** – audit-code, ready-check, validate, checklist, magic-wand, cleanup-repo
 - **docs/** – create-user-guide, update-user-guide, create-command, export-context
 - **devops/** – devops
@@ -75,6 +76,7 @@ the shared rules in `.agents/rules/*.mdc`.
 | `/beautify <target>`           | Improve UI/UX for a component or screen.                                               |
 | `/pivot <change>`              | Mid-sprint change management with impact analysis across all artifacts.                |
 | `/retro [feature or branch]`   | Post-feature retrospective with structured learnings and action items.                 |
+| `/done`                        | Technical completion checklist — verify feature is ready to merge.                     |
 | `/clean-code [target]`         | Remove dead code, unused variables, technical debt in a focused area.                  |
 | **Quality**                    |                                                                                        |
 | `/audit-code [target]`         | Analyze code quality, security, and adherence to project standards.                    |
@@ -113,9 +115,11 @@ the AI detects a matching task:
 | `repo-organization`      | File/folder conventions for repo structure.                    |
 | `elicitation`            | 50+ structured techniques for requirements gathering.          |
 | `party-mode`             | Multi-agent roundtable for architecture decisions and reviews. |
+| `distillation`           | Lossless document compression for token-efficient context.     |
 | `customization`          | How to customize playbook behavior via `.customize.yaml`.      |
 | `step-file-architecture` | Pattern for splitting complex commands into micro-step files.  |
 | `token-optimization`     | Lightweight, RTK-free token hygiene for commands and context.  |
 
 > For full behavior, see each command's markdown file under `.agents/commands/<category>/`. For
-> details on rules, commands, skills, and MCP, see [CONCEPTS.md](CONCEPTS.md).
+> details on rules, commands, skills, and MCP, see [CONCEPTS.md](CONCEPTS.md). For the complete
+> development lifecycle showing how commands connect, see [LIFECYCLE.md](LIFECYCLE.md).

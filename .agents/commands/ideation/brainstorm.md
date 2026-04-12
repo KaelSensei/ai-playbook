@@ -208,6 +208,16 @@ For top-priority features (top 3-5):
 - **Be creative but practical**: Ideas should be implementable
 - **Iterate based on feedback**: Refine ideas through discussion
 - **Document everything**: Update project progress documentation and backlog
+- **Use `elicitation` skill** when ideas feel shallow — 50 structured techniques available
+- **Use `party-mode` skill** with `--party` flag for multi-perspective brainstorming
+
+---
+
+## Related Commands
+
+- `/prfaq <idea>` — Validate a specific idea with Working Backwards (press release + FAQ)
+- `/spec <description>` — Turn a validated idea into a structured specification
+- `/plan` — Turn a spec into a technical implementation plan
 
 ---
 

@@ -16,8 +16,11 @@ When `/start` is invoked, immediately execute these steps:
    - Development plan or roadmap documentation
    - Progress tracking documentation (e.g., `PROGRESS.md`, `CHANGELOG.md`)
    - Deployment documentation (if applicable)
-2. Then load Cursor rules from `.cursor/rules/*.mdc`
-3. Set the working context to the project root
+   - `SPEC.md`, `PLAN.md` (if they exist — active feature specification and plan)
+   - `LIFECYCLE.md` (if it exists — command reference and workflow guide)
+2. Then load rules from `.agents/rules/*.mdc` (or `.cursor/rules/*.mdc`)
+3. Check for `.customize.yaml` — apply project-level customizations if present
+4. Set the working context to the project root
 
 ## Step 3: Bootstrap Project Context
 
@@ -71,3 +74,6 @@ AI:   Loaded README.md, PROGRESS.md, architecture docs.
 
 - `/continue` -- Similar but lighter; for resuming after a short break
 - `/feature <description>` -- For implementing a specific feature you already have in mind
+- `/spec <description>` -- For specifying a complex feature before implementing
+- `/brainstorm [topic]` -- For ideating when you don't know what to work on next
+- `/done` -- For verifying a feature is complete before merging
