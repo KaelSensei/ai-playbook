@@ -26,6 +26,7 @@ the shared rules in `.agents/rules/*.mdc`.
 | `/audit-code [target]`         | Analyze code quality, security, and adherence to project standards for the selected scope.                                       |
 | `/ready-check [feature]`       | Implementation readiness gate — verify requirements, architecture, security, and technical prerequisites before coding.          |
 | `/validate [scope]`            | Cross-artifact consistency check — finds drift between spec, plan, tasks, and code. Read-only analysis.                          |
+| `/checklist [spec or scope]`   | Generate validation checklists from specs — "unit tests for English." Verifiable items before and after implementation.          |
 | `/brainstorm [topic]`          | Run an AI-assisted product/feature ideation and planning workflow, turning ideas into actionable tasks.                          |
 | `/prfaq <idea>`                | Working Backwards product validation — write the press release and FAQ before building. Validates if an idea is worth building.  |
 | `/devops <task>`               | Design or update CI/CD and infrastructure (GitHub Actions, Docker, Kubernetes, etc.) in a security-first way.                    |
@@ -40,8 +41,8 @@ the shared rules in `.agents/rules/*.mdc`.
 - **bootstrap/** – start, continue, init-project, adopt-legacy
 - **git/** – add-commit-push, git, create-branch, feature-branch, merge-branch-into-main,
   merge-branch-into-dev, create-pr, review-pr, release
-- **workflow/** – spec, plan, feature, fix, refactor, beautify, clean-code
-- **quality/** – audit-code, ready-check, validate, magic-wand, cleanup-repo
+- **workflow/** – spec, plan, feature, fix, refactor, pivot, retro, beautify, clean-code
+- **quality/** – audit-code, ready-check, validate, checklist, magic-wand, cleanup-repo
 - **docs/** – create-user-guide, update-user-guide, create-command, export-context
 - **devops/** – devops
 - **ideation/** – brainstorm, prfaq
@@ -72,11 +73,14 @@ the shared rules in `.agents/rules/*.mdc`.
 | `/fix <issue>`                 | Diagnose and fix a specific issue with security and regression checks.                 |
 | `/refactor <description>`      | Non-functional improvements (structure, clarity) without changing behavior.            |
 | `/beautify <target>`           | Improve UI/UX for a component or screen.                                               |
+| `/pivot <change>`              | Mid-sprint change management with impact analysis across all artifacts.                |
+| `/retro [feature or branch]`   | Post-feature retrospective with structured learnings and action items.                 |
 | `/clean-code [target]`         | Remove dead code, unused variables, technical debt in a focused area.                  |
 | **Quality**                    |                                                                                        |
 | `/audit-code [target]`         | Analyze code quality, security, and adherence to project standards.                    |
 | `/ready-check [feature]`       | Implementation readiness gate — verify prerequisites before coding.                    |
 | `/validate [scope]`            | Cross-artifact consistency check (spec vs plan vs code). Read-only.                    |
+| `/checklist [spec or scope]`   | Generate validation checklists from specs ("unit tests for English").                  |
 | `/magic-wand [issue]`          | Deep expert-level debugging when normal approaches fail.                               |
 | `/cleanup-repo`                | Reorganize repo structure (docs, scripts, assets) into a clean layout.                 |
 | **Docs**                       |                                                                                        |
@@ -107,6 +111,7 @@ the AI detects a matching task:
 | `code-audit`             | Code quality and architecture audit checklist.                 |
 | `debugging-methodology`  | Root-cause analysis for persistent bugs.                       |
 | `repo-organization`      | File/folder conventions for repo structure.                    |
+| `elicitation`            | 50+ structured techniques for requirements gathering.          |
 | `party-mode`             | Multi-agent roundtable for architecture decisions and reviews. |
 | `customization`          | How to customize playbook behavior via `.customize.yaml`.      |
 | `step-file-architecture` | Pattern for splitting complex commands into micro-step files.  |
