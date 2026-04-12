@@ -20,7 +20,9 @@ the shared rules in `.agents/rules/*.mdc`.
 | `/merge-branch-into-dev [b]`   | Guide a safe merge workflow from a feature branch into `dev`, mirroring the main-merge safety checklist.                         |
 | `/create-pr <target-branch>`   | Open a pull request from the current branch into the given target branch (e.g. `dev`, `main`). Uses `gh` or outputs compare URL. |
 | `/release [version]`           | Generate release notes from commits since last tag and create a GitHub release (requires `gh`).                                  |
+| `/review-pr [PR# or branch]`   | Review a pull request with optional adversarial analysis (cynical reviewer + edge-case hunter).                                  |
 | `/audit-code [target]`         | Analyze code quality, security, and adherence to project standards for the selected scope.                                       |
+| `/ready-check [feature]`       | Implementation readiness gate — verify requirements, architecture, security, and technical prerequisites before coding.          |
 | `/brainstorm [topic]`          | Run an AI-assisted product/feature ideation and planning workflow, turning ideas into actionable tasks.                          |
 | `/devops <task>`               | Design or update CI/CD and infrastructure (GitHub Actions, Docker, Kubernetes, etc.) in a security-first way.                    |
 | `/magic-wand [issue]`          | Perform deep, expert-level debugging and problem-solving when normal commands are not enough.                                    |
@@ -33,9 +35,9 @@ the shared rules in `.agents/rules/*.mdc`.
 
 - **bootstrap/** – start, continue, init-project, adopt-legacy
 - **git/** – add-commit-push, git, create-branch, feature-branch, merge-branch-into-main,
-  merge-branch-into-dev, create-pr, release
+  merge-branch-into-dev, create-pr, review-pr, release
 - **workflow/** – feature, fix, refactor, beautify, clean-code
-- **quality/** – audit-code, magic-wand, cleanup-repo
+- **quality/** – audit-code, ready-check, magic-wand, cleanup-repo
 - **docs/** – create-user-guide, update-user-guide, create-command, export-context
 - **devops/** – devops
 - **ideation/** – brainstorm
@@ -57,6 +59,7 @@ the shared rules in `.agents/rules/*.mdc`.
 | `/merge-branch-into-main [b]`  | Safely merge a branch into `main` with pre-merge checks.                               |
 | `/merge-branch-into-dev [b]`   | Safely merge a branch into `dev`.                                                      |
 | `/create-pr <target-branch>`   | Open a PR from current branch into target (e.g. `dev`, `main`).                        |
+| `/review-pr [PR# or branch]`   | Review a PR with optional adversarial review (use `--adversarial` or `--quick`).       |
 | `/release [version]`           | Generate release notes from commits since last tag and create a GitHub release (`gh`). |
 | **Workflow**                   |                                                                                        |
 | `/feature <description>`       | Plan and implement new functionality end-to-end.                                       |
@@ -66,6 +69,7 @@ the shared rules in `.agents/rules/*.mdc`.
 | `/clean-code [target]`         | Remove dead code, unused variables, technical debt in a focused area.                  |
 | **Quality**                    |                                                                                        |
 | `/audit-code [target]`         | Analyze code quality, security, and adherence to project standards.                    |
+| `/ready-check [feature]`       | Implementation readiness gate — verify prerequisites before coding.                    |
 | `/magic-wand [issue]`          | Deep expert-level debugging when normal approaches fail.                               |
 | `/cleanup-repo`                | Reorganize repo structure (docs, scripts, assets) into a clean layout.                 |
 | **Docs**                       |                                                                                        |
@@ -88,6 +92,7 @@ the AI detects a matching task:
 | `create-rule`           | How to write and structure a `.mdc` rule.                     |
 | `create-command`        | How to create a new command.                                  |
 | `security-review`       | Security checklist before merging a branch.                   |
+| `adversarial-review`    | Cynical reviewer + edge-case hunter for deep PR analysis.     |
 | `conventional-commits`  | Commit message format (feat/fix/docs/refactor/etc.).          |
 | `release-notes`         | How to generate release notes from commits.                   |
 | `git-branch-naming`     | Branch naming conventions and normalization rules.            |

@@ -17,18 +17,44 @@ message), `debugging-methodology` (if the issue is complex or persistent).
 
 ---
 
-## Step 2: Understand the Issue
+## Step 2: Assess Complexity (Scale-Adaptive Routing)
+
+Before diving in, determine the scope of this fix:
+
+### Quick Flow (simple fix — single root cause, 1-2 files)
+
+Criteria: clear error message, obvious reproduction, isolated to one module, no schema changes. →
+**Skip to Step 3** (Understand the Issue) and proceed quickly through implementation.
+
+### Deep Flow (complex fix — unclear cause, cross-cutting, or persistent)
+
+Criteria: vague symptoms, multiple possible causes, touches multiple layers, or has failed prior fix
+attempts. → Use `debugging-methodology` skill. Follow all steps sequentially. Consider using
+`/magic-wand` if root cause is elusive.
+
+If in doubt, default to **Deep Flow**. A misdiagnosed quick fix wastes more time than a thorough
+investigation.
+
+---
+
+## Step 3: Understand the Issue
 
 1. Parse description; incorporate context from attachments
 2. Determine: bug, security issue, regression, or logic flaw
 3. Identify affected layer (UI, database, external sources, caching)
 4. Locate exact code paths involved
 5. Do **not** assume -- verify by reading the code first
-6. If complex/persistent: consider using `debugging-methodology` skill
+6. **Mark ambiguities explicitly** — do not guess or assume:
+   - For each unclear aspect, write: `[NEEDS CLARIFICATION] <what is ambiguous and why>`
+   - Maximum 3 markers. Only flag high-impact ambiguities that would change the fix approach.
+   - If any `[NEEDS CLARIFICATION]` markers exist: **stop and present them to the user before
+     fixing**
+   - Examples: unclear reproduction steps, ambiguous expected behavior, unknown scope of impact
+7. If complex/persistent: use `debugging-methodology` skill
 
 ---
 
-## Step 3: Security Check
+## Step 4: Security Check
 
 Run the **`security-review` skill** against the affected code:
 
@@ -39,7 +65,7 @@ Run the **`security-review` skill** against the affected code:
 
 ---
 
-## Step 4: Implement the Fix
+## Step 5: Implement the Fix
 
 1. Apply the **minimal, targeted change** required
 2. Do not refactor unrelated code
@@ -48,7 +74,7 @@ Run the **`security-review` skill** against the affected code:
 
 ---
 
-## Step 5: Validate
+## Step 6: Validate
 
 1. Reason through execution path end-to-end
 2. Confirm: issue resolved, no new edge cases, no security violations
@@ -57,7 +83,7 @@ Run the **`security-review` skill** against the affected code:
 
 ---
 
-## Step 6: Commit & Push (Required -- Must Execute)
+## Step 7: Commit & Push (Required -- Must Execute)
 
 You **must** commit and push. The fix is not complete until pushed.
 
