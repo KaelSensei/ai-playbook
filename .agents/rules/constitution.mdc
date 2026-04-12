@@ -1,0 +1,121 @@
+---
+alwaysApply: true
+---
+
+# Project Constitution — Immutable Governance
+
+This constitution defines the **non-negotiable principles** that govern all AI-assisted work in this
+project. Every workflow command (`/feature`, `/fix`, `/refactor`, `/spec`, `/plan`, etc.) must
+respect these articles. Violations are blockers — they cannot be overridden by convenience or speed.
+
+Inspired by spec-kit's constitutional governance pattern.
+
+## How the Constitution Works
+
+1. **Commands reference it** — Workflow commands include a "Constitution Check" step at phase
+   boundaries (before implementation, before merge, before plan approval).
+2. **Violations are blockers** — If a planned change violates an article, the AI must stop and
+   propose an alternative that complies.
+3. **Amendments require intent** — These articles can only be changed by explicit human decision,
+   never by AI suggestion during a workflow.
+
+---
+
+## Article 1: Security First
+
+Security > correctness > performance > convenience.
+
+- No backdoors, hidden logic, or obfuscated code. Ever.
+- All user input is untrusted until validated.
+- All external data is untrusted until sanitized.
+- No dynamic code execution (`eval`, `Function`, `exec`) with untrusted input.
+- No new dependencies without justification and audit.
+- Secrets never enter version control.
+
+_Reference: `security.mdc` for full security rules._
+
+## Article 2: Explicit Over Implicit
+
+- Code must be readable, auditable, and understandable.
+- No magic abstractions — prefer explicit logic over clever indirection.
+- Intent must be clear from the code itself. Comments explain "why", not "what".
+- Configuration is explicit (no hidden defaults that change behavior).
+- Errors are informative and typed, not swallowed or generic.
+
+## Article 3: Branch Discipline
+
+- Never commit directly to `main` or `master`.
+- Every change starts on a properly named branch (`feature/`, `fix/`, `refactor/`, `docs/`,
+  `chore/`).
+- Every commit uses conventional commit format.
+- Work is not done until it is committed and pushed.
+
+_Reference: `version-management.mdc` for full git rules._
+
+## Article 4: Specification Before Implementation
+
+For non-trivial work (Full Flow / Deep Flow):
+
+- Requirements must be clear before coding starts.
+- Ambiguities are marked with `[NEEDS CLARIFICATION]`, not guessed.
+- Architecture alignment is verified before implementation.
+- A `/ready-check` must pass before implementing complex features.
+
+For trivial work (Quick Flow):
+
+- A clear description is sufficient.
+- The AI may proceed without formal specification.
+
+## Article 5: No Scope Creep
+
+- A feature command implements the requested feature. Nothing more.
+- A fix command fixes the reported issue. No "while I'm here" improvements.
+- A refactor command changes structure. No behavior changes.
+- If additional work is discovered, suggest a separate command (`/fix`, `/refactor`, `/feature`).
+
+## Article 6: Test What Matters
+
+- New features should have tests for critical paths.
+- Bug fixes should include a regression test when feasible.
+- Tests describe behaviors, not implementations.
+- Existing tests must not be deleted without explicit justification.
+
+## Article 7: Documentation Is Not Optional
+
+- Documentation updates happen in the same commit as code changes.
+- No permission prompts for doc updates — they happen automatically.
+- Architecture docs are updated when architecture changes.
+- User-facing features update the user guide.
+
+_Reference: `documentation.mdc` for full documentation rules._
+
+## Article 8: Simplicity Is a Feature
+
+- Prefer simple solutions over clever ones.
+- Build what is needed now, not what might be needed later.
+- Three similar lines are better than a premature abstraction.
+- No new dependencies unless strictly necessary.
+- Functional > beautiful. Working > perfect.
+
+## Article 9: Respect Project Boundaries
+
+- Respect the project's defined tech stack — do not introduce alternatives.
+- Respect the project's architecture — do not bypass layer boundaries.
+- Respect the project's data rules — do not change data flow without justification.
+- Respect the project's allowed domains — do not add unauthorized external calls.
+
+_Reference: `general-principles.mdc` and `technical-stack.mdc` for project-specific constraints._
+
+---
+
+## Constitution Check Protocol
+
+When a workflow command reaches a phase boundary (before implementation, before merge), the AI must:
+
+1. **Verify** the planned work against each article.
+2. **Flag** any violations as `[CONSTITUTION VIOLATION] Article N: <description>`.
+3. **Stop** and propose an alternative that complies.
+4. **Proceed** only when all articles are satisfied.
+
+This check is **silent when passing** — don't report "Article 1: PASS, Article 2: PASS..." Only
+report violations.

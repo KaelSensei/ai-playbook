@@ -43,8 +43,12 @@ to Step 5** (Security Validation) and proceed through implementation.
 ### Full Flow (medium+ feature — 4+ files, cross-layer, or unclear scope)
 
 Criteria: touches multiple layers, requires new dependencies, involves schema changes, or has
-ambiguous requirements. → **Continue with Step 4** (Understand the Feature) and follow all steps
-sequentially.
+ambiguous requirements.
+
+- **If SPEC.md and/or PLAN.md exist** for this feature: use them as input. Skip to Step 5
+  (Architecture Validation) since specification and planning are already done.
+- **If no spec/plan exists:** consider running `/spec` → `/plan` first for complex features.
+  Alternatively, **continue with Step 4** and follow all steps sequentially.
 
 If in doubt, default to **Full Flow**. You can always move faster; you can't undo a bad assumption.
 
@@ -85,6 +89,23 @@ Run the **`security-review` skill** checklist against the planned feature:
 - No backdoors, hidden logic, or supply-chain risks
 
 If security implications are unclear: **stop and ask**.
+
+---
+
+## Step 6b: Constitution Check (Full Flow Only)
+
+Before implementing, verify the planned work against `constitution.mdc`:
+
+1. Does the approach respect security-first principles? (Article 1)
+2. Is the implementation explicit and auditable? (Article 2)
+3. Does the scope match what was requested — no more, no less? (Article 5)
+4. Is this the simplest viable approach? (Article 8)
+5. Does it respect project tech stack and architecture? (Article 9)
+
+For each violation: `[CONSTITUTION VIOLATION] Article N: <description>`. **Violations are blockers**
+— propose an alternative before proceeding.
+
+This check is **silent when passing** — only report violations.
 
 ---
 

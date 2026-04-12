@@ -7,6 +7,8 @@ the shared rules in `.agents/rules/*.mdc`.
 | Command                        | Description                                                                                                                      |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
 | `/start`                       | Bootstrap project context, load rules and key docs, and prepare the assistant to work on this repo.                              |
+| `/spec <description>`          | Create a structured feature specification (user stories, acceptance criteria, scope). First step of spec → plan → implement.     |
+| `/plan [spec or description]`  | Create a technical implementation plan with architecture decisions and task breakdown. Second step of the pipeline.              |
 | `/feature <description>`       | Plan and implement new functionality end-to-end, following architecture, security, and documentation rules.                      |
 | `/fix <issue>`                 | Diagnose and fix a specific issue or bug, with mandatory security and regression checks.                                         |
 | `/refactor <description>`      | Perform non-functional code improvements (structure, clarity, maintainability) without changing behavior.                        |
@@ -36,7 +38,7 @@ the shared rules in `.agents/rules/*.mdc`.
 - **bootstrap/** – start, continue, init-project, adopt-legacy
 - **git/** – add-commit-push, git, create-branch, feature-branch, merge-branch-into-main,
   merge-branch-into-dev, create-pr, review-pr, release
-- **workflow/** – feature, fix, refactor, beautify, clean-code
+- **workflow/** – spec, plan, feature, fix, refactor, beautify, clean-code
 - **quality/** – audit-code, ready-check, magic-wand, cleanup-repo
 - **docs/** – create-user-guide, update-user-guide, create-command, export-context
 - **devops/** – devops
@@ -62,6 +64,8 @@ the shared rules in `.agents/rules/*.mdc`.
 | `/review-pr [PR# or branch]`   | Review a PR with optional adversarial review (use `--adversarial` or `--quick`).       |
 | `/release [version]`           | Generate release notes from commits since last tag and create a GitHub release (`gh`). |
 | **Workflow**                   |                                                                                        |
+| `/spec <description>`          | Structured feature spec (user stories, acceptance criteria, scope boundaries).         |
+| `/plan [spec or description]`  | Technical implementation plan with design, task breakdown, and risk assessment.        |
 | `/feature <description>`       | Plan and implement new functionality end-to-end.                                       |
 | `/fix <issue>`                 | Diagnose and fix a specific issue with security and regression checks.                 |
 | `/refactor <description>`      | Non-functional improvements (structure, clarity) without changing behavior.            |
@@ -87,19 +91,20 @@ the shared rules in `.agents/rules/*.mdc`.
 The playbook also includes **agent skills** in `.agents/skills/`. Skills are loaded on demand when
 the AI detects a matching task:
 
-| Skill                   | Purpose                                                       |
-| ----------------------- | ------------------------------------------------------------- |
-| `create-rule`           | How to write and structure a `.mdc` rule.                     |
-| `create-command`        | How to create a new command.                                  |
-| `security-review`       | Security checklist before merging a branch.                   |
-| `adversarial-review`    | Cynical reviewer + edge-case hunter for deep PR analysis.     |
-| `conventional-commits`  | Commit message format (feat/fix/docs/refactor/etc.).          |
-| `release-notes`         | How to generate release notes from commits.                   |
-| `git-branch-naming`     | Branch naming conventions and normalization rules.            |
-| `code-audit`            | Code quality and architecture audit checklist.                |
-| `debugging-methodology` | Root-cause analysis for persistent bugs.                      |
-| `repo-organization`     | File/folder conventions for repo structure.                   |
-| `token-optimization`    | Lightweight, RTK-free token hygiene for commands and context. |
+| Skill                    | Purpose                                                       |
+| ------------------------ | ------------------------------------------------------------- |
+| `create-rule`            | How to write and structure a `.mdc` rule.                     |
+| `create-command`         | How to create a new command.                                  |
+| `security-review`        | Security checklist before merging a branch.                   |
+| `adversarial-review`     | Cynical reviewer + edge-case hunter for deep PR analysis.     |
+| `conventional-commits`   | Commit message format (feat/fix/docs/refactor/etc.).          |
+| `release-notes`          | How to generate release notes from commits.                   |
+| `git-branch-naming`      | Branch naming conventions and normalization rules.            |
+| `code-audit`             | Code quality and architecture audit checklist.                |
+| `debugging-methodology`  | Root-cause analysis for persistent bugs.                      |
+| `repo-organization`      | File/folder conventions for repo structure.                   |
+| `step-file-architecture` | Pattern for splitting complex commands into micro-step files. |
+| `token-optimization`     | Lightweight, RTK-free token hygiene for commands and context. |
 
 > For full behavior, see each command's markdown file under `.agents/commands/<category>/`. For
 > details on rules, commands, skills, and MCP, see [CONCEPTS.md](CONCEPTS.md).
