@@ -271,6 +271,13 @@ tool directory; those belong to the setup bundle, not to the base playbook catal
 - Read automatically by AI assistants
 - Updated independently of application code
 
+### Unattended / autonomous runs
+
+If you want to kick off a task and walk away (e.g. from a dedicated machine while you are out), see
+[AUTONOMOUS_SETUP.md](AUTONOMOUS_SETUP.md) for the safe setup flow and the `/auto` command shipped
+in `dev-squad-v2`. The guide covers Claude Code, Codex CLI, Cursor, Gemini CLI, and Aider, plus a
+one-shot bootstrap script at `scripts/setup-autonomous.sh`.
+
 ---
 
 ## Design Principles
