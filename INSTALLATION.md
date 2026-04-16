@@ -4,6 +4,10 @@ This guide covers how to install, build, test, and deploy the AI Playbook CLI to
 
 ## For End Users
 
+> **Installing a setup bundle (poc-squad, dev-squad, web2-agents, …) into another project?** See
+> [`.agents/setups/INSTALL.md`](.agents/setups/INSTALL.md) for the dedicated walkthrough — this
+> guide focuses on the base playbook (rules + commands + skills).
+
 ### Option 1: Git Submodule (Recommended for Teams)
 
 **Best for:** Teams, long-term projects, version-controlled AI behavior
