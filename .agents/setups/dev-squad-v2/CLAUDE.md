@@ -21,12 +21,13 @@
 
 ## Flows
 
-| Command                     | Description                         |
-| --------------------------- | ----------------------------------- |
-| `/brief [feature]`          | Tech Lead produces technical brief  |
-| `/build [spec]`             | Dev-a implements with TDD, opens PR |
-| `/review-pr [PR#]`          | Dev-b async reviews the PR          |
-| `/arbitrate [disagreement]` | Tech Lead arbitrates + ADR          |
+| Command                     | Description                                                    |
+| --------------------------- | -------------------------------------------------------------- |
+| `/brief [feature]`          | Tech Lead produces technical brief                             |
+| `/build [spec]`             | Dev-a implements with TDD, opens PR                            |
+| `/review-pr [PR#]`          | Dev-b async reviews the PR                                     |
+| `/arbitrate [disagreement]` | Tech Lead arbitrates + ADR                                     |
+| `/auto [task]`              | Unattended: chains brief → build → review-pr, opens a draft PR |
 
 ## Canon TDD — Non-Negotiable
 

@@ -42,6 +42,20 @@ bash /path/to/dev-squad-v2/install.sh .cursor
 4. /arbitrate [conflict]   → Tech Lead decides + ADR
 ```
 
+### Unattended mode — `/auto [task]`
+
+For fire-and-forget runs (e.g. kick it off from your own machine and step away), use:
+
+```
+/auto [task description]
+```
+
+`/auto` chains brief → build → review-pr end-to-end on a dedicated `feature/auto-<slug>` branch,
+opens a **draft** PR, and writes a status log to `tasks/auto-<slug>.md`. It stops at safe
+checkpoints instead of merging — it never pushes to `main`, never force-pushes, never merges, and
+halts early on ambiguous specs or missing secrets. Human review on the draft PR is still required
+before merge.
+
 ## Bundled Setup-Local Skills
 
 These skills belong to this setup bundle. They are separate from the shared base playbook skills in
