@@ -5,6 +5,7 @@
 set -e
 
 SOURCE="$(cd "$(dirname "$0")" && pwd)"
+BASE_SKILLS="$SOURCE/../../skills"
 TARGET="${1:-.claude}"
 
 echo ""
@@ -58,12 +59,23 @@ for skill in legacy-patterns refactoring-patterns strangler-fig technical-debt; 
 done
 echo "  4 legacy-specific skills"
 
-# ── Shared skills ─────────────────────────────────────────────────────────
+# ── Shared skills (setup-local) ───────────────────────────────────────────
 
-for skill in testing-patterns clean-code security-web2 database-patterns; do
+for skill in testing-patterns security-web2 database-patterns; do
   cp "$SOURCE/.claude/skills/$skill/SKILL.md" "$TARGET/skills/$skill/SKILL.md"
 done
-echo "  4 shared skills"
+echo "  3 shared skills"
+
+# ── Base playbook skills (shared across setups) ──────────────────────────
+
+for skill in clean-code; do
+  if [ -f "$BASE_SKILLS/$skill/SKILL.md" ]; then
+    cp "$BASE_SKILLS/$skill/SKILL.md" "$TARGET/skills/$skill/SKILL.md"
+    echo "  ✓ $skill (from base playbook)"
+  else
+    echo "  ⚠ $skill not found at $BASE_SKILLS/$skill — install the base playbook or rerun from a full clone"
+  fi
+done
 
 # ── Team skills ───────────────────────────────────────────────────────────
 

@@ -5,6 +5,7 @@
 set -e
 
 SOURCE="$(cd "$(dirname "$0")" && pwd)"
+BASE_SKILLS="$SOURCE/../../skills"
 TARGET="${1:-.claude}"
 
 echo ""
@@ -52,10 +53,21 @@ echo "✓  11 agents"
 
 # ── Domain skills ───────────────────────────────────────────────────────────
 
-for skill in clean-code testing-patterns api-design database-patterns security-web2; do
+for skill in testing-patterns api-design database-patterns security-web2; do
   cp "$SOURCE/.claude/skills/$skill/SKILL.md" "$TARGET/skills/$skill/SKILL.md"
 done
-echo "✓  5 domain skills"
+echo "✓  4 domain skills"
+
+# ── Base playbook skills (shared across setups) ─────────────────────────────
+
+for skill in clean-code; do
+  if [ -f "$BASE_SKILLS/$skill/SKILL.md" ]; then
+    cp "$BASE_SKILLS/$skill/SKILL.md" "$TARGET/skills/$skill/SKILL.md"
+    echo "✓  $skill (from base playbook)"
+  else
+    echo "⚠  $skill not found at $BASE_SKILLS/$skill — install the base playbook or rerun from a full clone"
+  fi
+done
 
 # ── Team skills ─────────────────────────────────────────────────────────────
 

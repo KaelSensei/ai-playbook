@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_SKILLS="$SOURCE/../../skills"
 TARGET="${1:-.claude}"
 
 echo "Dev Squad — installing into $(pwd)/$TARGET"
@@ -15,14 +16,23 @@ for agent in tech-lead dev-senior-a dev-senior-b; do
   cp "$SOURCE/.claude/agents/$agent.md" "$TARGET/agents/$agent.md" && echo "  ✓ $agent"
 done
 
-echo "→ Skills..."
-for skill in canon-tdd clean-architecture typescript-patterns code-review-standards api-design-ts react-patterns testing-patterns-ts; do
+echo "→ Setup-local skills..."
+for skill in canon-tdd typescript-patterns code-review-standards api-design-ts react-patterns testing-patterns-ts; do
   [ -d "$SOURCE/.claude/skills/$skill" ] && \
     cp -r "$SOURCE/.claude/skills/$skill" "$TARGET/skills/$skill" && echo "  ✓ $skill"
 done
 
+echo "→ Base playbook skills (shared)..."
+for skill in clean-architecture; do
+  if [ -d "$BASE_SKILLS/$skill" ]; then
+    cp -r "$BASE_SKILLS/$skill" "$TARGET/skills/$skill" && echo "  ✓ $skill (from base playbook)"
+  else
+    echo "  ⚠ $skill not found at $BASE_SKILLS/$skill — install the base playbook or rerun from a full clone"
+  fi
+done
+
 echo "→ Commands..."
-for cmd in brief build review-pr arbitrate; do
+for cmd in brief build review-pr arbitrate auto; do
   cp "$SOURCE/.claude/commands/$cmd.md" "$TARGET/commands/$cmd.md" && echo "  ✓ /$cmd"
 done
 
