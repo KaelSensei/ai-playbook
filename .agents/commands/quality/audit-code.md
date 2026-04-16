@@ -4,7 +4,7 @@ When `/audit-code [target]` is invoked, analyze code quality, security, and adhe
 standards.
 
 **Skills used:** `security-review` (security checklist), `code-audit` (quality and architecture
-checklist).
+checklist), `web-performance` (PageSpeed and Core Web Vitals -- if the project ships web pages).
 
 ---
 
@@ -44,6 +44,19 @@ Run the **`code-audit` skill** checklist against the target scope:
 5. Database patterns (if applicable)
 6. External data handling (if applicable)
 7. Documentation completeness
+
+---
+
+## Step 3b: Web Performance Audit (when applicable)
+
+If the project ships web pages and the audit scope touches the front-end, run the
+**`web-performance` skill** checklist against the affected pages. Required targets:
+
+- PageSpeed Insights mobile **>= 90 / 100**
+- LCP **<= 2.5 s**, INP **<= 200 ms**, CLS **<= 0.1** (all Core Web Vitals in the green)
+
+If any Core Web Vital is in the red on field data: treat as a **blocker**, not a low-priority
+finding.
 
 ---
 

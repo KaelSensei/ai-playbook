@@ -111,6 +111,7 @@ the AI detects a matching task:
 | `release-notes`          | How to generate release notes from commits.                    |
 | `git-branch-naming`      | Branch naming conventions and normalization rules.             |
 | `code-audit`             | Code quality and architecture audit checklist.                 |
+| `web-performance`        | PageSpeed and Core Web Vitals checklist for web pages.         |
 | `debugging-methodology`  | Root-cause analysis for persistent bugs.                       |
 | `repo-organization`      | File/folder conventions for repo structure.                    |
 | `elicitation`            | 50+ structured techniques for requirements gathering.          |
