@@ -70,6 +70,13 @@ npx ai-playbook-cli@latest install --type copy
 npx ai-playbook-cli@latest status
 ```
 
+### Running unattended (optional)
+
+If you want to kick off a task and step away — typically on a dedicated machine you leave running —
+see [AUTONOMOUS_SETUP.md](AUTONOMOUS_SETUP.md). It covers token scopes, a safe Claude Code
+allowlist, and the `/auto` command shipped with `dev-squad-v2`. A bootstrap script lives at
+`scripts/setup-autonomous.sh`.
+
 ---
 
 ## For Developers (Building & Publishing)
