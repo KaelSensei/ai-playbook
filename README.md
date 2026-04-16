@@ -181,7 +181,9 @@ Cursor has no hook system. Read
 [`.agents/docs/AGENTS_COMPATIBILITY.md`](.agents/docs/AGENTS_COMPATIBILITY.md) for the honest
 per-feature breakdown before picking a setup bundle.
 
-See each setup bundle's README in `.agents/setups/` for details.
+See each setup bundle's README in `.agents/setups/` for details, or
+[`.agents/setups/INSTALL.md`](.agents/setups/INSTALL.md) for the full walkthrough of installing a
+bundle into a brand-new or existing GitHub repo (with commit/PR flow, updates, and troubleshooting).
 
 ### Option 2: Git Submodule (Base Playbook, Recommended for Most Projects)
 
