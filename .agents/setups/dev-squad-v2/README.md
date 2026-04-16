@@ -58,15 +58,19 @@ before merge.
 
 ## Bundled Setup-Local Skills
 
-These skills belong to this setup bundle. They are separate from the shared base playbook skills in
-`.agents/skills/`.
+These skills belong to this setup bundle.
 
 | Skill                   | Content                                                                     |
 | ----------------------- | --------------------------------------------------------------------------- |
 | `canon-tdd`             | RED-GREEN-REFACTOR, test list, test doubles, builders, async, error testing |
-| `clean-architecture`    | Hexagonal, ports/adapters, use cases, domain events, error handling         |
 | `typescript-patterns`   | Result type, branded types, Zod, utility types, discriminated unions        |
 | `code-review-standards` | Severity levels, checklist per layer, common TS bugs, performance           |
 | `api-design-ts`         | REST conventions, response format, Zod middleware, JWT/RBAC                 |
 | `react-patterns`        | Custom hooks, forms, error boundary, Testing Library, context, performance  |
 | `testing-patterns-ts`   | Test pyramid, DB integration, supertest, hook testing                       |
+
+### Inherited from the base playbook
+
+The setup also installs the shared `clean-architecture` skill from `.agents/skills/` (hexagonal,
+ports/adapters, use cases, domain events, error handling). Agent references like
+`clean-architecture` in `CLAUDE.md` resolve to that shared copy at install time.
