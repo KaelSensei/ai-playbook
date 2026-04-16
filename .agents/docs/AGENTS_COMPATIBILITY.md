@@ -22,15 +22,16 @@ Mental model:
 
 Not every tool has every concept. This table is the physical reality, not a marketing promise.
 
-| Concept                                      | Claude Code                                           | Cursor                                      | Other MCP clients           |
-| -------------------------------------------- | ----------------------------------------------------- | ------------------------------------------- | --------------------------- |
-| **Rules** (persistent context)               | `.claude/` markdown loaded as context                 | `.cursor/rules/*.mdc` with YAML frontmatter | Read as plain markdown      |
-| **Slash commands**                           | `/command` reads `.claude/commands/*.md`              | `/command` reads `.cursor/commands/*.md`    | Manually invoked as scripts |
-| **Skills** (on-demand domain knowledge)      | Auto-loaded by agent when matching task is detected   | Loaded as reference context                 | Read on request             |
-| **Sub-agents** (multiple specialized agents) | Native — `.claude/agents/*.md` define personas        | **Not supported** — no sub-agent concept    | **Not supported**           |
-| **Hooks** (run shell on tool-use events)     | Native — `hooks/{pre,post}-tool-use.sh`, `on-stop.sh` | **Not supported**                           | **Not supported**           |
-| **MCP servers**                              | `.claude/mcp.json`                                    | `.cursor/mcp.json`                          | Standard `mcp.json`         |
-| **Model switching / session control**        | Native                                                | Native                                      | Varies                      |
+| Concept                                        | Claude Code                                                         | Cursor                                                    | Other MCP clients           |
+| ---------------------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------- |
+| **Rules** (persistent context)                 | `.claude/` markdown loaded as context                               | `.cursor/rules/*.mdc` with YAML frontmatter               | Read as plain markdown      |
+| **Slash commands**                             | `/command` reads `.claude/commands/*.md`                            | `/command` reads `.cursor/commands/*.md`                  | Manually invoked as scripts |
+| **Skills** (on-demand domain knowledge)        | Auto-loaded by agent when matching task is detected                 | Loaded as reference context                               | Read on request             |
+| **Sub-agents** (multiple specialized agents)   | Native — `.claude/agents/*.md` define personas                      | **Not supported** — no sub-agent concept                  | **Not supported**           |
+| **Hooks** (run shell on tool-use events)       | Native — `hooks/{pre,post}-tool-use.sh`, `on-stop.sh`               | **Not supported**                                         | **Not supported**           |
+| **MCP servers**                                | `.claude/mcp.json`                                                  | `.cursor/mcp.json`                                        | Standard `mcp.json`         |
+| **Model switching / session control**          | Native                                                              | Native                                                    | Varies                      |
+| **Unattended runs** (`/auto`, fire-and-forget) | ✅ Supported — see [AUTONOMOUS_SETUP.md](../../AUTONOMOUS_SETUP.md) | ❌ Not supported — Cursor is editor-only, no headless CLI | Depends on the client's CLI |
 
 **Takeaway:** rules, commands, and skills are markdown and portable. **Agents and hooks are Claude
 Code features with no Cursor equivalent** — they degrade gracefully (the content is still readable)
