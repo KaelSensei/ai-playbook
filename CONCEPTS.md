@@ -243,6 +243,23 @@ package for one kind of project, create a **setup bundle**.
 See [.agents/docs/AGENTS_COMPATIBILITY.md](.agents/docs/AGENTS_COMPATIBILITY.md) for what parts of a
 setup bundle actually work in Claude Code vs Cursor.
 
+### Which setup for my situation?
+
+Start with the base playbook unless one of these situations applies. Setup bundles are opt-in
+opinionation, not the default.
+
+| Your situation                                   | Start with                           | Why                                                            |
+| ------------------------------------------------ | ------------------------------------ | -------------------------------------------------------------- |
+| Throwaway POC, demo, hackathon, weekend spike    | `poc-squad-v1`                       | One persona, two commands, no TDD, no layers, fast to running  |
+| Just want the shared rules/commands/skills       | base playbook only (no setup bundle) | Simplest possible. Most projects should start here             |
+| TypeScript / React team work with strict TDD     | `dev-squad-v2`                       | Canon TDD + hexagonal, pair review, opens draft PRs            |
+| Modernizing a legacy codebase                    | `legacy-agents-v1`                   | Characterization tests, Strangler Fig, debt tracking           |
+| Full-stack SaaS with a team of 13                | `web2-agents-v1`                     | Biggest team, security hooks, OWASP focus                      |
+| Smart contracts / DeFi / protocols               | `web3-agents-v3`                     | Solidity + Foundry + DeFi skills, smart-contract safety rails  |
+| Writing specs, user stories, acceptance criteria | `pm-ba-squad-v2`                     | BDD Gherkin, refinement, spec review — produces docs, not code |
+
+When a POC graduates, switch setups — do not try to bolt production concerns onto `poc-squad-v1`.
+
 ---
 
 ## 5. MCP (Model Context Protocol)
