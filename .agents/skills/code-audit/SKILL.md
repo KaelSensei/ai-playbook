@@ -8,7 +8,8 @@ description:
 # Code Audit Checklist
 
 Structured checklist for evaluating code quality, architecture adherence, and documentation
-completeness. For security-specific checks, see the `security-review` skill.
+completeness. For security-specific checks, see the `security-review` skill. For web performance
+(PageSpeed, Core Web Vitals), see the `web-performance` skill.
 
 ## When to use this skill
 
@@ -71,6 +72,17 @@ automatically when it detects a matching task, or when a command explicitly says
 - [ ] External/scraped data treated as untrusted.
 - [ ] Input validated and normalized before storage.
 - [ ] Network failures handled gracefully (retry, fallback, offline).
+
+### Web performance (if the project ships web pages)
+
+Delegate the full audit to the `web-performance` skill. Minimum required:
+
+- [ ] PageSpeed Insights mobile score **>= 90 / 100** on touched pages.
+- [ ] Core Web Vitals all in the green on field data (LCP <= 2.5 s, INP <= 200 ms, CLS <= 0.1).
+- [ ] Hero images preloaded, sized, and served as AVIF/WebP.
+- [ ] No render-blocking CSS, fonts, or third-party scripts on the critical path.
+- [ ] All `<img>` / `<video>` have explicit dimensions or `aspect-ratio` (no CLS).
+- [ ] Third-party scripts deferred / lazy-loaded.
 
 ## Documentation checks
 

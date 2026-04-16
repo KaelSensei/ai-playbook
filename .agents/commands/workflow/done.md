@@ -44,6 +44,16 @@ Quick pass using `security-review` skill:
 - [ ] New network calls are to documented domains
 - [ ] New dependencies are justified and audited
 
+### C2. Web Performance (if the project ships web pages)
+
+Quick pass using `web-performance` skill on touched pages:
+
+- [ ] PageSpeed Insights mobile **>= 90 / 100**
+- [ ] LCP **<= 2.5 s**, INP **<= 200 ms**, CLS **<= 0.1** (Core Web Vitals all green)
+- [ ] No new render-blocking CSS, fonts, or third-party scripts on the critical path
+- [ ] All new `<img>` / `<video>` have explicit dimensions or `aspect-ratio`
+- [ ] Hero images preloaded and served as AVIF/WebP
+
 ### D. Documentation
 
 - [ ] README.md updated (if usage or build instructions changed)
