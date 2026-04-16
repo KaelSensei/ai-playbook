@@ -3,6 +3,9 @@
 Commands are organized under `.agents/commands/` by category. Slash command names are unchanged
 (e.g. `/feature`, `/fix`); the folder layout is for maintainability only.
 
+This document describes the **base playbook command catalog**. Setup bundles may also ship their own
+setup-local commands inside the installed `.claude/commands/` or `.cursor/commands/` directory.
+
 ## Folder Layout
 
 ```

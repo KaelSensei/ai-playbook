@@ -14,12 +14,13 @@ It defines:
   workflows
 - **Agent skills** (`.agents/skills/`) — on-demand domain expertise (security review, conventional
   commits, release notes, etc.)
-- **Multi-agent setups** (`.agents/setups/`) — pre-configured teams for dev, legacy, PM/BA, web2,
-  and web3 projects
+- Optional **setup bundles** (`.agents/setups/`) - pre-configured teams that install their own
+  personas, commands, and setup-local skills for dev, legacy, PM/BA, web2, and web3 projects
 - **Security-first policies** (MCP validation, backdoor prevention, supply-chain awareness)
 - **Version and branch discipline** for AI-generated commits
 
-For a detailed explanation of rules, commands, skills, and MCP, see [CONCEPTS.md](CONCEPTS.md).
+For a detailed explanation of rules, commands, skills, setup bundles, and MCP, see
+[CONCEPTS.md](CONCEPTS.md).
 
 The goal is to ensure AI-assisted development is:
 
@@ -36,6 +37,23 @@ For guidance on reducing LLM token usage (especially for shell commands and sear
 ## Quick Start
 
 Works for both **vibe coders** (just want results) and **developers** (want to customize).
+
+### Mental Model First
+
+Before choosing an install path, keep this distinction in mind:
+
+- **Base playbook** = `.agents/rules/` + `.agents/commands/` + `.agents/skills/`
+- **Setup bundle** = an optional package in `.agents/setups/` that installs its own personas,
+  commands, and setup-local skills for one opinionated workflow
+- **Skills are not an alternative to setups**. Skills are small expertise modules. Setups are larger
+  workflow bundles that may include their own local skills.
+
+**Most projects should start with the base playbook:**
+
+```bash
+git clone https://github.com/KaelSensei/ai-playbook.git .ai-playbook
+npx ai-playbook-cli@latest install
+```
 
 **30-second install** — pick the setup that matches what you're building, then run one command:
 
@@ -54,11 +72,15 @@ bash .ai-playbook/.agents/setups/dev-squad-v2/install.sh
 | Modernizing a legacy codebase                         | `legacy-agents-v1` |
 | Writing specs, user stories, or doing product work    | `pm-ba-squad-v2`   |
 
+If you do **not** need a prebuilt team with extra personas and setup-local commands, start with the
+base playbook instead of a setup bundle.
+
 After install, open your project in Claude Code or Cursor and type `/start`. The AI reads your
 project, picks a task, and begins. That's it — you're vibe coding with guardrails.
 
 **Next steps:** read [Getting Started](#getting-started) below for the full command list, or
-[CONCEPTS.md](CONCEPTS.md) if you want to understand how rules, commands, and skills fit together.
+[CONCEPTS.md](CONCEPTS.md) if you want to understand how rules, commands, skills, and setup bundles
+fit together.
 
 ---
 
@@ -82,8 +104,8 @@ Each project can pin a specific version of the playbook and upgrade intentionall
 **This repo is:**
 
 - A reusable AI behavior baseline
-- Tool-agnostic base playbook (rules, commands, skills work with Claude Code and Cursor).
-  Multi-agent setups target Claude Code primarily — see
+- Tool-agnostic base playbook (rules, commands, skills work with Claude Code and Cursor). Setup
+  bundles target Claude Code primarily — see
   [`.agents/docs/AGENTS_COMPATIBILITY.md`](.agents/docs/AGENTS_COMPATIBILITY.md)
 - Security-focused and production-oriented
 
@@ -95,11 +117,37 @@ Each project can pin a specific version of the playbook and upgrade intentionall
 
 ---
 
+## Base Playbook vs Setup Bundles
+
+Use the **base playbook** when you want portable, reusable building blocks:
+
+- Shared rules for behavior and safety
+- Shared slash commands for common workflows
+- Shared skills that commands can load on demand
+
+Use a **setup bundle** when you want a pre-arranged team workflow for one project archetype:
+
+- Agent personas
+- Setup-local commands
+- Setup-local skills
+- Optional hooks and extra docs
+
+Rule of thumb:
+
+- If you are asking "what expertise should the AI load during a task?" -> **skill**
+- If you are asking "what whole package should I install for this kind of project?" -> **setup
+  bundle**
+
+---
+
 ## Installation
 
-### Option 1: Multi-Agent Setup (Recommended)
+### Option 1: Setup Bundle (Optional, More Opinionated)
 
 **Install a pre-configured agent team into your project:**
+
+Choose this when you want an opinionated bundle for one workflow. If you only want the shared rules,
+commands, and skills, skip to **Option 2**.
 
 ```bash
 # Clone the playbook
@@ -112,7 +160,7 @@ bash .ai-playbook/.agents/setups/dev-squad-v2/install.sh
 bash .ai-playbook/.agents/setups/dev-squad-v2/install.sh .cursor
 ```
 
-Available setups:
+Available setup bundles:
 
 | Setup              | Agents                   | Best for              | Claude Code | Cursor     |
 | ------------------ | ------------------------ | --------------------- | ----------- | ---------- |
@@ -122,16 +170,16 @@ Available setups:
 | `web2-agents-v1`   | 13 (full team)           | Full-stack SaaS       | ✅ Full     | ⚠️ Partial |
 | `web3-agents-v3`   | 10 (full team)           | Smart contracts, DeFi | ✅ Full     | ⚠️ Partial |
 
-**Tool compatibility:** Multi-agent setups target Claude Code as their primary tool. On Cursor, the
+**Tool compatibility:** Setup bundles target Claude Code as their primary tool. On Cursor, the
 commands and skills still work, but the sub-agent personas collapse into one and any shell hooks
 (guardrails in `legacy-agents-v1`, `web2-agents-v1`, `web3-agents-v3`) are silently disabled because
 Cursor has no hook system. Read
 [`.agents/docs/AGENTS_COMPATIBILITY.md`](.agents/docs/AGENTS_COMPATIBILITY.md) for the honest
-per-feature breakdown before picking a setup.
+per-feature breakdown before picking a setup bundle.
 
-See each setup's README in `.agents/setups/` for details.
+See each setup bundle's README in `.agents/setups/` for details.
 
-### Option 2: Git Submodule (Base Playbook Only)
+### Option 2: Git Submodule (Base Playbook, Recommended for Most Projects)
 
 **For the base rules, commands, and skills without multi-agent teams:**
 
@@ -145,7 +193,7 @@ ln -s ../.ai-playbook/.agents/commands .claude/commands
 ln -s ../.ai-playbook/.agents/skills .claude/skills
 ```
 
-### Option 3: CLI Tool (Quick Setup)
+### Option 3: CLI Tool (Quick Setup for the Base Playbook)
 
 ```bash
 npx ai-playbook-cli@latest install
@@ -155,7 +203,7 @@ See [INSTALLATION.md](INSTALLATION.md) for detailed setup and troubleshooting.
 
 ## Getting Started
 
-After installing a setup or linking the base playbook, open your project in your AI tool and start
+After installing the base playbook or a setup bundle, open your project in your AI tool and start
 using commands:
 
 ### 1. Bootstrap your session
@@ -209,13 +257,16 @@ The AI reloads progress, checks the current branch, and picks up where you left 
 
 Skills are **not invoked directly**. The AI loads them automatically when a matching task is
 detected, or when a command references them (e.g. `/feature` uses the `security-review` and
-`git-branch-naming` skills). See [CONCEPTS.md](CONCEPTS.md) for details.
+`git-branch-naming` skills). Setup bundles may also ship **setup-local skills** inside the installed
+tool directory; those belong to the setup bundle, not to the base playbook catalog. See
+[CONCEPTS.md](CONCEPTS.md) for details.
 
 ---
 
 ## Typical Usage
 
-- Install a **multi-agent setup** or link the **base playbook**
+- Install the **base playbook** for most projects, or add a **setup bundle** if you want a more
+  opinionated team workflow
 - Config lives in your tool's directory (`.claude/`, `.cursor/`, etc.)
 - Read automatically by AI assistants
 - Updated independently of application code
