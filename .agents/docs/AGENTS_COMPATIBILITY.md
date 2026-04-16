@@ -49,6 +49,7 @@ is separate from the shared base playbook skill catalog in `.agents/skills/`.
 
 | Setup                  | Agents | Hooks | Claude Code | Cursor                    | Notes                                                                  |
 | ---------------------- | ------ | ----- | ----------- | ------------------------- | ---------------------------------------------------------------------- |
+| **`poc-squad-v1`**     | 1      | No    | ✅ Full     | ✅ Full                   | Single persona + 2 commands; almost nothing to lose across tools.      |
 | **`dev-squad-v2`**     | 3      | No    | ✅ Full     | ⚠️ Commands + skills only | No hooks; agent personas become reference docs in Cursor.              |
 | **`pm-ba-squad-v2`**   | 3      | No    | ✅ Full     | ⚠️ Commands + skills only | No hooks; spec-writing workflows translate cleanly to Cursor prompts.  |
 | **`legacy-agents-v1`** | 14     | Yes   | ✅ Full     | ⚠️ Commands only          | Hooks enforce legacy safety rails — **Cursor loses those guardrails**. |

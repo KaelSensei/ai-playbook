@@ -66,6 +66,7 @@ bash .ai-playbook/.agents/setups/dev-squad-v2/install.sh
 
 | If you are...                                         | Use                |
 | ----------------------------------------------------- | ------------------ |
+| Building a throwaway POC, demo, or weekend spike      | `poc-squad-v1`     |
 | Building a web app, SaaS, or API (TypeScript / React) | `dev-squad-v2`     |
 | Building a full-stack product with the works          | `web2-agents-v1`   |
 | Building smart contracts / DeFi / on-chain apps       | `web3-agents-v3`   |
@@ -73,7 +74,9 @@ bash .ai-playbook/.agents/setups/dev-squad-v2/install.sh
 | Writing specs, user stories, or doing product work    | `pm-ba-squad-v2`   |
 
 If you do **not** need a prebuilt team with extra personas and setup-local commands, start with the
-base playbook instead of a setup bundle.
+base playbook instead of a setup bundle. See
+[CONCEPTS.md — Which setup for my situation?](CONCEPTS.md#which-setup-for-my-situation) for the full
+decision table.
 
 After install, open your project in Claude Code or Cursor and type `/start`. The AI reads your
 project, picks a task, and begins. That's it — you're vibe coding with guardrails.
@@ -164,6 +167,7 @@ Available setup bundles:
 
 | Setup              | Agents                   | Best for              | Claude Code | Cursor     |
 | ------------------ | ------------------------ | --------------------- | ----------- | ---------- |
+| `poc-squad-v1`     | 1 (prototyper)           | Throwaway POCs, demos | ✅ Full     | ✅ Full    |
 | `dev-squad-v2`     | 3 (tech-lead, 2 seniors) | TypeScript/React TDD  | ✅ Full     | ⚠️ Partial |
 | `pm-ba-squad-v2`   | 3 (PO, BA, reviewer)     | Specs, stories, BDD   | ✅ Full     | ⚠️ Partial |
 | `legacy-agents-v1` | 14 (full team)           | Legacy modernization  | ✅ Full     | ⚠️ Partial |
