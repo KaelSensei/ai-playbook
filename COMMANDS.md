@@ -4,6 +4,10 @@ This annex lists all available commands. Commands are grouped under `.agents/com
 (see [.agents/docs/COMMANDS_STRUCTURE.md](.agents/docs/COMMANDS_STRUCTURE.md)). Each command follows
 the shared rules in `.agents/rules/*.mdc`.
 
+This file covers the **base playbook command catalog** only. Setup bundles may ship additional
+commands inside their own installed `.claude/commands/` or `.cursor/commands/` directory; those are
+setup-local workflows, not part of the shared base catalog.
+
 | Command                        | Description                                                                                                                      |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
 | `/start`                       | Bootstrap project context, load rules and key docs, and prepare the assistant to work on this repo.                              |
@@ -99,7 +103,8 @@ the shared rules in `.agents/rules/*.mdc`.
 ### Agent Skills
 
 The playbook also includes **agent skills** in `.agents/skills/`. Skills are loaded on demand when
-the AI detects a matching task:
+the AI detects a matching task. Setup bundles may also include **setup-local skills** for their own
+workflow package:
 
 | Skill                    | Purpose                                                        |
 | ------------------------ | -------------------------------------------------------------- |

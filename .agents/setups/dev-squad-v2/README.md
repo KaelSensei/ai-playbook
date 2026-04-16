@@ -3,8 +3,13 @@
 Multi-agent setup for TypeScript/React development with strict Canon TDD and asynchronous code
 review supervised by the Tech Lead.
 
-> **Tool-agnostic**: works with Claude Code, Cursor, or any AI tool that reads `.claude/` or
-> `.cursor/` config directories.
+> **Compatibility:** Claude Code first. Cursor can read a reduced version of this setup, but native
+> multi-agent orchestration does not carry over 1:1. See
+> [`../../docs/AGENTS_COMPATIBILITY.md`](../../docs/AGENTS_COMPATIBILITY.md).
+
+This setup is a **workflow bundle**. It installs personas, commands, and setup-local skills for one
+team pattern. It does not replace the base playbook catalog in `.agents/rules/`,
+`.agents/commands/`, and `.agents/skills/`.
 
 ## Agents
 
@@ -37,7 +42,10 @@ bash /path/to/dev-squad-v2/install.sh .cursor
 4. /arbitrate [conflict]   → Tech Lead decides + ADR
 ```
 
-## Skills
+## Bundled Setup-Local Skills
+
+These skills belong to this setup bundle. They are separate from the shared base playbook skills in
+`.agents/skills/`.
 
 | Skill                   | Content                                                                     |
 | ----------------------- | --------------------------------------------------------------------------- |

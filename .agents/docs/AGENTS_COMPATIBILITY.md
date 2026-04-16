@@ -11,6 +11,11 @@ The short version:
 
 Read on for per-feature and per-setup detail.
 
+Mental model:
+
+- **Base playbook** = reusable primitives
+- **Setup bundle** = opinionated install package for one workflow
+
 ---
 
 ## 1. What each tool actually supports
@@ -37,6 +42,9 @@ but the automation around them does not run.
 
 Each `.agents/setups/*` bundles its own `.claude/` layout, agent personas, and optional hooks. Here
 is what actually works where.
+
+Important: any `skills/` folder inside a setup is a **setup-local skill pack** for that bundle. It
+is separate from the shared base playbook skill catalog in `.agents/skills/`.
 
 | Setup                  | Agents | Hooks | Claude Code | Cursor                    | Notes                                                                  |
 | ---------------------- | ------ | ----- | ----------- | ------------------------- | ---------------------------------------------------------------------- |

@@ -1,8 +1,8 @@
 # AI Playbook Concepts
 
-This document explains the three core building blocks of the AI Playbook: **Rules**, **Commands**,
-and **Skills** — plus a brief overview of **MCP (Model Context Protocol)** and how everything fits
-together.
+This document explains the four core building blocks of the AI Playbook: **Rules**, **Commands**,
+**Skills**, and **Setup Bundles** — plus a brief overview of **MCP (Model Context Protocol)** and
+how everything fits together.
 
 ---
 
@@ -187,7 +187,65 @@ merging").
 
 ---
 
-## 4. MCP (Model Context Protocol)
+## 4. Setup Bundles (`.agents/setups/<name>/`)
+
+### What are setup bundles?
+
+Setup bundles are **installable packages** for a specific workflow or project archetype. A setup can
+bundle agent personas, setup-local commands, setup-local skills, docs, and optional hooks.
+
+Think of setups as the AI playbook's **pre-arranged team kits**.
+
+### Where do they live?
+
+```
+.agents/setups/
+  dev-squad-v2/        # TypeScript / React team workflow
+  pm-ba-squad-v2/      # Product / business analysis workflow
+  legacy-agents-v1/    # Legacy modernization workflow
+  web2-agents-v1/      # Full-stack SaaS workflow
+  web3-agents-v3/      # Smart-contract / protocol workflow
+```
+
+Each setup contains its own installable package, typically under `.claude/` plus a small
+`install.sh`.
+
+### How do they work?
+
+When you install a setup, it copies a ready-made team package into your project tool directory
+(`.claude/`, `.cursor/`, or another target path). That package may include:
+
+- Agent personas
+- Setup-local commands
+- Setup-local skills
+- Hooks
+- Template docs such as `project-architecture.md` or `constants.md`
+
+### Skills vs. Setup Bundles
+
+| Aspect       | Skill                                   | Setup bundle                                 |
+| ------------ | --------------------------------------- | -------------------------------------------- |
+| **Purpose**  | Add one piece of expertise              | Install a whole workflow package             |
+| **Scope**    | Narrow, task-scoped                     | Broad, project/workflow-scoped               |
+| **Contents** | One `SKILL.md` plus optional references | Personas, commands, skills, hooks, templates |
+| **Usage**    | Loaded on demand during a task          | Installed once into a project                |
+
+**Rule of thumb:** if you need reusable know-how, create a **skill**. If you need a prebuilt team
+package for one kind of project, create a **setup bundle**.
+
+### Important distinction
+
+- The base playbook lives in `.agents/rules/`, `.agents/commands/`, and `.agents/skills/`.
+- Setup bundles live in `.agents/setups/` and may contain their **own** commands and skills.
+- Setup-local skills are not a replacement for the base playbook skill catalog. They belong to that
+  setup's workflow.
+
+See [.agents/docs/AGENTS_COMPATIBILITY.md](.agents/docs/AGENTS_COMPATIBILITY.md) for what parts of a
+setup bundle actually work in Claude Code vs Cursor.
+
+---
+
+## 5. MCP (Model Context Protocol)
 
 ### What is MCP?
 
@@ -236,7 +294,7 @@ because it typically contains personal access tokens.
 
 ---
 
-## 5. How Everything Fits Together
+## 6. How Everything Fits Together
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -262,6 +320,11 @@ because it typically contains personal access tokens.
 
 ### Typical flow
 
+If you are using the **base playbook only**, the AI combines shared rules, commands, and skills.
+
+If you install a **setup bundle**, that bundle adds a project-specific package on top: personas,
+setup-local commands, setup-local skills, and sometimes hooks.
+
 1. **Rules** are loaded → AI knows the project's constraints and standards.
 2. User types a **command** (e.g. `/feature add dark mode`) → AI follows the steps.
 3. During execution, AI loads relevant **skills** (e.g. `conventional-commits` for the commit step).
@@ -270,21 +333,24 @@ because it typically contains personal access tokens.
 
 ### Quick reference
 
-| Building block | File location                      | Trigger         | Purpose               |
-| -------------- | ---------------------------------- | --------------- | --------------------- |
-| Rule           | `.agents/rules/*.mdc`              | Auto / glob     | Enforce constraints   |
-| Command        | `.agents/commands/<category>/*.md` | `/command-name` | Execute workflow      |
-| Skill          | `.agents/skills/<name>/SKILL.md`   | On demand       | Provide expertise     |
-| MCP config     | `.agents/mcp.json`                 | When tools used | Connect external APIs |
+| Building block | File location                      | Trigger         | Purpose                         |
+| -------------- | ---------------------------------- | --------------- | ------------------------------- |
+| Rule           | `.agents/rules/*.mdc`              | Auto / glob     | Enforce constraints             |
+| Command        | `.agents/commands/<category>/*.md` | `/command-name` | Execute workflow                |
+| Skill          | `.agents/skills/<name>/SKILL.md`   | On demand       | Provide expertise               |
+| Setup bundle   | `.agents/setups/<name>/`           | Installed once  | Provide a full workflow package |
+| MCP config     | `.agents/mcp.json`                 | When tools used | Connect external APIs           |
 
 ---
 
-## Further Reading
+## 7. Further Reading
 
 - [Cursor Rules Documentation](https://cursor.com/docs/context/rules)
 - [Cursor Commands Documentation](https://cursor.com/docs/context/commands)
 - [Cursor Agent Skills Documentation](https://cursor.com/docs/context/skills)
 - [Model Context Protocol Specification](https://modelcontextprotocol.io/)
+- [.agents/docs/AGENTS_COMPATIBILITY.md](.agents/docs/AGENTS_COMPATIBILITY.md): what parts of the
+  base playbook vs setup bundles work in each tool
 - [COMMANDS.md](COMMANDS.md) — Full list of playbook commands
 - [.agents/docs/COMMANDS_STRUCTURE.md](.agents/docs/COMMANDS_STRUCTURE.md) — Command folder
   organization

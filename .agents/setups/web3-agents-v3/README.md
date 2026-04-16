@@ -3,8 +3,13 @@
 Multi-agent setup for Web3 development. Specialized agents that work in parallel and review each
 other.
 
-> **Tool-agnostic**: works with Claude Code, Cursor, or any AI tool that reads `.claude/` or
-> `.cursor/` config directories.
+> **Compatibility:** Claude Code first. Cursor can read a reduced version of this setup, but native
+> multi-agent orchestration and hooks do not carry over 1:1. See
+> [`../../docs/AGENTS_COMPATIBILITY.md`](../../docs/AGENTS_COMPATIBILITY.md).
+
+This setup is a **workflow bundle**. It installs personas, commands, setup-local skills, and hooks
+for one protocol-development workflow. It does not replace the base playbook catalog in
+`.agents/rules/`, `.agents/commands/`, and `.agents/skills/`.
 
 ---
 
