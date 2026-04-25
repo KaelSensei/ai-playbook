@@ -13,12 +13,12 @@ mkdir -p "$TARGET/agents" "$TARGET/commands" "$TARGET/skills"
 mkdir -p tasks docs/adr docs/rollbacks docs/specs
 
 echo "→ Agents..."
-for agent in tech-lead dev-senior-a dev-senior-b; do
+for agent in tech-lead dev-senior-a dev-senior-b security-reviewer; do
   cp "$SOURCE/.claude/agents/$agent.md" "$TARGET/agents/$agent.md" && echo "  ✓ $agent"
 done
 
 echo "→ Setup-local skills..."
-for skill in canon-tdd typescript-patterns code-review-standards api-design-ts react-patterns testing-patterns-ts; do
+for skill in canon-tdd typescript-patterns code-review-standards api-design-ts react-patterns testing-patterns-ts security-web2; do
   [ -d "$SOURCE/.claude/skills/$skill" ] && \
     cp -r "$SOURCE/.claude/skills/$skill" "$TARGET/skills/$skill" && echo "  ✓ $skill"
 done
