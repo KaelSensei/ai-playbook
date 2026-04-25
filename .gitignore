@@ -36,3 +36,6 @@ cli/*.log
 
 # Husky
 .husky/_
+
+# Claude Code local settings (machine-specific, not for the repo)
+.claude/settings.local.json
