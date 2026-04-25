@@ -18,13 +18,13 @@ for agent in tech-lead dev-senior-a dev-senior-b security-reviewer; do
 done
 
 echo "→ Setup-local skills..."
-for skill in canon-tdd typescript-patterns code-review-standards api-design-ts react-patterns testing-patterns-ts security-web2; do
+for skill in canon-tdd typescript-patterns code-review-standards api-design-ts react-patterns testing-patterns-ts; do
   [ -d "$SOURCE/.claude/skills/$skill" ] && \
     cp -r "$SOURCE/.claude/skills/$skill" "$TARGET/skills/$skill" && echo "  ✓ $skill"
 done
 
 echo "→ Base playbook skills (shared)..."
-for skill in clean-architecture; do
+for skill in clean-architecture security-web2; do
   if [ -d "$BASE_SKILLS/$skill" ]; then
     cp -r "$BASE_SKILLS/$skill" "$TARGET/skills/$skill" && echo "  ✓ $skill (from base playbook)"
   else

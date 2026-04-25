@@ -54,14 +54,14 @@ echo "✓  11 agents"
 
 # ── Domain skills ───────────────────────────────────────────────────────────
 
-for skill in testing-patterns api-design database-patterns security-web2; do
+for skill in testing-patterns api-design database-patterns; do
   cp "$SOURCE/.claude/skills/$skill/SKILL.md" "$TARGET/skills/$skill/SKILL.md"
 done
-echo "✓  4 domain skills"
+echo "✓  3 domain skills"
 
 # ── Base playbook skills (shared across setups) ─────────────────────────────
 
-for skill in clean-code; do
+for skill in clean-code security-web2; do
   if [ -f "$BASE_SKILLS/$skill/SKILL.md" ]; then
     cp "$BASE_SKILLS/$skill/SKILL.md" "$TARGET/skills/$skill/SKILL.md"
     echo "✓  $skill (from base playbook)"
