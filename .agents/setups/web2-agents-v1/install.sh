@@ -6,6 +6,7 @@ set -e
 
 SOURCE="$(cd "$(dirname "$0")" && pwd)"
 BASE_SKILLS="$SOURCE/../../skills"
+BASE_COMMANDS="$SOURCE/../../commands"
 TARGET="${1:-.claude}"
 
 echo ""
@@ -82,6 +83,19 @@ for cmd in story spec build review check pr; do
   cp "$SOURCE/.claude/commands/$cmd.md" "$TARGET/commands/$cmd.md"
 done
 echo "✓  5 commands"
+
+# ── Base playbook commands (shared across setups) ───────────────────────────
+
+for cmd_path in devops/setup-ci; do
+  cmd_name="$(basename "$cmd_path")"
+  src="$BASE_COMMANDS/$cmd_path.md"
+  if [ -f "$src" ]; then
+    cp "$src" "$TARGET/commands/$cmd_name.md"
+    echo "✓  /$cmd_name (from base playbook)"
+  else
+    echo "⚠  $cmd_path not found at $src — install the base playbook or rerun from a full clone"
+  fi
+done
 
 # ── Foundation docs ─────────────────────────────────────────────────────────
 

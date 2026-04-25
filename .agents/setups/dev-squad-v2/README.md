@@ -56,6 +56,13 @@ checkpoints instead of merging — it never pushes to `main`, never force-pushes
 halts early on ambiguous specs or missing secrets. Human review on the draft PR is still required
 before merge.
 
+### CI scaffold — `/setup-ci`
+
+Pulled in from the base playbook. One-shot scaffold that detects the project's stack (Node/TS,
+Python, Rust, Go) and writes a minimal `.github/workflows/ci.yml` (build/test/lint/typecheck on push
+and PR). Refuses to overwrite without `--force`. Use it once near project start — for anything
+beyond a basic CI gate (deploy, Docker, K8s), use the base `/devops` command instead.
+
 ## Bundled Setup-Local Skills
 
 These skills belong to this setup bundle.

@@ -2,6 +2,7 @@
 set -euo pipefail
 SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_SKILLS="$SOURCE/../../skills"
+BASE_COMMANDS="$SOURCE/../../commands"
 TARGET="${1:-.claude}"
 
 echo "Dev Squad — installing into $(pwd)/$TARGET"
@@ -34,6 +35,17 @@ done
 echo "→ Commands..."
 for cmd in brief build review-pr arbitrate auto; do
   cp "$SOURCE/.claude/commands/$cmd.md" "$TARGET/commands/$cmd.md" && echo "  ✓ /$cmd"
+done
+
+echo "→ Base playbook commands (shared)..."
+for cmd_path in devops/setup-ci; do
+  cmd_name="$(basename "$cmd_path")"
+  src="$BASE_COMMANDS/$cmd_path.md"
+  if [ -f "$src" ]; then
+    cp "$src" "$TARGET/commands/$cmd_name.md" && echo "  ✓ /$cmd_name (from base playbook)"
+  else
+    echo "  ⚠ $cmd_path not found at $src — install the base playbook or rerun from a full clone"
+  fi
 done
 
 [ ! -f "$TARGET/project-architecture.md" ] && cp "$SOURCE/.claude/project-architecture.md" "$TARGET/"
