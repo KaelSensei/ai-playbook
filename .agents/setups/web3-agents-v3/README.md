@@ -18,6 +18,8 @@ for one protocol-development workflow. It does not replace the base playbook cat
 Instead of a single agent that does everything, you get a team:
 
 - `smart-contract-engineer` — Solidity security, reentrancy, flash loans, DeFi
+- `smart-contract-security-reviewer` — adversarial pre-deploy review (reentrancy, oracle, sig
+  replay, upgradeability, MEV); mandatory before any deployment
 - `infra-engineer` — K8s, Docker, health checks, monitoring
 - `devops-engineer` — CI/CD, forge scripts, migrations, Safe multisig
 - `frontend-engineer` — wagmi v2, viem, tx state machine, WebSocket cleanup
@@ -54,12 +56,13 @@ your-project/
     ├── project-architecture.md      ← fill in (your system)
     ├── data-architecture.md         ← fill in (your data)
     ├── constants.md                 ← fill in (your addresses)
-    ├── agents/                      ← 8 agent personas
+    ├── agents/                      ← 9 agent personas
     ├── skills/                      ← shared knowledge
     │   ├── solidity-patterns/
     │   ├── foundry-testing/
     │   ├── defi-protocols/
     │   ├── web3-frontend/
+    │   ├── security-web3/           ← from base playbook
     │   ├── team--skill-review/
     │   ├── team--skill-refine/
     │   └── team--skill-lookup/

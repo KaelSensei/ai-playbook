@@ -13,7 +13,7 @@ mkdir -p "$TARGET/agents" "$TARGET/commands" "$TARGET/skills"
 mkdir -p tasks docs/adr docs/rollbacks docs/specs
 
 echo "→ Agents..."
-for agent in tech-lead dev-senior-a dev-senior-b; do
+for agent in tech-lead dev-senior-a dev-senior-b security-reviewer; do
   cp "$SOURCE/.claude/agents/$agent.md" "$TARGET/agents/$agent.md" && echo "  ✓ $agent"
 done
 
@@ -24,7 +24,7 @@ for skill in canon-tdd typescript-patterns code-review-standards api-design-ts r
 done
 
 echo "→ Base playbook skills (shared)..."
-for skill in clean-architecture; do
+for skill in clean-architecture security-web2; do
   if [ -d "$BASE_SKILLS/$skill" ]; then
     cp -r "$BASE_SKILLS/$skill" "$TARGET/skills/$skill" && echo "  ✓ $skill (from base playbook)"
   else

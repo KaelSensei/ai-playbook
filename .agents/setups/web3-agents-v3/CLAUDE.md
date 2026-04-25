@@ -19,18 +19,19 @@
      Missing?         → generic pipeline (spec-writer + architect + rust-reviewer only).
      Remove rows for agents not needed on this project. -->
 
-| AGENT                   | PERSONA                    | CONTEXT DOCS                                                | SKILLS                                                                 |
-| ----------------------- | -------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------- |
-| smart-contract-engineer | smart-contract-engineer.md | project-architecture.md, data-architecture.md               | solidity-patterns, foundry-testing, defi-protocols, team--skill-review |
-| infra-engineer          | infra-engineer.md          | project-architecture.md, constants.md                       | team--skill-review                                                     |
-| devops-engineer         | devops-engineer.md         | project-architecture.md, constants.md                       | foundry-testing, team--skill-review                                    |
-| frontend-engineer       | frontend-engineer.md       | project-architecture.md, data-architecture.md               | web3-frontend, team--skill-review                                      |
-| backend-engineer        | backend-engineer.md        | project-architecture.md, data-architecture.md               | defi-protocols, team--skill-review                                     |
-| architect               | architect.md               | project-architecture.md, data-architecture.md, constants.md | solidity-patterns, defi-protocols, team--skill-review                  |
-| spec-writer             | spec-writer.md             | project-architecture.md, data-architecture.md               | solidity-patterns, team--skill-lookup                                  |
-| qa-automation           | qa-automation.md           | project-architecture.md, constants.md                       | observability, team--skill-review                                      |
-| scribe                  | scribe.md                  | project-architecture.md, data-architecture.md, constants.md | team--skill-lookup                                                     |
-| rust-reviewer           | rust-reviewer.md           | project-architecture.md                                     | solidity-patterns, team--skill-review                                  |
+| AGENT                            | PERSONA                             | CONTEXT DOCS                                                | SKILLS                                                                 |
+| -------------------------------- | ----------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------- |
+| smart-contract-engineer          | smart-contract-engineer.md          | project-architecture.md, data-architecture.md               | solidity-patterns, foundry-testing, defi-protocols, team--skill-review |
+| smart-contract-security-reviewer | smart-contract-security-reviewer.md | project-architecture.md, constants.md                       | security-web3, solidity-patterns, defi-protocols, team--skill-review   |
+| infra-engineer                   | infra-engineer.md                   | project-architecture.md, constants.md                       | team--skill-review                                                     |
+| devops-engineer                  | devops-engineer.md                  | project-architecture.md, constants.md                       | foundry-testing, team--skill-review                                    |
+| frontend-engineer                | frontend-engineer.md                | project-architecture.md, data-architecture.md               | web3-frontend, team--skill-review                                      |
+| backend-engineer                 | backend-engineer.md                 | project-architecture.md, data-architecture.md               | defi-protocols, team--skill-review                                     |
+| architect                        | architect.md                        | project-architecture.md, data-architecture.md, constants.md | solidity-patterns, defi-protocols, team--skill-review                  |
+| spec-writer                      | spec-writer.md                      | project-architecture.md, data-architecture.md               | solidity-patterns, team--skill-lookup                                  |
+| qa-automation                    | qa-automation.md                    | project-architecture.md, constants.md                       | observability, team--skill-review                                      |
+| scribe                           | scribe.md                           | project-architecture.md, data-architecture.md, constants.md | team--skill-lookup                                                     |
+| rust-reviewer                    | rust-reviewer.md                    | project-architecture.md                                     | solidity-patterns, team--skill-review                                  |
 
 ---
 

@@ -13,11 +13,12 @@ team pattern. It does not replace the base playbook catalog in `.agents/rules/`,
 
 ## Agents
 
-| Agent          | Role                                                                     |
-| -------------- | ------------------------------------------------------------------------ |
-| `tech-lead`    | Sets standards, writes technical brief, arbitrates, reviews architecture |
-| `dev-senior-a` | Implements with Canon TDD: test list → RED → GREEN → REFACTOR            |
-| `dev-senior-b` | Async reviewer: reads tests before code, always                          |
+| Agent               | Role                                                                     |
+| ------------------- | ------------------------------------------------------------------------ |
+| `tech-lead`         | Sets standards, writes technical brief, arbitrates, reviews architecture |
+| `dev-senior-a`      | Implements with Canon TDD: test list → RED → GREEN → REFACTOR            |
+| `dev-senior-b`      | Async reviewer: reads tests before code, always                          |
+| `security-reviewer` | OWASP review on any diff touching auth, input, secrets, or public routes |
 
 ## Install
 

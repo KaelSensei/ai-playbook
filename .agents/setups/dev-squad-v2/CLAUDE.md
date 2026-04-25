@@ -13,11 +13,12 @@
 
 ## Agent Team
 
-| Agent          | Role                                 | Skills                                                                    |
-| -------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `tech-lead`    | Standards + architecture arbitration | clean-architecture, typescript-patterns, code-review-standards            |
-| `dev-senior-a` | Canon TDD implementation             | canon-tdd, clean-architecture, typescript-patterns                        |
-| `dev-senior-b` | Async review (tests before code)     | canon-tdd, clean-architecture, typescript-patterns, code-review-standards |
+| Agent               | Role                                 | Skills                                                                    |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `tech-lead`         | Standards + architecture arbitration | clean-architecture, typescript-patterns, code-review-standards            |
+| `dev-senior-a`      | Canon TDD implementation             | canon-tdd, clean-architecture, typescript-patterns                        |
+| `dev-senior-b`      | Async review (tests before code)     | canon-tdd, clean-architecture, typescript-patterns, code-review-standards |
+| `security-reviewer` | OWASP review on auth/input/secrets   | security-web2, typescript-patterns, code-review-standards                 |
 
 ## Flows
 

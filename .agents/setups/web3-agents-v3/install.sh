@@ -5,6 +5,8 @@
 set -e
 
 SOURCE="$(cd "$(dirname "$0")" && pwd)"
+BASE_SKILLS="$SOURCE/../../skills"
+BASE_COMMANDS="$SOURCE/../../commands"
 TARGET="${1:-.claude}"
 
 echo ""
@@ -22,6 +24,7 @@ mkdir -p \
   "$TARGET/skills/foundry-testing" \
   "$TARGET/skills/defi-protocols" \
   "$TARGET/skills/web3-frontend" \
+  "$TARGET/skills/security-web3" \
   "$TARGET/skills/team--skill-review" \
   "$TARGET/skills/observability" \
   "$TARGET/skills/team--skill-refine" \
@@ -32,6 +35,7 @@ mkdir -p \
 
 for agent in \
   smart-contract-engineer \
+  smart-contract-security-reviewer \
   infra-engineer \
   devops-engineer \
   frontend-engineer \
@@ -42,7 +46,7 @@ for agent in \
 do
   cp "$SOURCE/.claude/agents/$agent.md" "$TARGET/agents/$agent.md"
 done
-echo "✓  8 agents"
+echo "✓  9 agents"
 
 # ── Domain skills ────────────────────────────────────────────────────────────
 
@@ -50,6 +54,17 @@ for skill in solidity-patterns foundry-testing defi-protocols web3-frontend; do
   cp "$SOURCE/.claude/skills/$skill/SKILL.md" "$TARGET/skills/$skill/SKILL.md"
 done
 echo "✓  4 domain skills"
+
+# ── Base playbook skills (shared across setups) ─────────────────────────────
+
+for skill in security-web3; do
+  if [ -f "$BASE_SKILLS/$skill/SKILL.md" ]; then
+    cp "$BASE_SKILLS/$skill/SKILL.md" "$TARGET/skills/$skill/SKILL.md"
+    echo "✓  $skill (from base playbook)"
+  else
+    echo "⚠  $skill not found at $BASE_SKILLS/$skill — install the base playbook or rerun from a full clone"
+  fi
+done
 
 # ── Team skills ──────────────────────────────────────────────────────────────
 
