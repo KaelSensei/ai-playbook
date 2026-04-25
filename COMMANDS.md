@@ -35,6 +35,7 @@ setup-local workflows, not part of the shared base catalog.
 | `/brainstorm [topic]`          | Run an AI-assisted product/feature ideation and planning workflow, turning ideas into actionable tasks.                          |
 | `/prfaq <idea>`                | Working Backwards product validation — write the press release and FAQ before building. Validates if an idea is worth building.  |
 | `/devops <task>`               | Design or update CI/CD and infrastructure (GitHub Actions, Docker, Kubernetes, etc.) in a security-first way.                    |
+| `/setup-ci [--force]`          | Scaffold a minimal GitHub Actions `ci.yml` (build/test/lint) tuned to the detected stack (Node, Python, Rust, Go).               |
 | `/magic-wand [issue]`          | Perform deep, expert-level debugging and problem-solving when normal commands are not enough.                                    |
 | `/create-command <name> [...]` | Generate a new Cursor command file that matches the project's command structure and rules.                                       |
 | `/add-commit-push [message]`   | Run project checks, stage all changes, create a conventional commit (using the optional message), and push the current branch.   |
@@ -49,7 +50,7 @@ setup-local workflows, not part of the shared base catalog.
 - **workflow/** – spec, plan, feature, fix, refactor, pivot, retro, done, beautify, clean-code
 - **quality/** – audit-code, ready-check, validate, checklist, magic-wand, cleanup-repo
 - **docs/** – create-user-guide, update-user-guide, create-command, export-context
-- **devops/** – devops
+- **devops/** – devops, setup-ci
 - **ideation/** – brainstorm, prfaq
 
 ### All commands
@@ -96,6 +97,7 @@ setup-local workflows, not part of the shared base catalog.
 | `/export-context [path]`       | Compress context window to markdown for another AI agent (handoff).                    |
 | **Devops**                     |                                                                                        |
 | `/devops <task>`               | Design or update CI/CD and infrastructure (GitHub Actions, Docker, Kubernetes, etc.).  |
+| `/setup-ci [--force]`          | Scaffold a minimal `.github/workflows/ci.yml` for the detected stack.                  |
 | **Ideation**                   |                                                                                        |
 | `/brainstorm [topic]`          | AI-assisted feature ideation and planning workflow.                                    |
 | `/prfaq <idea>`                | Working Backwards product validation (press release + FAQ before building).            |
