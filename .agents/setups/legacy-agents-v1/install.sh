@@ -62,14 +62,14 @@ echo "  4 legacy-specific skills"
 
 # ── Shared skills (setup-local) ───────────────────────────────────────────
 
-for skill in testing-patterns security-web2 database-patterns; do
+for skill in testing-patterns database-patterns; do
   cp "$SOURCE/.claude/skills/$skill/SKILL.md" "$TARGET/skills/$skill/SKILL.md"
 done
-echo "  3 shared skills"
+echo "  2 shared skills"
 
 # ── Base playbook skills (shared across setups) ──────────────────────────
 
-for skill in clean-code; do
+for skill in clean-code security-web2; do
   if [ -f "$BASE_SKILLS/$skill/SKILL.md" ]; then
     cp "$BASE_SKILLS/$skill/SKILL.md" "$TARGET/skills/$skill/SKILL.md"
     echo "  ✓ $skill (from base playbook)"
