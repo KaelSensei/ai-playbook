@@ -1,0 +1,22 @@
+services:
+  claude:
+    build:
+      context: .
+      args:
+        USER_UID: ${USER_UID:-1000}
+        USER_GID: ${USER_GID:-1000}
+    image: claude-rtk-sandbox:latest
+    container_name: claude-rtk
+    stdin_open: true
+    tty: true
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    volumes:
+      - ${WORKSPACE:-./workspace}:/workspace
+      - claude-config:/home/dev/.claude
+      - npm-global:/home/dev/.npm-global
+    working_dir: /workspace
+
+volumes:
+  claude-config:
+  npm-global:

@@ -1,0 +1,7 @@
+.git
+.gitignore
+.env
+workspace/
+README.md
+Makefile
+make.ps1
